@@ -34,7 +34,7 @@ public class ReaderController {
 
     @GetMapping("/readers")
         // get all the readers
-    List<ReaderDTO> allReaders() {
+    List<ReaderDTO_forAll> allReaders() {
         return this.readerService.getAllReaders().stream().map(this::convertToReaderDTO_forAll).collect(Collectors.toList());
     }
 
@@ -46,7 +46,7 @@ public class ReaderController {
 
     @GetMapping("/readers/{id}")
         // get a reader by id
-    ReaderDTO oneReader(@PathVariable Long id) {
+    ReaderDTO_forOne oneReader(@PathVariable Long id) {
         return this.convertToReaderDTO_forOne(this.readerService.getReaderById(id));
     }
 

@@ -1,0 +1,44 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light text-center">
+    <div class="container-fluid container-custom">
+        <a class="navbar-brand" routerLink="">BookHub</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item dropdown ms-3">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Libraries
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" routerLink="/libraries">See all</a></li>
+                <li><a class="dropdown-item" routerLink="/libraries-books-statistics">Books statistics</a></li>
+                <li><a class="dropdown-item" routerLink="/libraries-readers-statistics">Readers statistics</a></li>
+                <li><a class="dropdown-item" routerLink="">Create</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown ms-3">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Books
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" routerLink="/books">See all</a></li>
+                <li><a class="dropdown-item" routerLink="">Create</a></li>
+                <li><a class="dropdown-item" routerLink="/books-filter">Filter by price</a></li>
+              </ul>
+            </li>
+
+            <li class="nav-item dropdown ms-3">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Readers
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" routerLink="/readers">See all</a></li>
+                <li><a class="dropdown-item" routerLink="">Create</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+</nav>

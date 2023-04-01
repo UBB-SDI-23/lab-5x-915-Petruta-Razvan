@@ -1,0 +1,50 @@
+<div class="card m-3 text-center card-custom" *ngIf="reader !== undefined">
+    <div class="card-body">
+        <div>
+            <p>Name: {{reader.name}}</p>
+        </div>
+        <div>
+            <p>Email: {{reader.email}}</p>
+        </div>
+        <div>
+            <p>BirthDate: {{reader.birthDate}}</p>
+        </div>
+        <div>
+            <p>Gender: {{reader.gender}}</p>
+        </div>
+        <div>
+            <p>Is student: {{reader.student ? "Yes" : "No"}}</p>
+        </div>
+
+        <p>Libraries:</p>
+        <div class="row">
+            <div class="col-lg-4 li-custom" *ngFor="let library of reader.libraries">
+                <div class="card m-3 text-center">
+                    <div class="card-body">
+                        <div>
+                            <p>Name: {{library.name}}</p>
+                        </div>
+                        <div>
+                            <p>Address: {{library.address}}</p>
+                        </div>
+                        <div>
+                            <p>Email: {{library.email}}</p>
+                        </div>
+                        <div>
+                            <p>Website: {{library.website}}</p>
+                        </div>
+                        <div>
+                            <p>Construction Year: {{library.yearOfConstruction}}</p>
+                        </div>
+                        <div>
+                            <p>Start date: {{library.startDate}}</p>
+                        </div>
+                        <div>
+                            <p>End date: {{library.endDate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

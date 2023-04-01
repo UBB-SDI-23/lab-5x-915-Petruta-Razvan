@@ -38,13 +38,13 @@ public class LibraryController {
     // LIBRARIES --------------------------------------------------------
     @GetMapping("/libraries")
     // get all the libraries
-    List<LibraryDTO> allLibraries() {
+    List<LibraryDTO_noBooks> allLibraries() {
         return this.libraryService.getAllLibraries().stream().map(this::convertToLibraryDTO_forAll).collect(Collectors.toList());
     }
 
     @GetMapping("/libraries/{id}/books")
     // get all the books from a library given the id
-    List<BookDTO> allBookFromLibrary(@PathVariable Long id) {
+    List<BookDTO_onlyLibraryID> allBookFromLibrary(@PathVariable Long id) {
         return this.libraryService.getAllBooksFromLibrary(id).stream().map(this::convertToBookDTO_forAll).collect(Collectors.toList());
     }
 
@@ -55,7 +55,7 @@ public class LibraryController {
 
     @GetMapping("/libraries/{id}")
     // get a library by id
-    LibraryDTO oneLibrary(@PathVariable Long id) {
+    LibraryDTO_allBooks oneLibrary(@PathVariable Long id) {
         return this.convertToLibraryDTO_forOne(this.libraryService.getLibraryById(id));
     }
 
@@ -121,7 +121,7 @@ public class LibraryController {
         return libraryDTO;
     }
 
-    private BookDTO convertToBookDTO_forAll(Book book) {
+    private BookDTO_onlyLibraryID convertToBookDTO_forAll(Book book) {
         BookDTO_onlyLibraryID bookDTO = this.modelMapper.map(book, BookDTO_onlyLibraryID.class);
         bookDTO.setLibraryID(book.getLibrary().getID());
         return bookDTO;

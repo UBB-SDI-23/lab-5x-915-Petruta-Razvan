@@ -1,0 +1,40 @@
+<div class="card m-3 text-center card-custom" *ngIf="book !== undefined">
+    <div class="card-body">
+        <div>
+            <p>Title: {{book.title}}</p>
+        </div>
+        <div>
+            <p>Author: {{book.author}}</p>
+        </div>
+        <div>
+            <p>Publisher: {{book.publisher}}</p>
+        </div>
+        <div>
+            <p>Price: {{book.price}} €</p>
+        </div>
+        <div>
+            <p>Published Year: {{book.publishedYear}}</p>
+        </div>
+
+        <p>From the library:</p>
+        <div class="card m-3 text-center">
+            <div class="card-body">
+                <div>
+                    <p>Name: {{book.library.name}}</p>
+                </div>
+                <div>
+                    <p>Address: {{book.library.address}}</p>
+                </div>
+                <div>
+                    <p>Email: {{book.library.email}}</p>
+                </div>
+                <div>
+                    <p>Website: {{book.library.website}}</p>
+                </div>
+                <div>
+                    <p>Construction Year: {{book.library.yearOfConstruction}}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+<div class="card m-3 text-center card-custom" *ngIf="library !== undefined">
+    <div class="card-body">
+        <div>
+            <p>Name: {{library.name}}</p>
+        </div>
+        <div>
+            <p>Address: {{library.address}}</p>
+        </div>
+        <div>
+            <p>Email: {{library.email}}</p>
+        </div>
+        <div>
+            <p>Website: {{library.website}}</p>
+        </div>
+        <div>
+            <p>Construction Year: {{library.yearOfConstruction}}</p>
+        </div>
+
+        <p>Books:</p>
+        <div class="row">
+            <div class="col-lg-4 li-custom" *ngFor="let book of library.books">
+                <div class="card m-3 text-center">
+                    <div class="card-body">
+                        <div>
+                            <p>Title: {{book.title}}</p>
+                        </div>
+                        <div>
+                            <p>Author: {{book.author}}</p>
+                        </div>
+                        <div>
+                            <p>Publisher: {{book.publisher}}</p>
+                        </div>
+                        <div>
+                            <p>Price: {{book.price}} €</p>
+                        </div>
+                        <div>
+                            <p>Published Year: {{book.publishedYear}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p>Readers:</p>
+        <div class="row">
+            <div class="col-lg-4 li-custom" *ngFor="let reader of library.readers">
+                <div class="card m-3 text-center">
+                    <div class="card-body">
+                        <div>
+                            <p>Name: {{reader.name}}</p>
+                        </div>
+                        <div>
+                            <p>Email: {{reader.email}}</p>
+                        </div>
+                        <div>
+                            <p>BirthDate: {{reader.birthDate}}</p>
+                        </div>
+                        <div>
+                            <p>Gender: {{reader.gender}}</p>
+                        </div>
+                        <div>
+                            <p>Is student: {{reader.student ? "Yes" : "No"}}</p>
+                        </div>
+                        <div>
+                            <p>Start date: {{reader.startDate}}</p>
+                        </div>
+                        <div>
+                            <p>End date: {{reader.endDate}}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

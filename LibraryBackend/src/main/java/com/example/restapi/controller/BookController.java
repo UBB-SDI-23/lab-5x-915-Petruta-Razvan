@@ -28,7 +28,7 @@ public class BookController {
 
     @GetMapping("/books")
     // get all the books, or filter by price if there is a parameter specified
-    List<BookDTO> allBooks(@RequestParam(required = false) Double minPrice) {
+    List<BookDTO_onlyLibraryID> allBooks(@RequestParam(required = false) Double minPrice) {
         if (minPrice == null) {
             return this.bookService.getAllBooks().stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
         }
@@ -37,13 +37,13 @@ public class BookController {
 
     @GetMapping("/booksWithMinimumPrice")
         // get all the books, or filter by price if there is a parameter specified
-    List<BookDTO> allBooksWithMinPrice(@RequestParam(required = false) Double minPrice) {
+    List<BookDTO_onlyLibraryID> allBooksWithMinPrice(@RequestParam(required = false) Double minPrice) {
         return this.bookService.getBooksWithPriceGreater(minPrice).stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
     }
 
     @GetMapping("/books/{id}")
     // get a book by its id
-    BookDTO oneBook(@PathVariable Long id) {
+    BookDTO_wholeLibrary oneBook(@PathVariable Long id) {
         return this.convertToBookDTO_wholeLibrary(this.bookService.getBookById(id));
     }
 
@@ -65,13 +65,13 @@ public class BookController {
         this.bookService.deleteBook(id);
     }
 
-    private BookDTO convertToBookDTO_onlyLibraryID(Book book) {
+    private BookDTO_onlyLibraryID convertToBookDTO_onlyLibraryID(Book book) {
         BookDTO_onlyLibraryID bookDTO = this.modelMapper.map(book, BookDTO_onlyLibraryID.class);
         bookDTO.setLibraryID(book.getLibrary().getID());
         return bookDTO;
     }
 
-    private BookDTO convertToBookDTO_wholeLibrary(Book book) {
+    private BookDTO_wholeLibrary convertToBookDTO_wholeLibrary(Book book) {
         return this.modelMapper.map(book, BookDTO_wholeLibrary.class);
     }
 }

@@ -1,0 +1,12 @@
+.container-custom {
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+li a:hover {
+    color: #36c66b;
+}
+
+.dropdown-item:active {
+    background: transparent;
+}
