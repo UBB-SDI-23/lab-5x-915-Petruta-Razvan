@@ -7,7 +7,7 @@ import { Library, LibraryCount, LibraryDetails } from '../model/library.model';
   providedIn: 'root'
 })
 export class LibraryService {
-  private baseUrl = "http://13.53.235.237/api/";
+  private baseUrl = "/api/";
 
   constructor(private httpClient: HttpClient) { }
 
