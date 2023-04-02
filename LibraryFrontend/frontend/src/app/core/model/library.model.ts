@@ -37,3 +37,11 @@ export interface LibraryCount {
     name: string,
     totalCount: number
 }
+
+export interface AddUpdateLibraryDTO {
+    name: string,
+    address: string,
+    email: string,
+    website: string,
+    yearOfConstruction: number
+}

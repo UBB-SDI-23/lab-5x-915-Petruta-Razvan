@@ -10,6 +10,9 @@ import { ReaderDetailsComponent } from './components/reader/reader-details/reade
 import { BookFilterComponent } from './components/book/book-filter/book-filter.component';
 import { LibraryBooksStatisticsComponent } from './components/library/library-books-statistics/library-books-statistics.component';
 import { LibraryReadersStatisticsComponent } from './components/library/library-readers-statistics/library-readers-statistics.component';
+import { LibraryAddComponent } from './components/library/library-add/library-add.component';
+import { LibraryUpdateComponent } from './components/library/library-update/library-update.component';
+import { LibraryDeleteComponent } from './components/library/library-delete/library-delete.component';
 
 const routes: Routes = [
   {
@@ -43,6 +46,18 @@ const routes: Routes = [
   {
     path: 'libraries-readers-statistics',
     component: LibraryReadersStatisticsComponent
+  },
+  {
+    path: 'libraries-add',
+    component: LibraryAddComponent
+  },
+  {
+    path: 'libraries-update/:id',
+    component: LibraryUpdateComponent
+  },
+  {
+    path: 'libraries-delete/:id',
+    component: LibraryDeleteComponent
   },
   {
     path: 'readers',

@@ -1,2 +1,2 @@
-/api/* http://13.53.235.237/api/:splat 200!
+/api/* http://13.50.241.155/api/:splat 200!
 /* /index.html 200

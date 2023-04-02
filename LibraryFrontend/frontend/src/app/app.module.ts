@@ -19,6 +19,9 @@ import { BookFilterComponent } from './components/book/book-filter/book-filter.c
 import { FormsModule } from '@angular/forms';
 import { LibraryBooksStatisticsComponent } from './components/library/library-books-statistics/library-books-statistics.component';
 import { LibraryReadersStatisticsComponent } from './components/library/library-readers-statistics/library-readers-statistics.component';
+import { LibraryAddComponent } from './components/library/library-add/library-add.component';
+import { LibraryUpdateComponent } from './components/library/library-update/library-update.component';
+import { LibraryDeleteComponent } from './components/library/library-delete/library-delete.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +37,10 @@ import { LibraryReadersStatisticsComponent } from './components/library/library-
     ReaderDetailsComponent,
     BookFilterComponent,
     LibraryBooksStatisticsComponent,
-    LibraryReadersStatisticsComponent
+    LibraryReadersStatisticsComponent,
+    LibraryAddComponent,
+    LibraryUpdateComponent,
+    LibraryDeleteComponent
     // put all components, automat cand le creez
   ],
   imports: [

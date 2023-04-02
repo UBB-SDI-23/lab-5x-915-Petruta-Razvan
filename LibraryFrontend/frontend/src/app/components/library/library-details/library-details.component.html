@@ -71,5 +71,10 @@
                 </div>
             </div>
         </div>
+
+        <div>
+            <button type="button" [routerLink]="['/libraries-update/', library.id]" class="btn btn-outline-primary m-2 btn-custom">Update</button>
+            <button type="button" [routerLink]="['/libraries-delete/', library.id]" class="btn btn-outline-danger m-2 btn-custom">Delete</button>
+        </div>
     </div>
 </div>
