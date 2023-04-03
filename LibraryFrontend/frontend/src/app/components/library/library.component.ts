@@ -18,4 +18,10 @@ export class LibraryComponent implements OnInit {
       this.libraries = result;
     });
   }
+
+  onSortByName(): void {
+    this.libraries.sort((a: Library, b: Library) => {
+      return a.name.localeCompare(b.name);
+    })
+  }
 }
