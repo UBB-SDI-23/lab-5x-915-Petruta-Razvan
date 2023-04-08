@@ -17,4 +17,25 @@ export class ReaderComponent implements OnInit {
       this.readers = result;
     });
   }
+
+  onSort(field: string): void {
+    const sortByName = ((a: Reader, b: Reader) => {
+      return a.name.localeCompare(b.name);
+    });
+
+    const sortByBirthDate = ((a: Reader, b: Reader) => {
+      return new Date(a.birthDate).getTime() - new Date(b.birthDate).getTime();
+    });
+
+    switch (field) {
+      case "name": {
+        this.readers.sort(sortByName);
+        break;
+      }
+      case "birthDate": {
+        this.readers.sort(sortByBirthDate);
+        break;
+      }
+    }
+  }
 }

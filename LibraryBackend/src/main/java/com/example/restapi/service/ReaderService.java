@@ -3,9 +3,12 @@ package com.example.restapi.service;
 import com.example.restapi.exceptions.ReaderNotFoundException;
 import com.example.restapi.model.Reader;
 import com.example.restapi.repository.ReaderRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReaderService {
@@ -15,8 +18,10 @@ public class ReaderService {
         this.readerRepository = readerRepository;
     }
 
-    public List<Reader> getAllReaders() {
-        return this.readerRepository.findAll();
+    public List<Reader> getAllReaders(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+        return this.readerRepository.findAll(pageable).getContent();
     }
 
     public Reader addNewReader(Reader newReader) {

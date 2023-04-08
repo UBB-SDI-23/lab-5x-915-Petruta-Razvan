@@ -38,8 +38,9 @@ public class LibraryController {
     // LIBRARIES --------------------------------------------------------
     @GetMapping("/libraries")
     // get all the libraries
-    List<LibraryDTO_noBooks> allLibraries() {
-        return this.libraryService.getAllLibraries().stream().map(this::convertToLibraryDTO_forAll).collect(Collectors.toList());
+    List<LibraryDTO_noBooks> allLibraries(@RequestParam(defaultValue = "0") Integer pageNo,
+                                          @RequestParam(defaultValue = "100") Integer pageSize) {
+        return this.libraryService.getAllLibraries(pageNo, pageSize).stream().map(this::convertToLibraryDTO_forAll).collect(Collectors.toList());
     }
 
     @GetMapping("/libraries/{id}/books")
@@ -61,7 +62,7 @@ public class LibraryController {
 
     @GetMapping("/libraries/books-statistic")
     List<LibrariesCountDTO> getLibrariesWithBooksStatistic() {
-        return this.libraryService.getLibrariesWithNumberOfBooksAsc();
+        return this.libraryService.getLibrariesWithNumberOfBooksDesc();
     }
 
     @GetMapping("/libraries/readers-statistic")

@@ -19,9 +19,32 @@ export class LibraryComponent implements OnInit {
     });
   }
 
-  onSortByName(): void {
-    this.libraries.sort((a: Library, b: Library) => {
+  onSort(field: string): void {
+    const sortByName = ((a: Library, b: Library) => {
       return a.name.localeCompare(b.name);
-    })
+    });
+
+    const sortByAddress = ((a: Library, b: Library) => {
+      return a.address.localeCompare(b.address);
+    });
+
+    const sortByConstructionYear = ((a: Library, b: Library) => {
+      return a.yearOfConstruction - b.yearOfConstruction;
+    });
+
+    switch (field) {
+      case "name": {
+        this.libraries.sort(sortByName);
+        break;
+      }
+      case "address": {
+        this.libraries.sort(sortByAddress);
+        break;
+      }
+      case "constructionYear": {
+        this.libraries.sort(sortByConstructionYear);
+        break;
+      }
+    }
   }
 }

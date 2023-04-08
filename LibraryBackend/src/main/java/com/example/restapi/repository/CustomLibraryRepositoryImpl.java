@@ -16,7 +16,7 @@ public class CustomLibraryRepositoryImpl implements CustomLibraryRepository {
     private EntityManager entityManager;
 
     @Override
-    public List<LibrariesCountDTO> findLibrariesGroupByCountBooksAsc() {
+    public List<LibrariesCountDTO> findLibrariesGroupByCountBooksDesc() {
         CriteriaBuilder cb = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<LibrariesCountDTO> query = cb.createQuery(LibrariesCountDTO.class);
         Root<Library> libraryRoot = query.from(Library.class);
@@ -29,9 +29,9 @@ public class CustomLibraryRepositoryImpl implements CustomLibraryRepository {
                 cb.count(libraryBookJoin.get("title"))
         ))
                 .groupBy(libraryRoot.get("ID"), libraryRoot.get("name"))
-                .orderBy(cb.asc(cb.count(libraryBookJoin.get("title"))));
+                .orderBy(cb.desc(cb.count(libraryBookJoin.get("title"))));
 
-        return this.entityManager.createQuery(query).getResultList();
+        return this.entityManager.createQuery(query).setMaxResults(50).getResultList();
     }
 
     @Override
@@ -52,6 +52,6 @@ public class CustomLibraryRepositoryImpl implements CustomLibraryRepository {
                 .groupBy(libraryRoot.get("ID"), libraryRoot.get("name"))
                 .orderBy(cb.desc(cb.count(membershipBookJoin.get("isStudent"))));
 
-        return this.entityManager.createQuery(query).getResultList();
+        return this.entityManager.createQuery(query).setMaxResults(50).getResultList();
     }
 }

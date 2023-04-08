@@ -6,10 +6,27 @@
     color: #36c66b;
 }
 
-.btn-custom {
+.btn-custom:hover {
+    color: white;
+}
+
+.item-custom {
+    cursor: pointer;
+}
+
+.container-custom {
+    max-width: 80%;
+}
+
+.btn-custom, .item-custom {
     font-size: 0.8rem;
 }
 
-.btn-custom:hover {
-    color: white;
+.item-custom {
+    cursor: pointer;
+}
+
+.item-custom:active {
+    background-color: transparent;
+    color: black;
 }

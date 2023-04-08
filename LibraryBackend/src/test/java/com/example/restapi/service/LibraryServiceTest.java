@@ -24,7 +24,7 @@ public class LibraryServiceTest {
 
     @Before
     public void init() {
-        when(this.libraryRepository.findLibrariesGroupByCountBooksAsc()).thenReturn(Arrays.asList(
+        when(this.libraryRepository.findLibrariesGroupByCountBooksDesc()).thenReturn(Arrays.asList(
                 new LibrariesCountDTO(1L, "name1", 5L),
                 new LibrariesCountDTO(2L, "name2", 6L),
                 new LibrariesCountDTO(3L, "name3", 10L)
@@ -39,7 +39,7 @@ public class LibraryServiceTest {
 
     @Test
     public void testGetLibrariesWithNumberOfBooksAsc() {
-        List<LibrariesCountDTO> result = this.libraryService.getLibrariesWithNumberOfBooksAsc();
+        List<LibrariesCountDTO> result = this.libraryService.getLibrariesWithNumberOfBooksDesc();
 
         assertEquals(3, result.size());
         assertEquals("name1", result.get(0).getName());

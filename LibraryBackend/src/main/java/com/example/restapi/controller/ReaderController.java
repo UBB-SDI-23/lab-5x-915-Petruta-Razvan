@@ -34,8 +34,9 @@ public class ReaderController {
 
     @GetMapping("/readers")
         // get all the readers
-    List<ReaderDTO_forAll> allReaders() {
-        return this.readerService.getAllReaders().stream().map(this::convertToReaderDTO_forAll).collect(Collectors.toList());
+    List<ReaderDTO_forAll> allReaders(@RequestParam(defaultValue = "0") Integer pageNo,
+                                      @RequestParam(defaultValue = "100") Integer pageSize) {
+        return this.readerService.getAllReaders(pageNo, pageSize).stream().map(this::convertToReaderDTO_forAll).collect(Collectors.toList());
     }
 
     @PostMapping("/readers")

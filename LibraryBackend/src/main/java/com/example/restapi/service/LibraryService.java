@@ -8,9 +8,12 @@ import com.example.restapi.model.Reader;
 import com.example.restapi.repository.BookRepository;
 import com.example.restapi.repository.LibraryRepository;
 import com.example.restapi.repository.ReaderRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class LibraryService {
@@ -24,8 +27,10 @@ public class LibraryService {
         this.readerRepository = readerRepository;
     }
 
-    public List<Library> getAllLibraries() {
-        return this.libraryRepository.findAll();
+    public List<Library> getAllLibraries(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+        return this.libraryRepository.findAll(pageable).getContent();
     }
 
     public List<Book> getAllBooksFromLibrary(Long id) {
@@ -64,8 +69,8 @@ public class LibraryService {
         return this.readerRepository.findReadersByMembershipsLibraryID(libraryID);
     }
 
-    public List<LibrariesCountDTO> getLibrariesWithNumberOfBooksAsc() {
-        return this.libraryRepository.findLibrariesGroupByCountBooksAsc();
+    public List<LibrariesCountDTO> getLibrariesWithNumberOfBooksDesc() {
+        return this.libraryRepository.findLibrariesGroupByCountBooksDesc();
     }
 
     public List<LibrariesCountDTO> getLibrariesWithNumberOfStudentReadersDesc() {

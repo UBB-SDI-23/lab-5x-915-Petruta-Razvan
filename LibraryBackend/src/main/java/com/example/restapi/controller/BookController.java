@@ -1,6 +1,5 @@
 package com.example.restapi.controller;
 
-import com.example.restapi.dto.BookDTO;
 import com.example.restapi.dto.BookDTO_onlyLibraryID;
 import com.example.restapi.dto.BookDTO_wholeLibrary;
 import com.example.restapi.model.Book;
@@ -28,17 +27,21 @@ public class BookController {
 
     @GetMapping("/books")
     // get all the books, or filter by price if there is a parameter specified
-    List<BookDTO_onlyLibraryID> allBooks(@RequestParam(required = false) Double minPrice) {
+    List<BookDTO_onlyLibraryID> allBooks(@RequestParam(required = false) Double minPrice,
+                                         @RequestParam(defaultValue = "0") Integer pageNo,
+                                         @RequestParam(defaultValue = "100") Integer pageSize) {
         if (minPrice == null) {
-            return this.bookService.getAllBooks().stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
+            return this.bookService.getAllBooks(pageNo, pageSize).stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
         }
-        return this.bookService.getBooksWithPriceGreater(minPrice).stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
+        return this.bookService.getBooksWithPriceGreater(minPrice, pageNo, pageSize).stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
     }
 
     @GetMapping("/booksWithMinimumPrice")
         // get all the books, or filter by price if there is a parameter specified
-    List<BookDTO_onlyLibraryID> allBooksWithMinPrice(@RequestParam(required = false) Double minPrice) {
-        return this.bookService.getBooksWithPriceGreater(minPrice).stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
+    List<BookDTO_onlyLibraryID> allBooksWithMinPrice(@RequestParam(required = false) Double minPrice,
+                                                     @RequestParam(defaultValue = "0") Integer pageNo,
+                                                     @RequestParam(defaultValue = "100") Integer pageSize) {
+        return this.bookService.getBooksWithPriceGreater(minPrice, pageNo, pageSize).stream().map(this::convertToBookDTO_onlyLibraryID).collect(Collectors.toList());
     }
 
     @GetMapping("/books/{id}")

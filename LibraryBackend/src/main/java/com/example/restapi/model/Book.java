@@ -35,7 +35,7 @@ public class Book {
     @Min(1000)
     @Max(2023)
     private Integer publishedYear;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "library_id", nullable = false)
     @JsonIgnore
     @EqualsAndHashCode.Exclude

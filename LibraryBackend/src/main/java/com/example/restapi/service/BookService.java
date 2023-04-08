@@ -7,10 +7,13 @@ import com.example.restapi.model.Book;
 import com.example.restapi.model.Library;
 import com.example.restapi.repository.BookRepository;
 import com.example.restapi.repository.LibraryRepository;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -22,8 +25,10 @@ public class BookService {
         this.libraryRepository = libraryRepository;
     }
 
-    public List<Book> getAllBooks() {
-        return this.bookRepository.findAll();
+    public List<Book> getAllBooks(Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+        return this.bookRepository.findAll(pageable).getContent();
     }
 
     public Book addNewBook(Book newBook, Long id) {
@@ -67,7 +72,9 @@ public class BookService {
         this.bookRepository.deleteById(id);
     }
 
-    public List<Book> getBooksWithPriceGreater(Double price) {
-        return this.bookRepository.findByPriceGreaterThan(price);
+    public List<Book> getBooksWithPriceGreater(Double price, Integer pageNo, Integer pageSize) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize);
+
+        return this.bookRepository.findByPriceGreaterThan(price, pageable).getContent();
     }
 }

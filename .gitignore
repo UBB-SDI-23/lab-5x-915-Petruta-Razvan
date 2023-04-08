@@ -1,0 +1,4 @@
+/LibraryBackend/populate_database/queries/insert_books.sql
+/LibraryBackend/populate_database/queries/insert_libraries.sql
+/LibraryBackend/populate_database/queries/insert_readers.sql
+/LibraryBackend/populate_database/queries/insert_memberships.sql
