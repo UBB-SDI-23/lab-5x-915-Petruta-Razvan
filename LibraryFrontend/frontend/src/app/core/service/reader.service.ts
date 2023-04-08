@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ReaderService {
   // private baseUrl = "/api/";
-  private baseUrl = "http://localhost/api/";
+  private baseUrl = "http://13.49.102.150/api/";
 
   constructor(private httpClient: HttpClient) { }
 
