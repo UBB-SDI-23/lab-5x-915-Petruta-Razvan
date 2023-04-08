@@ -1,14 +1,15 @@
 import random
 import psycopg2
+from constants import HOST, PORT, DATABASE, USER, PASSWORD
 
 
 def insert_data_memberships():
     conn = psycopg2.connect(
-        host='localhost',
-        port='5432',
-        database='librarydb',
-        user='postgres',
-        password='password'
+        host=HOST,
+        port=PORT,
+        database=DATABASE,
+        user=USER,
+        password=PASSWORD
     )
 
     try:

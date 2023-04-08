@@ -1,15 +1,16 @@
 import random
 import psycopg2
 from faker import Faker
+from constants import SPECIAL_CHARS, EMAIL_DOMAINS, TLDS, HOST, PORT, DATABASE, USER, PASSWORD
 
 
 def insert_data_libraries():
     conn = psycopg2.connect(
-        host='localhost',
-        port='5432',
-        database='librarydb',
-        user='postgres',
-        password='password'
+        host=HOST,
+        port=PORT,
+        database=DATABASE,
+        user=USER,
+        password=PASSWORD
     )
 
     try:
@@ -20,10 +21,10 @@ def insert_data_libraries():
                 values = []
                 for i in range(1000000):
                     name = fake.company()
-                    name_modified = "".join(c for c in name if c not in [".", " ", ","]).lower()
+                    name_modified = "".join(c for c in name if c not in SPECIAL_CHARS).lower()
                     address = fake.address()
-                    email = name_modified + random.choice(["@gmail.com", "@yahoo.com"])
-                    website = name_modified + random.choice([".com", ".net", ".ro"])
+                    email = name_modified + random.choice(EMAIL_DOMAINS)
+                    website = name_modified + random.choice(TLDS)
                     year_of_construction = random.randint(1850, 2022)
                     values.append(f"('{name}', '{address}', '{email}', '{website}', {year_of_construction})")
                     if len(values) == 1000:

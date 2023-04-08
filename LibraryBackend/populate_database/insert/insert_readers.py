@@ -1,15 +1,16 @@
 import random
 import psycopg2
 from faker import Faker
+from constants import EMAIL_DOMAINS, HOST, PORT, DATABASE, USER, PASSWORD, GENDERS, SPECIAL_CHARS
 
 
 def insert_data_readers():
     conn = psycopg2.connect(
-        host='localhost',
-        port='5432',
-        database='librarydb',
-        user='postgres',
-        password='password'
+        host=HOST,
+        port=PORT,
+        database=DATABASE,
+        user=USER,
+        password=PASSWORD
     )
 
     try:
@@ -20,13 +21,13 @@ def insert_data_readers():
                 values = []
                 for i in range(1000000):
                     name = fake.name()
-                    name_modified = "".join(c for c in name if c not in [".", " ", ","]).lower()
-                    email = name_modified + random.choice(["@gmail.com", "@yahoo.com"])
+                    name_modified = "".join(c for c in name if c not in SPECIAL_CHARS).lower()
+                    email = name_modified + random.choice(EMAIL_DOMAINS)
                     year = random.randint(1940, 2010)
                     month = random.randint(1, 12)
                     day = random.randint(1, 28)
                     date = f"{year}-{'{:02d}'.format(month)}-{'{:02d}'.format(day)}"
-                    gender = random.choice(["male", "female"])
+                    gender = random.choice(GENDERS)
                     is_student = random.choice([True, False])
                     values.append(f"('{name}', '{email}', '{date}', '{gender}', {is_student})")
                     if len(values) == 1000:
