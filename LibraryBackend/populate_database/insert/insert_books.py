@@ -1,16 +1,15 @@
 import random
 import psycopg2
 from faker import Faker
-from constants import HOST, PORT, DATABASE, USER, PASSWORD
 
 
 def insert_data_books():
     conn = psycopg2.connect(
-        host=HOST,
-        port=PORT,
-        database=DATABASE,
-        user=USER,
-        password=PASSWORD
+        host='localhost',
+        port='5432',
+        database='librarydb',
+        user='postgres',
+        password='password'
     )
 
     try:
