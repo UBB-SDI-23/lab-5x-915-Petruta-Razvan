@@ -21,7 +21,8 @@ const routes: Routes = [
   },
   {
     path: 'books',
-    component: BookComponent
+    component: BookComponent,
+    data: { pageNo: 0, pageSize: 50 }
   },
   {
     path: 'books-filter',
@@ -33,7 +34,8 @@ const routes: Routes = [
   },
   {
     path: 'libraries',
-    component: LibraryComponent
+    component: LibraryComponent,
+    data: { pageNo: 0, pageSize: 50 }
   },
   {
     path: 'libraries/:id',
@@ -61,7 +63,8 @@ const routes: Routes = [
   },
   {
     path: 'readers',
-    component: ReaderComponent
+    component: ReaderComponent,
+    data: { pageNo: 0, pageSize: 50 }
   },
   {
     path: 'readers/:id',

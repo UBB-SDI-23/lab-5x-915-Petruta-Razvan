@@ -1,6 +1,7 @@
 <div class="container container-fluid mt-5 mb-5 container-custom">
     <div class="btn-group dropend m-3 mb-5">
-        <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-custom btn-sort" data-bs-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-custom btn-sort"
+            data-bs-toggle="dropdown" aria-expanded="false">
             Sort by:
         </button>
         <ul class="dropdown-menu">
@@ -13,7 +14,7 @@
         <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let library of libraries; let i = index">
             <div class="card m-3 text-center">
                 <div class="card-body">
-                    <h4># {{i + 1}}</h4>
+                    <h4># {{pageNumber * 50 + i + 1}}</h4>
                     <div>
                         <p>Name: {{library.name}}</p>
                     </div>
@@ -41,4 +42,16 @@
             </div>
         </div>
     </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination m-3 justify-content-end">
+            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onStart()"><a class="page-link"><<<</a></li>
+            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onPrevious()"><a class="page-link"><</a></li>
+            <li class="page-item"><a class="page-link disabled">{{(pageNumber + 1) | number: '1.0-0'}} / {{(noElements) | number: '1.0-0'}}</a></li>
+            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noElements - 1}" (click)="onNext()"><a class="page-link">></a></li>
+            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noElements - 1}" (click)="onEnd()"><a class="page-link">>>></a></li>
+        </ul>
+    </nav>
+    <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top" (click)="backToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 </div>

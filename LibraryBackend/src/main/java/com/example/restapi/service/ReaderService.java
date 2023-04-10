@@ -5,6 +5,7 @@ import com.example.restapi.model.Reader;
 import com.example.restapi.repository.ReaderRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,7 +20,7 @@ public class ReaderService {
     }
 
     public List<Reader> getAllReaders(Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("ID"));
 
         return this.readerRepository.findAll(pageable).getContent();
     }

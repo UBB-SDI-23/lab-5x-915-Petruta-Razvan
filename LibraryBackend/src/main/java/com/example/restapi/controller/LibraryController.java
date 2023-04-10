@@ -37,16 +37,18 @@ public class LibraryController {
 
     // LIBRARIES --------------------------------------------------------
     @GetMapping("/libraries")
-    // get all the libraries
     List<LibraryDTO_noBooks> allLibraries(@RequestParam(defaultValue = "0") Integer pageNo,
-                                          @RequestParam(defaultValue = "100") Integer pageSize) {
-        return this.libraryService.getAllLibraries(pageNo, pageSize).stream().map(this::convertToLibraryDTO_forAll).collect(Collectors.toList());
+                                          @RequestParam(defaultValue = "50") Integer pageSize) {
+        return this.libraryService.getAllLibraries(pageNo, pageSize).stream().map(
+                (library) -> DTOConverters.convertToLibraryDTO_forAll(library, this.modelMapper)
+        ).collect(Collectors.toList());
     }
 
     @GetMapping("/libraries/{id}/books")
-    // get all the books from a library given the id
     List<BookDTO_onlyLibraryID> allBookFromLibrary(@PathVariable Long id) {
-        return this.libraryService.getAllBooksFromLibrary(id).stream().map(this::convertToBookDTO_forAll).collect(Collectors.toList());
+        return this.libraryService.getAllBooksFromLibrary(id).stream().map(
+                (book) -> DTOConverters.convertToBookDTO_forAll(book, this.modelMapper)
+        ).collect(Collectors.toList());
     }
 
     @GetMapping("/libraries/{id}/readers")
@@ -55,7 +57,6 @@ public class LibraryController {
     }
 
     @GetMapping("/libraries/{id}")
-    // get a library by id
     LibraryDTO_allBooks oneLibrary(@PathVariable Long id) {
         return this.convertToLibraryDTO_forOne(this.libraryService.getLibraryById(id));
     }
@@ -70,8 +71,12 @@ public class LibraryController {
         return this.libraryService.getLibrariesWithNumberOfStudentReadersDesc();
     }
 
+    @GetMapping("/libraries/count")
+    long countLibraries() {
+        return this.libraryService.countAllLibraries();
+    }
+
     @PostMapping("/libraries")
-    // add a new library
     Library newLibrary(@Valid @RequestBody Library newLibrary) {
         return this.libraryService.addNewLibrary(newLibrary);
     }
@@ -87,19 +92,13 @@ public class LibraryController {
     }
 
     @PutMapping("/libraries/{id}")
-    // update a library given the id
     Library replaceLibrary(@Valid @RequestBody Library newLibrary, @PathVariable Long id) {
         return this.libraryService.replaceLibrary(newLibrary, id);
     }
 
     @DeleteMapping("/libraries/{id}")
-    // delete a library by id
     void deleteLibrary(@PathVariable Long id) {
         this.libraryService.deleteLibrary(id);
-    }
-
-    private LibraryDTO_noBooks convertToLibraryDTO_forAll(Library library) {
-        return this.modelMapper.map(library, LibraryDTO_noBooks.class);
     }
 
     private LibraryDTO_allBooks convertToLibraryDTO_forOne(Library library) {
@@ -120,11 +119,5 @@ public class LibraryController {
                 }).collect(Collectors.toSet());
         libraryDTO.setReaders(readers);
         return libraryDTO;
-    }
-
-    private BookDTO_onlyLibraryID convertToBookDTO_forAll(Book book) {
-        BookDTO_onlyLibraryID bookDTO = this.modelMapper.map(book, BookDTO_onlyLibraryID.class);
-        bookDTO.setLibraryID(book.getLibrary().getID());
-        return bookDTO;
     }
 }

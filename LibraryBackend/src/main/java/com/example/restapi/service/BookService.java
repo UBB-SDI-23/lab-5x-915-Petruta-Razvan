@@ -9,11 +9,11 @@ import com.example.restapi.repository.BookRepository;
 import com.example.restapi.repository.LibraryRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 @Service
 public class BookService {
@@ -26,7 +26,7 @@ public class BookService {
     }
 
     public List<Book> getAllBooks(Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("ID"));
 
         return this.bookRepository.findAll(pageable).getContent();
     }

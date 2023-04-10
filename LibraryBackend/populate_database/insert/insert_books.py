@@ -19,17 +19,21 @@ def insert_data_books():
             with conn.cursor() as cursor:
                 cursor.execute("SELECT ID from libraries")
                 library_ids = [el[0] for el in cursor.fetchall()]
-                insert_query = "INSERT INTO books (title, author, publisher, price, published_year, library_id) VALUES "
+                insert_query = "INSERT INTO books (title, author, publisher, price, published_year, description, library_id) VALUES "
                 values = []
                 for i in range(1000000):
                     title = fake.sentence(nb_words=random.randint(2, 5), variable_nb_words=True,
                                           ext_word_list=None).strip(".")
                     author = fake.name()
                     publisher = fake.company()
+                    description = fake.paragraph(nb_sentences=5)
+                    while len(description.split()) < 100:
+                        description += " " + fake.paragraph(nb_sentences=5)
+                    description = "".join(c for c in description if c not in ["'", ",", "-", "/"]).lower()
                     price = round(random.uniform(10, 100), 2)
                     published_year = random.randint(1850, 2022)
                     library_id = random.choice(library_ids)
-                    values.append(f"('{title}', '{author}', '{publisher}', {price}, {published_year}, {library_id})")
+                    values.append(f"('{title}', '{author}', '{publisher}', {price}, {published_year}, '{description}', {library_id})")
                     if len(values) == 1000:
                         f.write(insert_query + ", ".join(values) + ";\n")
                         values = []

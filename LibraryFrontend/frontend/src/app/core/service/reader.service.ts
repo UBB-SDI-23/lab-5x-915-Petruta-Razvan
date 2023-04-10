@@ -8,12 +8,16 @@ import { Observable } from 'rxjs';
 })
 export class ReaderService {
   // private baseUrl = "/api/";
-  private baseUrl = "http://13.49.102.150/api/";
+  private baseUrl = "http://localhost/api/";
 
   constructor(private httpClient: HttpClient) { }
 
   getReaders(): Observable<Reader[]> {
     return this.httpClient.get(this.baseUrl + "readers") as Observable<Reader[]>;
+  }
+
+  get50Readers(pageNo: Number, pageSize: Number): Observable<Reader[]> {
+    return this.httpClient.get(this.baseUrl + "readers?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<Reader[]>;
   }
 
   getReader(id: string): Observable<ReaderDetails> {

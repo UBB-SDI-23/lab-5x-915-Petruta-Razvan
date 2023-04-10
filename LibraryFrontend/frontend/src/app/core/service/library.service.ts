@@ -8,12 +8,16 @@ import { AddUpdateLibraryDTO, Library, LibraryCount, LibraryDetails } from '../m
 })
 export class LibraryService {
   // private baseUrl = "/api/";
-  private baseUrl = "http://13.49.102.150/api/";
+  private baseUrl = "http://localhost/api/";
 
   constructor(private httpClient: HttpClient) { }
 
   getLibraries(): Observable<Library[]> {
     return this.httpClient.get(this.baseUrl + "libraries") as Observable<Library[]>;
+  }
+
+  get50Libraries(pageNo: Number, pageSize: Number): Observable<Library[]> {
+    return this.httpClient.get(this.baseUrl + "libraries?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<Library[]>;
   }
 
   getLibrary(id: string): Observable<LibraryDetails> {
@@ -26,6 +30,10 @@ export class LibraryService {
 
   getReadersStatistics(): Observable<LibraryCount[]> {
     return this.httpClient.get(this.baseUrl + "libraries/readers-statistic") as Observable<LibraryCount[]>;
+  }
+
+  countLibraries(): Observable<Number> {
+    return this.httpClient.get(this.baseUrl + "libraries/count") as Observable<Number>;
   }
 
   addLibrary(library: AddUpdateLibraryDTO): Observable<Library> {

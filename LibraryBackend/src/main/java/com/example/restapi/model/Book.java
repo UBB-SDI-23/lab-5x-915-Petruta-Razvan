@@ -7,8 +7,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-import java.util.Set;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -35,6 +33,9 @@ public class Book {
     @Min(1000)
     @Max(2023)
     private Integer publishedYear;
+    @Column(length = 2000)
+    @NotEmpty
+    private String description;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "library_id", nullable = false)
     @JsonIgnore

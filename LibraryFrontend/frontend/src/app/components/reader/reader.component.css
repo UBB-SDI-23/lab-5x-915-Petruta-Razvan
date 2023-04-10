@@ -26,3 +26,7 @@
     background-color: transparent;
     color: black;
 }
+
+.pagination .page-custom {
+    cursor: pointer;
+}

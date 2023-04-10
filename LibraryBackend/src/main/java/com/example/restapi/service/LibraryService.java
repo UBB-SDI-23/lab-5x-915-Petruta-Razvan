@@ -10,10 +10,10 @@ import com.example.restapi.repository.LibraryRepository;
 import com.example.restapi.repository.ReaderRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class LibraryService {
@@ -28,9 +28,13 @@ public class LibraryService {
     }
 
     public List<Library> getAllLibraries(Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("ID"));
 
         return this.libraryRepository.findAll(pageable).getContent();
+    }
+
+    public long countAllLibraries() {
+        return this.libraryRepository.count();
     }
 
     public List<Book> getAllBooksFromLibrary(Long id) {
