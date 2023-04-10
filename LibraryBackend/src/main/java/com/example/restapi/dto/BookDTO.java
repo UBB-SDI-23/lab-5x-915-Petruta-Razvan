@@ -23,4 +23,6 @@ public abstract class BookDTO {
     @Min(1000)
     @Max(2023)
     private Integer publishedYear;
+    @NotEmpty
+    private String description;
 }

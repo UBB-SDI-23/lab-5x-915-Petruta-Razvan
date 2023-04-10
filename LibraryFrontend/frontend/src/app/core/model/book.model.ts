@@ -7,7 +7,8 @@ export interface Book {
     publisher: string,
     price: number,
     publishedYear: number,
-    libraryID: number
+    libraryID: number,
+    description: string
 }
 
 export interface BookNoLibrary {
@@ -16,7 +17,8 @@ export interface BookNoLibrary {
     author: string,
     publisher: string,
     price: number,
-    publishedYear: number
+    publishedYear: number,
+    description: string
 }
 
 export interface BookDetails {
@@ -26,5 +28,6 @@ export interface BookDetails {
     publisher: string,
     price: number,
     publishedYear: number,
+    description: string,
     library: Library
 }
