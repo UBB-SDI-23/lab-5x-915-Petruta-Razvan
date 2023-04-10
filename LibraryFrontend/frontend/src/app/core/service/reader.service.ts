@@ -7,8 +7,8 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ReaderService {
-  // private baseUrl = "/api/";
-  private baseUrl = "http://localhost/api/";
+  private baseUrl = "/api/";
+  // private baseUrl = "http://13.53.43.81/api/";
 
   constructor(private httpClient: HttpClient) { }
 

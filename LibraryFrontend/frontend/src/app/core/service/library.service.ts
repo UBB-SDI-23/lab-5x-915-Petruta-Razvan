@@ -7,8 +7,8 @@ import { AddUpdateLibraryDTO, Library, LibraryCount, LibraryDetails } from '../m
   providedIn: 'root'
 })
 export class LibraryService {
-  // private baseUrl = "/api/";
-  private baseUrl = "http://localhost/api/";
+  private baseUrl = "/api/";
+  // private baseUrl = "http://13.53.43.81/api/";
 
   constructor(private httpClient: HttpClient) { }
 
