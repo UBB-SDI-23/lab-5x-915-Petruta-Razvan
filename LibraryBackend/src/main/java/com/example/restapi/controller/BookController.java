@@ -1,5 +1,6 @@
 package com.example.restapi.controller;
 
+import com.example.restapi.dto.BookDTO;
 import com.example.restapi.dto.BookDTO_onlyLibraryID;
 import com.example.restapi.dto.BookDTO_wholeLibrary;
 import com.example.restapi.dto.DTOConverters;
@@ -54,14 +55,19 @@ public class BookController {
         return DTOConverters.convertToBookDTO_wholeLibrary(this.bookService.getBookById(id), modelMapper);
     }
 
+    @GetMapping("/books/count")
+    long countBooks() {
+        return this.bookService.countAllBooks();
+    }
+
     @PostMapping("/libraries/{id}/books")
     Book newBook(@Valid @RequestBody Book newBook, @PathVariable Long id) {
         return this.bookService.addNewBook(newBook, id);
     }
 
     @PutMapping("/books/{id}")
-    Book replaceBook(@Valid @RequestBody BookDTO_onlyLibraryID bookDTO, @PathVariable Long id) {
-        return this.bookService.replaceBook(bookDTO, id);
+    Book replaceBook(@Valid @RequestBody Book book, @PathVariable Long id) {
+        return this.bookService.replaceBook(book, id);
     }
 
     @DeleteMapping("/books/{id}")

@@ -9,16 +9,27 @@ import { ReaderService } from 'src/app/core/service/reader.service';
   styleUrls: ['./reader-details.component.css']
 })
 export class ReaderDetailsComponent implements OnInit{
-  reader?: ReaderDetails
-  readerID?: string
+  reader?: ReaderDetails;
+  readerID?: string;
+  showLoader: boolean = false;
 
   constructor(private readerService: ReaderService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.showLoader = true;
+
     this.activatedRoute.params.subscribe(params => {
       this.readerID = params['id'];
-      this.readerService.getReader(this.readerID!).subscribe((reader: ReaderDetails) => {
-        this.reader = reader;
+      this.readerService.getReader(this.readerID!).subscribe({
+        next: (reader: ReaderDetails) => {
+          this.reader = reader;
+        },
+        error: (error) => {
+          console.log(error);
+        },
+        complete: () => {
+          this.showLoader = false;
+        }
       });
     });
   }

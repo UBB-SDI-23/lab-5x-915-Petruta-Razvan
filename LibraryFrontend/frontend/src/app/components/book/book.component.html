@@ -1,4 +1,10 @@
-<div class="container container-fluid mt-5 mb-5 container-custom">
+<div *ngIf="showLoader" class="d-flex justify-content-center m-5">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<div *ngIf="!showLoader" class="container container-fluid mt-5 mb-5 container-custom">
     <div class="btn-group dropend m-3 mb-5">
         <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-custom btn-sort" data-bs-toggle="dropdown" aria-expanded="false">
             Sort by:
@@ -24,7 +30,7 @@
                         <p>Publisher: {{book.publisher}}</p>
                     </div>
                     <div>
-                        <p>Description: {{book.description}}</p>
+                        <p>Description: {{book.description.substring(0, 100)}}...</p>
                     </div>
                     <div>
                         <p>Price: {{book.price}} €</p>
@@ -36,9 +42,12 @@
                         <p>Library ID: {{book.libraryID}}</p>
                     </div>
                     <div>
-                        <button type="button" [routerLink]="['/books/', book.id]" class="btn btn-outline-warning m-2 btn-custom">Info</button>
-                        <button type="button" class="btn btn-outline-primary m-2 btn-custom">Update</button>
-                        <button type="button" class="btn btn-outline-danger m-2 btn-custom">Delete</button>
+                        <button type="button" [routerLink]="['/books/', book.id]" 
+                            class="btn btn-outline-warning m-2 btn-custom"><i class="fa-sharp fa-solid fa-info"></i></button>
+                        <button type="button" [routerLink]="['/books-update/', book.id]" 
+                            class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
+                        <button type="button" [routerLink]="['/books-delete/', book.id]"
+                            class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
                     </div>
                 </div>
             </div>
@@ -48,9 +57,13 @@
         <ul class="pagination m-3 justify-content-end">
             <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onStart()"><a class="page-link"><<<</a></li>
             <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onPrevious()"><a class="page-link"><</a></li>
-            <li class="page-item"><a class="page-link disabled">{{(pageNumber + 1) | number: '1.0-0'}} / 20,000</a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 19999}" (click)="onNext()"><a class="page-link">></a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 19999}" (click)="onEnd()"><a class="page-link">>>></a></li>
+            <li class="page-item"><a class="page-link disabled">{{(pageNumber + 1) | number: '1.0-0'}} / {{(noPages) | number: '1.0-0'}}</a></li>
+            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noPages - 1}" (click)="onNext()"><a class="page-link">></a></li>
+            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noPages - 1}" (click)="onEnd()"><a class="page-link">>>></a></li>
         </ul>
     </nav>
+
+    <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top" (click)="backToTop()">
+        <i class="fas fa-arrow-up"></i>
+    </button>
 </div>

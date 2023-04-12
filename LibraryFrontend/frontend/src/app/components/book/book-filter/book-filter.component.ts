@@ -10,18 +10,27 @@ import { BookService } from 'src/app/core/service/book.service';
 export class BookFilterComponent implements OnInit {
   books: Book[] = [];
   searchTerm: string = '0';
+  showLoader: boolean = false;
 
   constructor(private bookService: BookService) {}
   
   ngOnInit(): void {
-    this.bookService.getBookWithMinPrice(this.searchTerm).subscribe((result: Book[]) => {
-      this.books = result;
-    });
+    this.onSearch();
   }
 
   onSearch(): void {
-    this.bookService.getBookWithMinPrice(this.searchTerm).subscribe((result: Book[]) => {
-      this.books = result;
+    this.showLoader = true;
+
+    this.bookService.getBookWithMinPrice(this.searchTerm).subscribe({
+      next: (result: Book[]) => {
+        this.books = result;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.showLoader = false;
+      }
     });
   }
 }

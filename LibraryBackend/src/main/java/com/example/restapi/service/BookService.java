@@ -1,5 +1,6 @@
 package com.example.restapi.service;
 
+import com.example.restapi.dto.BookDTO;
 import com.example.restapi.dto.BookDTO_onlyLibraryID;
 import com.example.restapi.exceptions.BookNotFoundException;
 import com.example.restapi.exceptions.LibraryNotFoundException;
@@ -44,21 +45,14 @@ public class BookService {
         return this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
     }
 
-    public Book replaceBook(BookDTO_onlyLibraryID bookDTO, Long id) {
-        Library library = this.libraryRepository.findById(bookDTO.getLibraryID()).orElseThrow(() -> new LibraryNotFoundException(bookDTO.getLibraryID()));
+    public Book replaceBook(Book bookDTO, Long id) {
         Book book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
-
-        if (!Objects.equals(library.getID(), book.getLibrary().getID())) {
-            book.getLibrary().removeBook(book);
-            book.setLibrary(library);
-            library.addBook(book);
-        }
-
         book.setTitle(bookDTO.getTitle());
         book.setAuthor(bookDTO.getAuthor());
         book.setPublisher(bookDTO.getPublisher());
         book.setPrice(bookDTO.getPrice());
         book.setPublishedYear(bookDTO.getPublishedYear());
+        book.setDescription(bookDTO.getDescription());
         return this.bookRepository.save(book);
     }
 
@@ -76,5 +70,9 @@ public class BookService {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
         return this.bookRepository.findByPriceGreaterThan(price, pageable).getContent();
+    }
+
+    public long countAllBooks() {
+        return this.bookRepository.count();
     }
 }

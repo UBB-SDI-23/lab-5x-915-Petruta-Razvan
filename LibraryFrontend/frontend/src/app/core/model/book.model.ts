@@ -31,3 +31,12 @@ export interface BookDetails {
     description: string,
     library: Library
 }
+
+export interface UpdateBookDTO {
+    title: string,
+    author: string,
+    publisher: string,
+    price: number,
+    publishedYear: number,
+    description: string
+}

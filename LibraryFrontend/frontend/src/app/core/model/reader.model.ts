@@ -29,3 +29,11 @@ export interface ReaderMembership {
     startDate: Date,
     endDate: Date
 }
+
+export interface AddUpdateReaderDTO {
+    name: string,
+    email: string,
+    birthDate: Date,
+    gender: string,
+    student: boolean
+}

@@ -1,4 +1,10 @@
-<div class="card m-3 text-center card-custom" *ngIf="library !== undefined">
+<div *ngIf="showLoader" class="d-flex justify-content-center m-5">
+    <div class="spinner-border" role="status">
+        <span class="visually-hidden">Loading...</span>
+    </div>
+</div>
+
+<div class="card m-3 text-center card-custom" *ngIf="!showLoader && library !== undefined">
     <div class="card-body">
         <div>
             <p>Name: {{library.name}}</p>
@@ -73,8 +79,8 @@
         </div>
 
         <div>
-            <button type="button" [routerLink]="['/libraries-update/', library.id]" class="btn btn-outline-primary m-2 btn-custom">Update</button>
-            <button type="button" [routerLink]="['/libraries-delete/', library.id]" class="btn btn-outline-danger m-2 btn-custom">Delete</button>
+            <button type="button" [routerLink]="['/libraries-update/', library.id]" class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
+            <button type="button" [routerLink]="['/libraries-delete/', library.id]" class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
         </div>
     </div>
 </div>

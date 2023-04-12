@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Book, BookDetails } from '../model/book.model';
+import { Book, BookDetails, UpdateBookDTO } from '../model/book.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class BookService {
-  private baseUrl = "/api/";
-  // private baseUrl = "http://13.53.43.81/api/";
+  // private baseUrl = "/api/";
+  private baseUrl = "http://localhost/api/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -26,5 +26,17 @@ export class BookService {
 
   getBookWithMinPrice(price: string): Observable<Book[]> {
     return this.httpClient.get(this.baseUrl + "books?minPrice=" + price) as Observable<Book[]>;
+  }
+
+  countBooks(): Observable<Number> {
+    return this.httpClient.get(this.baseUrl + "books/count") as Observable<Number>;
+  }
+
+  updateBook(id: string, book: UpdateBookDTO): Observable<Book> {
+    return this.httpClient.put(this.baseUrl + "books/" + id, book) as Observable<Book>;
+  }
+
+  deleteBook(id: string): Observable<Object> {
+    return this.httpClient.delete(this.baseUrl + "books/" + id) as Observable<Object>;
   }
 }

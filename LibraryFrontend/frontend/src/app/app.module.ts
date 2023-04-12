@@ -22,6 +22,11 @@ import { LibraryReadersStatisticsComponent } from './components/library/library-
 import { LibraryAddComponent } from './components/library/library-add/library-add.component';
 import { LibraryUpdateComponent } from './components/library/library-update/library-update.component';
 import { LibraryDeleteComponent } from './components/library/library-delete/library-delete.component';
+import { BookUpdateComponent } from './components/book/book-update/book-update.component';
+import { BookDeleteComponent } from './components/book/book-delete/book-delete.component';
+import { ReaderUpdateComponent } from './components/reader/reader-update/reader-update.component';
+import { ReaderDeleteComponent } from './components/reader/reader-delete/reader-delete.component';
+import { ReaderAddComponent } from './components/reader/reader-add/reader-add.component';
 
 @NgModule({
   declarations: [
@@ -40,14 +45,19 @@ import { LibraryDeleteComponent } from './components/library/library-delete/libr
     LibraryReadersStatisticsComponent,
     LibraryAddComponent,
     LibraryUpdateComponent,
-    LibraryDeleteComponent
+    LibraryDeleteComponent,
+    BookUpdateComponent,
+    BookDeleteComponent,
+    ReaderUpdateComponent,
+    ReaderDeleteComponent,
+    ReaderAddComponent
     // put all components, automat cand le creez
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    FormsModule
+    FormsModule,
     // form module + http service module
   ],
   providers: [

@@ -13,6 +13,11 @@ import { LibraryReadersStatisticsComponent } from './components/library/library-
 import { LibraryAddComponent } from './components/library/library-add/library-add.component';
 import { LibraryUpdateComponent } from './components/library/library-update/library-update.component';
 import { LibraryDeleteComponent } from './components/library/library-delete/library-delete.component';
+import { BookUpdateComponent } from './components/book/book-update/book-update.component';
+import { BookDeleteComponent } from './components/book/book-delete/book-delete.component';
+import { ReaderUpdateComponent } from './components/reader/reader-update/reader-update.component';
+import { ReaderDeleteComponent } from './components/reader/reader-delete/reader-delete.component';
+import { ReaderAddComponent } from './components/reader/reader-add/reader-add.component';
 
 const routes: Routes = [
   {
@@ -22,7 +27,7 @@ const routes: Routes = [
   {
     path: 'books',
     component: BookComponent,
-    data: { pageNo: 0, pageSize: 50 }
+    data: { pageNo: 0, pageSize: 25 }
   },
   {
     path: 'books-filter',
@@ -33,9 +38,17 @@ const routes: Routes = [
     component: BookDetailsComponent
   },
   {
+    path: 'books-update/:id',
+    component: BookUpdateComponent
+  },
+  {
+    path: 'books-delete/:id',
+    component: BookDeleteComponent
+  },
+  {
     path: 'libraries',
     component: LibraryComponent,
-    data: { pageNo: 0, pageSize: 50 }
+    data: { pageNo: 0, pageSize: 25 }
   },
   {
     path: 'libraries/:id',
@@ -64,11 +77,23 @@ const routes: Routes = [
   {
     path: 'readers',
     component: ReaderComponent,
-    data: { pageNo: 0, pageSize: 50 }
+    data: { pageNo: 0, pageSize: 25 }
   },
   {
     path: 'readers/:id',
     component: ReaderDetailsComponent
+  },
+  {
+    path: 'readers-add',
+    component: ReaderAddComponent
+  },
+  {
+    path: 'readers-update/:id',
+    component: ReaderUpdateComponent
+  },
+  {
+    path: 'readers-delete/:id',
+    component: ReaderDeleteComponent
   },
 ];
 

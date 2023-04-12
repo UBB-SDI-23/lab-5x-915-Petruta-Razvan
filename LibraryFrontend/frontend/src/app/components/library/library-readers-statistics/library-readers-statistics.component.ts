@@ -9,12 +9,23 @@ import { LibraryService } from 'src/app/core/service/library.service';
 })
 export class LibraryReadersStatisticsComponent implements OnInit {
   libraries: LibraryCount[] = [];
+  showLoader: boolean = true;
 
   constructor(private libraryService: LibraryService) {}
   
   ngOnInit(): void {
-    this.libraryService.getReadersStatistics().subscribe((result: LibraryCount[]) => {
-      this.libraries = result;
+    this.showLoader = true;
+
+    this.libraryService.getReadersStatistics().subscribe({
+      next: (result: LibraryCount[]) => {
+        this.libraries = result;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.showLoader = false;
+      }
     });
   }
 }

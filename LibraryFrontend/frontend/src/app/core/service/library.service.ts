@@ -7,8 +7,8 @@ import { AddUpdateLibraryDTO, Library, LibraryCount, LibraryDetails } from '../m
   providedIn: 'root'
 })
 export class LibraryService {
-  private baseUrl = "/api/";
-  // private baseUrl = "http://13.53.43.81/api/";
+  // private baseUrl = "/api/";
+  private baseUrl = "http://localhost/api/";
 
   constructor(private httpClient: HttpClient) { }
 
@@ -16,7 +16,7 @@ export class LibraryService {
     return this.httpClient.get(this.baseUrl + "libraries") as Observable<Library[]>;
   }
 
-  get50Libraries(pageNo: Number, pageSize: Number): Observable<Library[]> {
+  getPageLibraries(pageNo: Number, pageSize: Number): Observable<Library[]> {
     return this.httpClient.get(this.baseUrl + "libraries?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<Library[]>;
   }
 

@@ -20,7 +20,6 @@ public class Book {
     @Column
     @NotEmpty
     private String title;
-    @Column
     @NotEmpty
     private String author;
     @Column

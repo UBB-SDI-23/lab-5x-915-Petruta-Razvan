@@ -12,8 +12,9 @@ import { LibraryService } from 'src/app/core/service/library.service';
 export class LibraryComponent implements OnInit {
   libraries: Library[] = [];
   pageNumber: number = 0;
-  pageSize: number = 50;
-  noElements: number = 0;
+  pageSize: number = 25;
+  noPages: number = 0;
+  showLoader: boolean = true;
 
   constructor(private libraryService: LibraryService, private route: ActivatedRoute, private router: Router, private elementRef: ElementRef) {}
   
@@ -21,9 +22,9 @@ export class LibraryComponent implements OnInit {
     window.onscroll = () => this.scrollFunction();
 
     this.libraryService.countLibraries().subscribe((result: Number) => {
-      this.noElements = Math.floor(result.valueOf() / this.pageSize);
+      this.noPages = Math.floor(result.valueOf() / this.pageSize);
       if (result.valueOf() % this.pageSize > 0) {
-        this.noElements++;
+        this.noPages++;
       }
     });
 
@@ -31,18 +32,28 @@ export class LibraryComponent implements OnInit {
   }
 
   listLibraries(): void {
+    this.showLoader = true;
+
     this.route.queryParams.subscribe(params => {
       this.pageNumber = Number(params['pageNo']) || 0;
-      this.pageSize = Number(params['pageSize']) || 50;
+      this.pageSize = Number(params['pageSize']) || 25;
     });
     
-    this.libraryService.get50Libraries(this.pageNumber, this.pageSize).subscribe((result: Library[]) => {
-      this.libraries = result;
+    this.libraryService.getPageLibraries(this.pageNumber, this.pageSize).subscribe({
+      next: (result: Library[]) => {
+        this.libraries = result;
+      },
+      error: (error) => {
+        console.log(error);
+      },
+      complete: () => {
+        this.showLoader = false;
+      }
     });
   }
 
   onNext(): void {
-    if (this.pageNumber === this.noElements - 1) {
+    if (this.pageNumber === this.noPages - 1) {
       return;
     }
 
@@ -69,11 +80,11 @@ export class LibraryComponent implements OnInit {
   }
 
   onEnd(): void {
-    if (this.pageNumber === this.noElements - 1) {
+    if (this.pageNumber === this.noPages - 1) {
       return;
     }
 
-    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.noElements - 1, pageSize: this.pageSize } })
+    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.noPages - 1, pageSize: this.pageSize } })
     .then(() => this.listLibraries());
   }
 

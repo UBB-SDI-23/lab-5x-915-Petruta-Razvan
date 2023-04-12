@@ -8,7 +8,6 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.*;
 
-import java.util.Objects;
 import java.util.Set;
 
 @Data
@@ -34,7 +33,7 @@ public class Library {
     @NotEmpty
     private String website;
     @Column
-    @Min(1850)
+    @Min(1800)
     @Max(2023)
     private Integer yearOfConstruction;
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)

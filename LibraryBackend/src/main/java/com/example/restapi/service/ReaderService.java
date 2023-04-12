@@ -52,4 +52,8 @@ public class ReaderService {
     public void deleteReader(Long id) {
         this.readerRepository.deleteById(id);
     }
+
+    public long countAllReaders() {
+        return this.readerRepository.count();
+    }
 }

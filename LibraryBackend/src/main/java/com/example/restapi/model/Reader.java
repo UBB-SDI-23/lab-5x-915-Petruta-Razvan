@@ -2,10 +2,7 @@ package com.example.restapi.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.Past;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.*;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -25,7 +22,7 @@ public class Reader {
     @Column
     @NotEmpty
     private String name;
-    @Column
+    @NotBlank(message = "it should not be empty")
     @Email
     private String email;
     @Column

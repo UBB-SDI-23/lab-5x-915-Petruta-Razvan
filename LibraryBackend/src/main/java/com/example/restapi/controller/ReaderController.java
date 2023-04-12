@@ -40,6 +40,11 @@ public class ReaderController {
         ).collect(Collectors.toList());
     }
 
+    @GetMapping("/readers/count")
+    long countReaders() {
+        return this.readerService.countAllReaders();
+    }
+
     @PostMapping("/readers")
     Reader newReader(@Valid @RequestBody Reader newReader) {
         return this.readerService.addNewReader(newReader);
