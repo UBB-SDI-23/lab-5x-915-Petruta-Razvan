@@ -11,3 +11,11 @@
 .btn-custom:hover {
     color: white;
 }
+
+.bg-custom-active {
+    background-color: #36c66b;
+}
+
+.bg-custom-expired {
+    background-color: #dc3545;
+}

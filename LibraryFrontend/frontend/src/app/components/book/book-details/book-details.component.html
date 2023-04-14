@@ -7,25 +7,25 @@
 <div class="card m-3 text-center card-custom" *ngIf="!showLoader && book !== undefined">
     <div class="card-body">
         <div>
-            <p>Title: {{book.title}}</p>
+            <p><span class="fw-bold">Title:</span> {{book.title}}</p>
         </div>
         <div>
-            <p>Author: {{book.author}}</p>
+            <p><span class="fw-bold">Author:</span> {{book.author}}</p>
         </div>
         <div>
-            <p>Publisher: {{book.publisher}}</p>
+            <p><span class="fw-bold">Publisher:</span> {{book.publisher}}</p>
         </div>
         <div>
-            <p>Description: {{book.description}}</p>
+            <p><span class="fw-bold">Description:</span> {{book.description}}</p>
         </div>
         <div>
-            <p>Price: {{book.price}} €</p>
+            <p><span class="fw-bold">Price:</span> {{book.price}} €</p>
         </div>
         <div>
-            <p>Published Year: {{book.publishedYear}}</p>
+            <p><span class="fw-bold">Published Year:</span> {{book.publishedYear}}</p>
         </div>
 
-        <p>From the library:</p>
+        <p class="fw-bold">From the library:</p>
         <div class="card m-3 text-center">
             <div class="card-body">
                 <div>

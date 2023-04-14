@@ -27,6 +27,12 @@
             <div class="col-lg-4 li-custom" *ngFor="let library of reader.libraries">
                 <div class="card m-3 text-center">
                     <div class="card-body">
+                        <div class="badge text-wrap bg-custom-active m-3" *ngIf="isActive(library.endDate)">
+                            Active
+                        </div>
+                        <div class="badge text-wrap bg-custom-expired m-3" *ngIf="!isActive(library.endDate)">
+                            Expired
+                        </div>
                         <div>
                             <p><span class="fw-bold">Name:</span> {{library.name}}</p>
                         </div>
@@ -51,6 +57,10 @@
                     </div>
                 </div>
             </div>
+        </div>
+
+        <div>
+            <p>Want a new membership? <a [routerLink]="['/reader-membership/', reader.id]">here</a></p>
         </div>
 
         <div>

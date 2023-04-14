@@ -19,6 +19,7 @@ import { ReaderUpdateComponent } from './components/reader/reader-update/reader-
 import { ReaderDeleteComponent } from './components/reader/reader-delete/reader-delete.component';
 import { ReaderAddComponent } from './components/reader/reader-add/reader-add.component';
 import { BookAddComponent } from './components/book/book-add/book-add.component';
+import { ReaderNewMembershipComponent } from './components/reader/reader-new-membership/reader-new-membership.component';
 
 const routes: Routes = [
   {
@@ -87,6 +88,10 @@ const routes: Routes = [
   {
     path: 'readers/:id',
     component: ReaderDetailsComponent
+  },
+  {
+    path: 'reader-membership/:id',
+    component: ReaderNewMembershipComponent
   },
   {
     path: 'readers-add',

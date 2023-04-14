@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReaderAll } from 'src/app/core/model/reader.model';
 import { ReaderService } from 'src/app/core/service/reader.service';
@@ -14,6 +15,8 @@ export class ReaderComponent implements OnInit {
   pageSize: number = 25;
   noPages: number = 0;
   showLoader: boolean = true;
+
+  goToPageNumber: number = 0;
 
   constructor(private readerService: ReaderService, private route: ActivatedRoute, private router: Router, private elementRef: ElementRef) {}
   
@@ -49,42 +52,6 @@ export class ReaderComponent implements OnInit {
         this.showLoader = false;
       }
     });
-  }
-
-  onNext(): void {
-    if (this.pageNumber === this.noPages - 1) {
-      return;
-    }
-
-    this.router.navigate(['/readers'], { queryParams: { pageNo: this.pageNumber + 1, pageSize: this.pageSize } })
-    .then(() => this.listReaders());
-  }
-
-  onPrevious(): void {
-    if (this.pageNumber === 0) {
-      return;
-    }
-
-    this.router.navigate(['/readers'], { queryParams: { pageNo: this.pageNumber - 1, pageSize: this.pageSize } })
-    .then(() => this.listReaders());
-  }
-
-  onStart(): void {
-    if (this.pageNumber === 0) {
-      return;
-    }
-
-    this.router.navigate(['/readers'], { queryParams: { pageNo: 0, pageSize: this.pageSize } })
-    .then(() => this.listReaders());
-  }
-
-  onEnd(): void {
-    if (this.pageNumber === this.noPages - 1) {
-      return;
-    }
-
-    this.router.navigate(['/readers'], { queryParams: { pageNo: this.noPages - 1, pageSize: this.pageSize } })
-    .then(() => this.listReaders());
   }
 
   onSort(field: string): void {
@@ -128,5 +95,34 @@ export class ReaderComponent implements OnInit {
   backToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+  }
+
+  onPageChanged(event: PageEvent) {
+    this.pageNumber = event.pageIndex;
+    this.goToPageNumber = this.pageNumber;
+    this.pageSize = event.pageSize;
+    
+    this.readerService.countReaders().subscribe((result: Number) => {
+      this.noPages = Math.floor(result.valueOf() / this.pageSize);
+      if (result.valueOf() % this.pageSize > 0) {
+        this.noPages++;
+      }
+    });
+
+    this.router.navigate(['/readers'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
+    .then(() => this.listReaders());
+  }
+
+  goToPage(): void {
+    this.pageNumber = Math.min(Math.max(0, this.goToPageNumber), this.noPages);
+    const pageIndex = this.pageNumber;
+    this.router.navigate(['/readers'], { queryParams: { pageNo: pageIndex, pageSize: this.pageSize } })
+        .then(() => this.listReaders());
+  }
+
+  checkPageNumber(): void {
+    if (this.goToPageNumber > this.noPages) {
+      this.goToPageNumber = this.noPages;
+    }
   }
 }

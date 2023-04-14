@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LibraryAll } from 'src/app/core/model/library.model';
 import { LibraryService } from 'src/app/core/service/library.service';
@@ -16,6 +17,7 @@ export class LibraryComponent implements OnInit {
   noPages: number = 0;
   showLoader: boolean = true;
 
+  goToPageNumber: number = 0;
   constructor(private libraryService: LibraryService, private route: ActivatedRoute, private router: Router, private elementRef: ElementRef) {}
   
   ngOnInit(): void {
@@ -50,42 +52,6 @@ export class LibraryComponent implements OnInit {
         this.showLoader = false;
       }
     });
-  }
-
-  onNext(): void {
-    if (this.pageNumber === this.noPages - 1) {
-      return;
-    }
-
-    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.pageNumber + 1, pageSize: this.pageSize } })
-    .then(() => this.listLibraries());
-  }
-
-  onPrevious(): void {
-    if (this.pageNumber === 0) {
-      return;
-    }
-
-    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.pageNumber - 1, pageSize: this.pageSize } })
-    .then(() => this.listLibraries());
-  }
-
-  onStart(): void {
-    if (this.pageNumber === 0) {
-      return;
-    }
-
-    this.router.navigate(['/libraries'], { queryParams: { pageNo: 0, pageSize: this.pageSize } })
-    .then(() => this.listLibraries());
-  }
-
-  onEnd(): void {
-    if (this.pageNumber === this.noPages - 1) {
-      return;
-    }
-
-    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.noPages - 1, pageSize: this.pageSize } })
-    .then(() => this.listLibraries());
   }
 
   onSort(field: string): void {
@@ -137,5 +103,34 @@ export class LibraryComponent implements OnInit {
   backToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+  }
+
+  onPageChanged(event: PageEvent) {
+    this.pageNumber = event.pageIndex;
+    this.goToPageNumber = this.pageNumber;
+    this.pageSize = event.pageSize;
+    
+    this.libraryService.countLibraries().subscribe((result: Number) => {
+      this.noPages = Math.floor(result.valueOf() / this.pageSize);
+      if (result.valueOf() % this.pageSize > 0) {
+        this.noPages++;
+      }
+    });
+
+    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
+    .then(() => this.listLibraries());
+  }
+
+  goToPage(): void {
+    this.pageNumber = Math.min(Math.max(0, this.goToPageNumber), this.noPages);
+    const pageIndex = this.pageNumber;
+    this.router.navigate(['/libraries'], { queryParams: { pageNo: pageIndex, pageSize: this.pageSize } })
+        .then(() => this.listLibraries());
+  }
+
+  checkPageNumber(): void {
+    if (this.goToPageNumber > this.noPages) {
+      this.goToPageNumber = this.noPages;
+    }
   }
 }

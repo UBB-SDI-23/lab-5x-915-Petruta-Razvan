@@ -47,3 +47,12 @@ export interface AddUpdateReaderDTO {
     gender: string,
     student: boolean
 }
+
+export interface Membership {
+    id: {
+        libraryID: number,
+        readerID: number
+    },
+    startDate: Date,
+    endDate: Date
+}

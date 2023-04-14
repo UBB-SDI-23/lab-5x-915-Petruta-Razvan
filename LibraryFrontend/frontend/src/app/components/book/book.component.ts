@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
+import { PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from 'src/app/core/model/book.model';
 import { BookService } from 'src/app/core/service/book.service';
@@ -15,6 +16,8 @@ export class BookComponent implements OnInit {
   pageSize: number = 25; 
   noPages: number = 0;
   showLoader: boolean = false;
+
+  goToPageNumber: number = 0;
 
   constructor(private bookService: BookService, private route: ActivatedRoute, private router: Router, private elementRef: ElementRef) {}
   
@@ -51,43 +54,6 @@ export class BookComponent implements OnInit {
       }
     });
   }
-
-  onNext(): void {
-    if (this.pageNumber === this.noPages - 1) {
-      return;
-    }
-
-    this.router.navigate(['/books'], { queryParams: { pageNo: this.pageNumber + 1, pageSize: this.pageSize } })
-    .then(() => this.listBooks());
-  }
-
-  onPrevious(): void {
-    if (this.pageNumber === 0) {
-      return;
-    }
-
-    this.router.navigate(['/books'], { queryParams: { pageNo: this.pageNumber - 1, pageSize: this.pageSize } })
-    .then(() => this.listBooks());
-  }
-
-  onStart(): void {
-    if (this.pageNumber === 0) {
-      return;
-    }
-
-    this.router.navigate(['/books'], { queryParams: { pageNo: 0, pageSize: this.pageSize } })
-    .then(() => this.listBooks());
-  }
-
-  onEnd(): void {
-    if (this.pageNumber === this.noPages - 1) {
-      return;
-    }
-
-    this.router.navigate(['/books'], { queryParams: { pageNo: this.noPages - 1, pageSize: this.pageSize } })
-    .then(() => this.listBooks());
-  }
-
 
   onSort(field: string): void {
     const sortByTitle = ((a: Book, b: Book) => {
@@ -138,5 +104,34 @@ export class BookComponent implements OnInit {
   backToTop() {
     document.body.scrollTop = 0;
     document.documentElement.scrollTop = 0;
+  }
+
+  onPageChanged(event: PageEvent) {
+    this.pageNumber = event.pageIndex;
+    this.goToPageNumber = this.pageNumber;
+    this.pageSize = event.pageSize;
+    
+    this.bookService.countBooks().subscribe((result: Number) => {
+      this.noPages = Math.floor(result.valueOf() / this.pageSize);
+      if (result.valueOf() % this.pageSize > 0) {
+        this.noPages++;
+      }
+    });
+
+    this.router.navigate(['/books'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
+    .then(() => this.listBooks());
+  }
+
+  goToPage(): void {
+    this.pageNumber = Math.min(Math.max(0, this.goToPageNumber), this.noPages);
+    const pageIndex = this.pageNumber;
+    this.router.navigate(['/books'], { queryParams: { pageNo: pageIndex, pageSize: this.pageSize } })
+        .then(() => this.listBooks());
+  }
+
+  checkPageNumber(): void {
+    if (this.goToPageNumber > this.noPages) {
+      this.goToPageNumber = this.noPages;
+    }
   }
 }

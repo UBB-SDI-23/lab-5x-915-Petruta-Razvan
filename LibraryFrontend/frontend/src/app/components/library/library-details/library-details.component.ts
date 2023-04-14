@@ -33,4 +33,8 @@ export class LibraryDetailsComponent implements OnInit {
       });
     });
   }
+
+  isActive(date: Date): boolean {
+    return !(new Date(date).getTime() < new Date().getTime());
+  }
 }

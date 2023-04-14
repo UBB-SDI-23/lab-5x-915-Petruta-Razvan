@@ -49,15 +49,27 @@
             </div>
         </div>
     </div>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination m-3 justify-content-end">
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onStart()"><a class="page-link"><<<</a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onPrevious()"><a class="page-link"><</a></li>
-            <li class="page-item"><a class="page-link disabled">{{(pageNumber + 1) | number: '1.0-0'}} / {{(noPages) | number: '1.0-0'}}</a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noPages - 1}" (click)="onNext()"><a class="page-link">></a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noPages - 1}" (click)="onEnd()"><a class="page-link">>>></a></li>
-        </ul>
-    </nav>
+    
+    <mat-paginator #paginator
+               class="demo-paginator"
+               (page)="onPageChanged($event)"
+               [length]="noPages * pageSize"
+               [pageSize]="pageSize"
+               [showFirstLastButtons]="true"
+               [pageSizeOptions]="[10, 25, 50]"
+               [pageIndex]="pageNumber"
+               aria-label="Select page">
+    </mat-paginator>
+
+    <div class="page-selector text-end">
+        <mat-form-field>
+            <mat-label>page:</mat-label>
+            <input matInput type="number"
+            [(ngModel)]="goToPageNumber" min="0" max="{{noPages}}"
+            (keyup.enter)="goToPage()"
+            (ngModelChange)="checkPageNumber()">
+        </mat-form-field>
+    </div>
 
     <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top" (click)="backToTop()">
         <i class="fas fa-arrow-up"></i>

@@ -27,10 +27,10 @@ public class MembershipService {
         this.readerRepository = readerRepository;
     }
 
-    public Membership createMembership(Long libraryID, Reader reader) {
+    public Membership createMembership(Long libraryID, Long readerID) {
         // check for library and reader existence
         Library library =  this.libraryRepository.findById(libraryID).orElseThrow(() -> new LibraryNotFoundException(libraryID));
-        Reader readerFromDB = this.readerRepository.findById(reader.getID()).orElseThrow(() -> new ReaderNotFoundException(reader.getID()));
+        Reader reader = this.readerRepository.findById(readerID).orElseThrow(() -> new ReaderNotFoundException(readerID));
 
         // start date: current date
         // membership will last 365 days
@@ -40,7 +40,7 @@ public class MembershipService {
         // create the key
         MembershipKey key = new MembershipKey();
         key.setLibraryID(libraryID);
-        key.setReaderID(reader.getID());
+        key.setReaderID(readerID);
 
         // create the membership
         Membership membership = new Membership();
@@ -48,12 +48,12 @@ public class MembershipService {
         membership.setStartDate(startDate);
         membership.setEndDate(endDate);
         membership.setLibrary(library);
-        membership.setReader(readerFromDB);
+        membership.setReader(reader);
         this.membershipRepository.save(membership);
 
         // add the membership to the sets of library and reader
         library.addMembership(membership);
-        readerFromDB.addMembership(membership);
+        reader.addMembership(membership);
 
         return membership;
     }

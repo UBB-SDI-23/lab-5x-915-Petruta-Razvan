@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -31,6 +32,7 @@ import { ReaderDeleteComponent } from './components/reader/reader-delete/reader-
 import { ReaderAddComponent } from './components/reader/reader-add/reader-add.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BookAddComponent } from './components/book/book-add/book-add.component';
+import { ReaderNewMembershipComponent } from './components/reader/reader-new-membership/reader-new-membership.component';
 
 @NgModule({
   declarations: [
@@ -55,7 +57,8 @@ import { BookAddComponent } from './components/book/book-add/book-add.component'
     ReaderUpdateComponent,
     ReaderDeleteComponent,
     ReaderAddComponent,
-    BookAddComponent
+    BookAddComponent,
+    ReaderNewMembershipComponent
     // put all components, automat cand le creez
   ],
   imports: [
@@ -66,6 +69,7 @@ import { BookAddComponent } from './components/book/book-add/book-add.component'
     BrowserAnimationsModule,
     MatInputModule,
     MatAutocompleteModule,
+    MatPaginatorModule,
     // form module + http service module
   ],
   providers: [

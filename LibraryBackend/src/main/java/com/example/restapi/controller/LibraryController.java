@@ -84,9 +84,9 @@ public class LibraryController {
         return this.libraryService.addNewLibrary(newLibrary);
     }
 
-    @PostMapping("/libraries/{id}/readers")
-    Membership newReaderMembership(@RequestBody Reader reader, @PathVariable Long id) {
-        return this.membershipService.createMembership(id, reader);
+    @PostMapping("/libraries/{libraryID}/readers/{readerID}")
+    Membership newReaderMembership(@PathVariable Long libraryID, @PathVariable Long readerID) {
+        return this.membershipService.createMembership(libraryID, readerID);
     }
 
     @PostMapping("/libraries/{id}/readersList")

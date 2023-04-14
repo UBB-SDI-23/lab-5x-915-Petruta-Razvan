@@ -19,27 +19,27 @@
         <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let book of books; let i = index">
             <div class="card m-3 text-center">
                 <div class="card-body">
-                    <h4># {{pageNumber * 50 + i + 1}}</h4>
+                    <h4># {{pageNumber * pageSize + i + 1}}</h4>
                     <div>
-                        <p>Title: {{book.title}}</p>
+                        <p><span class="fw-bold">Title:</span> {{book.title}}</p>
                     </div>
                     <div>
-                        <p>Author: {{book.author}}</p>
+                        <p><span class="fw-bold">Author:</span> {{book.author}}</p>
                     </div>
                     <div>
-                        <p>Publisher: {{book.publisher}}</p>
+                        <p><span class="fw-bold">Publisher:</span> {{book.publisher}}</p>
                     </div>
                     <div>
-                        <p>Description: {{book.description.substring(0, 100)}}...</p>
+                        <p><span class="fw-bold">Description:</span> {{book.description.substring(0, 100)}}...</p>
                     </div>
                     <div>
-                        <p>Price: {{book.price}} €</p>
+                        <p><span class="fw-bold">Price:</span> {{book.price}} €</p>
                     </div>
                     <div>
-                        <p>Published Year: {{book.publishedYear}}</p>
+                        <p><span class="fw-bold">Published Year:</span> {{book.publishedYear}}</p>
                     </div>
                     <div>
-                        <p>Library ID: {{book.libraryID}}</p>
+                        <p><span class="fw-bold">Library ID:</span> {{book.libraryID}}</p>
                     </div>
                     <div>
                         <button type="button" [routerLink]="['/books/', book.id]" 
@@ -53,15 +53,27 @@
             </div>
         </div>
     </div>
-    <nav aria-label="Page navigation example">
-        <ul class="pagination m-3 justify-content-end">
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onStart()"><a class="page-link"><<<</a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === 0}" (click)="onPrevious()"><a class="page-link"><</a></li>
-            <li class="page-item"><a class="page-link disabled">{{(pageNumber + 1) | number: '1.0-0'}} / {{(noPages) | number: '1.0-0'}}</a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noPages - 1}" (click)="onNext()"><a class="page-link">></a></li>
-            <li class="page-item page-custom" [ngClass]="{'disabled': pageNumber === noPages - 1}" (click)="onEnd()"><a class="page-link">>>></a></li>
-        </ul>
-    </nav>
+    
+    <mat-paginator #paginator
+               class="demo-paginator"
+               (page)="onPageChanged($event)"
+               [length]="noPages * pageSize"
+               [pageSize]="pageSize"
+               [showFirstLastButtons]="true"
+               [pageSizeOptions]="[10, 25, 50]"
+               [pageIndex]="pageNumber"
+               aria-label="Select page">
+    </mat-paginator>
+
+    <div class="page-selector text-end">
+        <mat-form-field>
+            <mat-label>page:</mat-label>
+            <input matInput type="number"
+            [(ngModel)]="goToPageNumber" min="0" max="{{noPages}}"
+            (keyup.enter)="goToPage()"
+            (ngModelChange)="checkPageNumber()">
+        </mat-form-field>
+    </div>
 
     <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top" (click)="backToTop()">
         <i class="fas fa-arrow-up"></i>

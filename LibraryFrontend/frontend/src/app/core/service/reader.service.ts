@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AddUpdateReaderDTO, Reader, ReaderAll, ReaderDetails } from '../model/reader.model';
+import { AddUpdateReaderDTO, Membership, Reader, ReaderAll, ReaderDetails } from '../model/reader.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -38,5 +38,9 @@ export class ReaderService {
 
   deleteReader(id: string): Observable<Object> {
     return this.httpClient.delete(this.baseUrl + "readers/" + id) as Observable<Object>;
+  }
+
+  createMembership(libraryID: string, readerID: string): Observable<Membership> {
+    return this.httpClient.post(this.baseUrl + "libraries/" + libraryID + "/readers/" + readerID, {}) as Observable<Membership>;
   }
 }
