@@ -86,35 +86,23 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<executions>
-					<execution>
-						<goals>
-							<goal>build-info</goal>
-						</goals>
-					</execution>
-				</executions>
-				<configuration>
-					<requiresUnpack>
-						<dependency>
-							<groupId>org.flywaydb</groupId>
-							<artifactId>flyway-core</artifactId>
-						</dependency>
-					</requiresUnpack>
-				</configuration>
 			</plugin>
 
 			<plugin>
 				<groupId>org.flywaydb</groupId>
 				<artifactId>flyway-maven-plugin</artifactId>
 				<version>8.5.13</version>
-				<executions>
-					<execution>
-						<phase>compile</phase>
-						<goals>
-							<goal>migrate</goal>
-						</goals>
-					</execution>
-				</executions>
+				<configuration>
+					<user>postgres</user>
+					<password>password</password>
+					<schemas>
+						<schema>librarydb</schema>
+					</schemas>
+					<url>jdbc:postgresql://localhost:5432/librarydb</url>
+					<locations>
+						<location>filesystem:src/main/resources/db/migration</location>
+					</locations>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
