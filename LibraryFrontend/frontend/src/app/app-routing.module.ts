@@ -18,6 +18,7 @@ import { BookDeleteComponent } from './components/book/book-delete/book-delete.c
 import { ReaderUpdateComponent } from './components/reader/reader-update/reader-update.component';
 import { ReaderDeleteComponent } from './components/reader/reader-delete/reader-delete.component';
 import { ReaderAddComponent } from './components/reader/reader-add/reader-add.component';
+import { BookAddComponent } from './components/book/book-add/book-add.component';
 
 const routes: Routes = [
   {
@@ -36,6 +37,10 @@ const routes: Routes = [
   {
     path: 'books/:id',
     component: BookDetailsComponent
+  },
+  {
+    path: 'books-add',
+    component: BookAddComponent
   },
   {
     path: 'books-update/:id',

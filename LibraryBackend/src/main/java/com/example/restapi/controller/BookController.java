@@ -30,7 +30,7 @@ public class BookController {
     @GetMapping("/books")
     List<BookDTO_onlyLibraryID> allBooks(@RequestParam(required = false) Double minPrice,
                                          @RequestParam(defaultValue = "0") Integer pageNo,
-                                         @RequestParam(defaultValue = "50") Integer pageSize) {
+                                         @RequestParam(defaultValue = "25") Integer pageSize) {
         if (minPrice == null) {
             return this.bookService.getAllBooks(pageNo, pageSize).stream().map(
                     (book) -> DTOConverters.convertToBookDTO_onlyLibraryID(book, this.modelMapper)

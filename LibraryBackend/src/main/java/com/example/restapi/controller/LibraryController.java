@@ -38,10 +38,8 @@ public class LibraryController {
     // LIBRARIES --------------------------------------------------------
     @GetMapping("/libraries")
     List<LibraryDTO_noBooks> allLibraries(@RequestParam(defaultValue = "0") Integer pageNo,
-                                          @RequestParam(defaultValue = "50") Integer pageSize) {
-        return this.libraryService.getAllLibraries(pageNo, pageSize).stream().map(
-                (library) -> DTOConverters.convertToLibraryDTO_forAll(library, this.modelMapper)
-        ).collect(Collectors.toList());
+                                          @RequestParam(defaultValue = "25") Integer pageSize) {
+        return this.libraryService.getAllLibraries(pageNo, pageSize);
     }
 
     @GetMapping("/libraries/{id}/books")
@@ -74,6 +72,11 @@ public class LibraryController {
     @GetMapping("/libraries/count")
     long countLibraries() {
         return this.libraryService.countAllLibraries();
+    }
+
+    @GetMapping("/libraries-search")
+    List<Library> getLibrariesByName(@RequestParam(required = false) String name) {
+        return this.libraryService.searchLibrariesByNameFullText(name);
     }
 
     @PostMapping("/libraries")

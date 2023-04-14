@@ -11,7 +11,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "books")
+@Table(name = "books", indexes = {
+        @Index(name = "fk_library_id_books_index", columnList = "library_id")
+})
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,10 +27,8 @@ public class Book {
     @Column
     @NotEmpty
     private String publisher;
-    @Column
     @Min(0)
     private Double price;
-    @Column
     @Min(1000)
     @Max(2023)
     private Integer publishedYear;

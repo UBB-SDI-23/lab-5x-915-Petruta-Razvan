@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Library } from 'src/app/core/model/library.model';
+import { LibraryAll } from 'src/app/core/model/library.model';
 import { LibraryService } from 'src/app/core/service/library.service';
 
 @Component({
@@ -10,7 +10,7 @@ import { LibraryService } from 'src/app/core/service/library.service';
 })
 
 export class LibraryComponent implements OnInit {
-  libraries: Library[] = [];
+  libraries: LibraryAll[] = [];
   pageNumber: number = 0;
   pageSize: number = 25;
   noPages: number = 0;
@@ -40,7 +40,7 @@ export class LibraryComponent implements OnInit {
     });
     
     this.libraryService.getPageLibraries(this.pageNumber, this.pageSize).subscribe({
-      next: (result: Library[]) => {
+      next: (result: LibraryAll[]) => {
         this.libraries = result;
       },
       error: (error) => {
@@ -89,15 +89,15 @@ export class LibraryComponent implements OnInit {
   }
 
   onSort(field: string): void {
-    const sortByName = ((a: Library, b: Library) => {
+    const sortByName = ((a: LibraryAll, b: LibraryAll) => {
       return a.name.localeCompare(b.name);
     });
 
-    const sortByAddress = ((a: Library, b: Library) => {
+    const sortByAddress = ((a: LibraryAll, b: LibraryAll) => {
       return a.address.localeCompare(b.address);
     });
 
-    const sortByConstructionYear = ((a: Library, b: Library) => {
+    const sortByConstructionYear = ((a: LibraryAll, b: LibraryAll) => {
       return a.yearOfConstruction - b.yearOfConstruction;
     });
 
@@ -119,6 +119,11 @@ export class LibraryComponent implements OnInit {
 
   scrollFunction() {
     const mybutton = this.elementRef.nativeElement.querySelector('#btn-back-to-top');
+
+    if (mybutton === null) {
+      return;
+    }
+
     if (
       document.body.scrollTop > 200 ||
       document.documentElement.scrollTop > 200

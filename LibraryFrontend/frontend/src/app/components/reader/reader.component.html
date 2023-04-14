@@ -20,19 +20,22 @@
                 <div class="card-body">
                     <h4># {{pageNumber * pageSize + i + 1}}</h4>
                     <div>
-                        <p>Name: {{reader.name}}</p>
+                        <p><span class="fw-bold">Name:</span> {{reader.name}}</p>
                     </div>
                     <div>
-                        <p>Email: {{reader.email}}</p>
+                        <p><span class="fw-bold">Email:</span> {{reader.email}}</p>
                     </div>
                     <div>
-                        <p>BirthDate: {{reader.birthDate}}</p>
+                        <p><span class="fw-bold">BirthDate:</span> {{reader.birthDate}}</p>
                     </div>
                     <div>
-                        <p>Gender: {{reader.gender}}</p>
+                        <p><span class="fw-bold">Gender:</span> {{reader.gender}}</p>
                     </div>
                     <div>
-                        <p>Is student: {{reader.student ? "Yes" : "No"}}</p>
+                        <p><span class="fw-bold">Is student:</span> {{reader.student ? "Yes" : "No"}}</p>
+                    </div>
+                    <div>
+                        <p><span class="fw-bold">Number of memberships:</span> {{reader.totalLibraries}}</p>
                     </div>
                     <div>
                         <button type="button" [routerLink]="['/readers/', reader.id]"

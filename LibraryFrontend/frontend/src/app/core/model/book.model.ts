@@ -40,3 +40,12 @@ export interface UpdateBookDTO {
     publishedYear: number,
     description: string
 }
+
+export interface AddBookDTO {
+    title: string,
+    author: string,
+    publisher: string,
+    price: number,
+    publishedYear: number,
+    description: string
+}

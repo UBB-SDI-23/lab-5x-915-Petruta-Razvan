@@ -9,6 +9,16 @@ export interface Reader {
     student: boolean
 }
 
+export interface ReaderAll {
+    id: number,
+    name: string,
+    email: string,
+    birthDate: Date,
+    gender: string,
+    student: boolean,
+    totalLibraries: number
+}
+
 export interface ReaderDetails {
     id: number,
     name: string,

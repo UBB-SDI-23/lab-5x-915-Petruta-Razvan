@@ -39,7 +39,7 @@ export class BookComponent implements OnInit {
       this.pageSize = Number(params['pageSize']) || 50;
     });
 
-    this.bookService.get50Books(this.pageNumber, this.pageSize).subscribe({
+    this.bookService.getPageBooks(this.pageNumber, this.pageSize).subscribe({
       next: (result: Book[]) => {
         this.books = result;
       },
@@ -120,6 +120,11 @@ export class BookComponent implements OnInit {
 
   scrollFunction() {
     const mybutton = this.elementRef.nativeElement.querySelector('#btn-back-to-top');
+
+    if (mybutton === null) {
+      return;
+    }
+
     if (
       document.body.scrollTop > 200 ||
       document.documentElement.scrollTop > 200

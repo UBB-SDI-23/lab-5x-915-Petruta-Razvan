@@ -1,7 +1,10 @@
 package com.example.restapi.service;
 
+import com.example.restapi.dto.DTOConverters;
+import com.example.restapi.dto.ReaderDTO_forAll;
 import com.example.restapi.exceptions.ReaderNotFoundException;
 import com.example.restapi.model.Reader;
+import com.example.restapi.repository.MembershipRepository;
 import com.example.restapi.repository.ReaderRepository;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -14,15 +17,20 @@ import java.util.stream.Collectors;
 @Service
 public class ReaderService {
     private final ReaderRepository readerRepository;
+    private final MembershipRepository membershipRepository;
 
-    public ReaderService(ReaderRepository readerRepository) {
+    public ReaderService(ReaderRepository readerRepository, MembershipRepository membershipRepository) {
         this.readerRepository = readerRepository;
+        this.membershipRepository = membershipRepository;
     }
 
-    public List<Reader> getAllReaders(Integer pageNo, Integer pageSize) {
+    public List<ReaderDTO_forAll> getAllReaders(Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("ID"));
 
-        return this.readerRepository.findAll(pageable).getContent();
+        return this.readerRepository.findAll(pageable).getContent().stream().map(
+                reader -> DTOConverters.convertToReaderDTO_forAll(reader,
+                        this.membershipRepository.countByReaderID(reader.getID()))
+        ).collect(Collectors.toList());
     }
 
     public Reader addNewReader(Reader newReader) {

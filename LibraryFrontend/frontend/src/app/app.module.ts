@@ -1,6 +1,8 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { HttpClientModule } from '@angular/common/http';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatInputModule } from '@angular/material/input';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -27,6 +29,8 @@ import { BookDeleteComponent } from './components/book/book-delete/book-delete.c
 import { ReaderUpdateComponent } from './components/reader/reader-update/reader-update.component';
 import { ReaderDeleteComponent } from './components/reader/reader-delete/reader-delete.component';
 import { ReaderAddComponent } from './components/reader/reader-add/reader-add.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { BookAddComponent } from './components/book/book-add/book-add.component';
 
 @NgModule({
   declarations: [
@@ -50,7 +54,8 @@ import { ReaderAddComponent } from './components/reader/reader-add/reader-add.co
     BookDeleteComponent,
     ReaderUpdateComponent,
     ReaderDeleteComponent,
-    ReaderAddComponent
+    ReaderAddComponent,
+    BookAddComponent
     // put all components, automat cand le creez
   ],
   imports: [
@@ -58,6 +63,9 @@ import { ReaderAddComponent } from './components/reader/reader-add/reader-add.co
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    BrowserAnimationsModule,
+    MatInputModule,
+    MatAutocompleteModule,
     // form module + http service module
   ],
   providers: [

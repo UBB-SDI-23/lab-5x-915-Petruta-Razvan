@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import { AddUpdateLibraryDTO, Library, LibraryCount, LibraryDetails } from '../model/library.model';
+import { AddUpdateLibraryDTO, Library, LibraryAll, LibraryCount, LibraryDetails } from '../model/library.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +12,12 @@ export class LibraryService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getLibraries(): Observable<Library[]> {
-    return this.httpClient.get(this.baseUrl + "libraries") as Observable<Library[]>;
+  getLibraries(): Observable<LibraryAll[]> {
+    return this.httpClient.get(this.baseUrl + "libraries") as Observable<LibraryAll[]>;
   }
 
-  getPageLibraries(pageNo: Number, pageSize: Number): Observable<Library[]> {
-    return this.httpClient.get(this.baseUrl + "libraries?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<Library[]>;
+  getPageLibraries(pageNo: Number, pageSize: Number): Observable<LibraryAll[]> {
+    return this.httpClient.get(this.baseUrl + "libraries?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<LibraryAll[]>;
   }
 
   getLibrary(id: string): Observable<LibraryDetails> {
@@ -34,6 +34,10 @@ export class LibraryService {
 
   countLibraries(): Observable<Number> {
     return this.httpClient.get(this.baseUrl + "libraries/count") as Observable<Number>;
+  }
+
+  getLibrariesByName(name: string): Observable<Library[]> {
+    return this.httpClient.get(this.baseUrl + "libraries-search?name=" + name) as Observable<Library[]>;
   }
 
   addLibrary(library: AddUpdateLibraryDTO): Observable<Library> {

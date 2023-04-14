@@ -10,6 +10,17 @@ export interface Library {
     yearOfConstruction: number
 }
 
+export interface LibraryAll {
+    id: number,
+    name: string,
+    address: string,
+    email: string,
+    website: string,
+    yearOfConstruction: number,
+    totalReaders: number,
+    totalBooks: number
+}
+
 export interface LibraryDetails {
     id: number,
     name: string,

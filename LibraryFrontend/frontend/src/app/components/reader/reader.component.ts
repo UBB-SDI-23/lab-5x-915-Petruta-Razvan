@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Reader } from 'src/app/core/model/reader.model';
+import { ReaderAll } from 'src/app/core/model/reader.model';
 import { ReaderService } from 'src/app/core/service/reader.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { ReaderService } from 'src/app/core/service/reader.service';
   styleUrls: ['./reader.component.css']
 })
 export class ReaderComponent implements OnInit {
-  readers: Reader[] = [];
+  readers: ReaderAll[] = [];
   pageNumber: number = 0;
   pageSize: number = 25;
   noPages: number = 0;
@@ -38,8 +38,8 @@ export class ReaderComponent implements OnInit {
       this.pageSize = Number(params['pageSize']) || 25;
     });
 
-    this.readerService.get50Readers(this.pageNumber, this.pageSize).subscribe({
-      next: (result: Reader[]) => {
+    this.readerService.getPageReaders(this.pageNumber, this.pageSize).subscribe({
+      next: (result: ReaderAll[]) => {
         this.readers = result;
       },
       error: (error) => {
@@ -88,11 +88,11 @@ export class ReaderComponent implements OnInit {
   }
 
   onSort(field: string): void {
-    const sortByName = ((a: Reader, b: Reader) => {
+    const sortByName = ((a: ReaderAll, b: ReaderAll) => {
       return a.name.localeCompare(b.name);
     });
 
-    const sortByBirthDate = ((a: Reader, b: Reader) => {
+    const sortByBirthDate = ((a: ReaderAll, b: ReaderAll) => {
       return new Date(a.birthDate).getTime() - new Date(b.birthDate).getTime();
     });
 
@@ -110,6 +110,11 @@ export class ReaderComponent implements OnInit {
 
   scrollFunction() {
     const mybutton = this.elementRef.nativeElement.querySelector('#btn-back-to-top');
+
+    if (mybutton === null) {
+      return;
+    }
+
     if (
       document.body.scrollTop > 200 ||
       document.documentElement.scrollTop > 200

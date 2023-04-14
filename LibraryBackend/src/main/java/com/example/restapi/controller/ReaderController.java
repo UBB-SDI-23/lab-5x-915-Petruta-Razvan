@@ -1,6 +1,5 @@
 package com.example.restapi.controller;
 
-import com.example.restapi.dto.DTOConverters;
 import com.example.restapi.dto.LibraryDTO_withMembership;
 import com.example.restapi.dto.ReaderDTO_forAll;
 import com.example.restapi.dto.ReaderDTO_forOne;
@@ -34,10 +33,8 @@ public class ReaderController {
 
     @GetMapping("/readers")
     List<ReaderDTO_forAll> allReaders(@RequestParam(defaultValue = "0") Integer pageNo,
-                                      @RequestParam(defaultValue = "50") Integer pageSize) {
-        return this.readerService.getAllReaders(pageNo, pageSize).stream().map(
-                (reader) -> DTOConverters.convertToReaderDTO_forAll(reader, this.modelMapper)
-        ).collect(Collectors.toList());
+                                      @RequestParam(defaultValue = "25") Integer pageSize) {
+        return this.readerService.getAllReaders(pageNo, pageSize);
     }
 
     @GetMapping("/readers/count")

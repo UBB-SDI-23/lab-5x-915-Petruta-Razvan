@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { AddUpdateReaderDTO, Reader, ReaderDetails } from '../model/reader.model';
+import { AddUpdateReaderDTO, Reader, ReaderAll, ReaderDetails } from '../model/reader.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,12 +12,12 @@ export class ReaderService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getReaders(): Observable<Reader[]> {
-    return this.httpClient.get(this.baseUrl + "readers") as Observable<Reader[]>;
+  getReaders(): Observable<ReaderAll[]> {
+    return this.httpClient.get(this.baseUrl + "readers") as Observable<ReaderAll[]>;
   }
 
-  get50Readers(pageNo: Number, pageSize: Number): Observable<Reader[]> {
-    return this.httpClient.get(this.baseUrl + "readers?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<Reader[]>;
+  getPageReaders(pageNo: Number, pageSize: Number): Observable<ReaderAll[]> {
+    return this.httpClient.get(this.baseUrl + "readers?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<ReaderAll[]>;
   }
 
   getReader(id: string): Observable<ReaderDetails> {

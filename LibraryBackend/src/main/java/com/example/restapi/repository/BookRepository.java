@@ -19,4 +19,6 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @NonNull
     @EntityGraph(attributePaths = "library")
     Optional<Book> findById(@NonNull Long id);
+
+    Long countByLibraryID(Long libraryID);
 }

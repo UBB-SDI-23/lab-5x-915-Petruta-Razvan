@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Book, BookDetails, UpdateBookDTO } from '../model/book.model';
+import { AddBookDTO, Book, BookDetails, UpdateBookDTO } from '../model/book.model';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class BookService {
     return this.httpClient.get(this.baseUrl + "books") as Observable<Book[]>;
   }
 
-  get50Books(pageNo: Number, pageSize: Number): Observable<Book[]> {
+  getPageBooks(pageNo: Number, pageSize: Number): Observable<Book[]> {
     return this.httpClient.get(this.baseUrl + "books?pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<Book[]>;
   }
 
@@ -30,6 +30,10 @@ export class BookService {
 
   countBooks(): Observable<Number> {
     return this.httpClient.get(this.baseUrl + "books/count") as Observable<Number>;
+  }
+
+  addBook(book: AddBookDTO, libraryID: string): Observable<Book> {
+    return this.httpClient.post(this.baseUrl + "libraries/" + libraryID + "/books", book) as Observable<Book>;
   }
 
   updateBook(id: string, book: UpdateBookDTO): Observable<Book> {

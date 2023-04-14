@@ -14,7 +14,9 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "libraries")
+@Table(name = "libraries", indexes = {
+        @Index(name = "name_libraries_index", columnList = "name")
+})
 public class Library {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

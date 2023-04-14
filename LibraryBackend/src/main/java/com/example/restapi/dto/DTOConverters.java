@@ -17,8 +17,17 @@ public class DTOConverters {
         return modelMapper.map(book, BookDTO_wholeLibrary.class);
     }
 
-    public static LibraryDTO_noBooks convertToLibraryDTO_forAll(Library library, ModelMapper modelMapper) {
-        return modelMapper.map(library, LibraryDTO_noBooks.class);
+    public static LibraryDTO_noBooks convertToLibraryDTO_noBooks(Library library, Long countReaders, Long countBooks) {
+        LibraryDTO_noBooks newLibrary = new LibraryDTO_noBooks();
+        newLibrary.setID(library.getID());
+        newLibrary.setName(library.getName());
+        newLibrary.setEmail(library.getEmail());
+        newLibrary.setAddress(library.getAddress());
+        newLibrary.setWebsite(library.getWebsite());
+        newLibrary.setYearOfConstruction(library.getYearOfConstruction());
+        newLibrary.setTotalReaders(countReaders);
+        newLibrary.setTotalBooks(countBooks);
+        return newLibrary;
     }
 
     public static BookDTO_onlyLibraryID convertToBookDTO_forAll(Book book, ModelMapper modelMapper) {
@@ -27,7 +36,15 @@ public class DTOConverters {
         return bookDTO;
     }
 
-    public static ReaderDTO_forAll convertToReaderDTO_forAll(Reader reader, ModelMapper modelMapper) {
-        return modelMapper.map(reader, ReaderDTO_forAll.class);
+    public static ReaderDTO_forAll convertToReaderDTO_forAll(Reader reader, Long countReaders) {
+        ReaderDTO_forAll newReader = new ReaderDTO_forAll();
+        newReader.setID(reader.getID());
+        newReader.setName(reader.getName());
+        newReader.setEmail(reader.getEmail());
+        newReader.setStudent(reader.isStudent());
+        newReader.setGender(reader.getGender());
+        newReader.setBirthDate(reader.getBirthDate());
+        newReader.setTotalLibraries(countReaders);
+        return newReader;
     }
 }

@@ -37,6 +37,12 @@
                         <p>Construction Year: {{library.yearOfConstruction}}</p>
                     </div>
                     <div>
+                        <p>Number of active readers: {{library.totalReaders}}</p>
+                    </div>
+                    <div>
+                        <p>Number of available books: {{library.totalBooks}}</p>
+                    </div>
+                    <div>
                         <button type="button" [routerLink]="['/libraries/', library.id]"
                             class="btn btn-outline-warning m-2 btn-custom"><i class="fa-sharp fa-solid fa-info"></i></button>
                         <button type="button" [routerLink]="['/libraries-update/', library.id]"

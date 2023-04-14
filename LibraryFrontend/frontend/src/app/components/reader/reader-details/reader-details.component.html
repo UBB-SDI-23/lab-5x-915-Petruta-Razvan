@@ -7,46 +7,46 @@
 <div class="card m-3 text-center card-custom" *ngIf="!showLoader && reader !== undefined">
     <div class="card-body">
         <div>
-            <p>Name: {{reader.name}}</p>
+            <p><span class="fw-bold">Name:</span> {{reader.name}}</p>
         </div>
         <div>
-            <p>Email: {{reader.email}}</p>
+            <p><span class="fw-bold">Email:</span> {{reader.email}}</p>
         </div>
         <div>
-            <p>BirthDate: {{reader.birthDate}}</p>
+            <p><span class="fw-bold">BirthDate:</span> {{reader.birthDate}}</p>
         </div>
         <div>
-            <p>Gender: {{reader.gender}}</p>
+            <p><span class="fw-bold">Gender:</span> {{reader.gender}}</p>
         </div>
         <div>
-            <p>Is student: {{reader.student ? "Yes" : "No"}}</p>
+            <p><span class="fw-bold">Is student:</span> {{reader.student ? "Yes" : "No"}}</p>
         </div>
 
-        <p>Libraries:</p>
+        <p class="fw-bold">Library memberships:</p>
         <div class="row">
             <div class="col-lg-4 li-custom" *ngFor="let library of reader.libraries">
                 <div class="card m-3 text-center">
                     <div class="card-body">
                         <div>
-                            <p>Name: {{library.name}}</p>
+                            <p><span class="fw-bold">Name:</span> {{library.name}}</p>
                         </div>
                         <div>
-                            <p>Address: {{library.address}}</p>
+                            <p><span class="fw-bold">Address:</span> {{library.address}}</p>
                         </div>
                         <div>
-                            <p>Email: {{library.email}}</p>
+                            <p><span class="fw-bold">Email:</span> {{library.email}}</p>
                         </div>
                         <div>
-                            <p>Website: {{library.website}}</p>
+                            <p><span class="fw-bold">Website:</span> {{library.website}}</p>
                         </div>
                         <div>
-                            <p>Construction Year: {{library.yearOfConstruction}}</p>
+                            <p><span class="fw-bold">Construction Year:</span> {{library.yearOfConstruction}}</p>
                         </div>
                         <div>
-                            <p>Start date: {{library.startDate}}</p>
+                            <p><span class="fw-bold">Start Date:</span> {{library.startDate}}</p>
                         </div>
                         <div>
-                            <p>End date: {{library.endDate}}</p>
+                            <p><span class="fw-bold">End Date:</span> {{library.endDate}}</p>
                         </div>
                     </div>
                 </div>

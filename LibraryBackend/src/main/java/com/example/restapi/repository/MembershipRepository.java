@@ -5,4 +5,6 @@ import com.example.restapi.model.MembershipKey;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface MembershipRepository extends JpaRepository<Membership, MembershipKey> {
+    Long countByLibraryID(Long libraryID);
+    Long countByReaderID(Long readerID);
 }

@@ -22,7 +22,8 @@
         </div>
         <div class="form-group mt-3">
             <label>Email</label>
-            <input type="email" name="email" class="form-control" [(ngModel)]="email" required autocomplete="off" pattern="^[a-zA-Z0-9][a-zA-Z0-9]*@[a-zA-Z0-9][a-zA-Z0-9\.]*">
+            <input type="email" name="email" class="form-control" [(ngModel)]="email" required autocomplete="off"
+                pattern="^[a-zA-Z0-9][a-zA-Z0-9]*@[a-zA-Z0-9][a-zA-Z0-9\.]*">
             <div *ngIf="errorMessages.email!== null" class="alert alert-danger" role="alert">
                 {{errorMessages.email}}
             </div>
@@ -36,14 +37,15 @@
         </div>
         <div class="form-group mt-3">
             <label>Construction Year</label>
-            <input type="number" name="constructionYear" class="form-control" [(ngModel)]="yearOfConstruction" required autocomplete="off">
+            <input type="number" name="constructionYear" class="form-control" [(ngModel)]="yearOfConstruction" required
+                autocomplete="off">
             <div *ngIf="errorMessages.yearOfConstruction !== null" class="alert alert-danger" role="alert">
                 {{errorMessages.yearOfConstruction}}
             </div>
         </div>
         <div class="form-group mt-3">
             <button class="btn btn-outline-primary" [disabled]="!libraryForm.form.valid"><i
-                class="fa-solid fa-check"></i></button>
+                    class="fa-solid fa-check"></i></button>
         </div>
     </form>
 </div>
