@@ -7,8 +7,8 @@ import { AddUpdateLibraryDTO, Library, LibraryAll, LibraryCount, LibraryDetails 
   providedIn: 'root'
 })
 export class LibraryService {
-  // private baseUrl = "/api/";
-  private baseUrl = "http://localhost/api/";
+  private baseUrl = "https://sdi-library-management.strangled.net/api/";
+  // private baseUrl = "http://localhost/api/";
 
   constructor(private httpClient: HttpClient) { }
 
