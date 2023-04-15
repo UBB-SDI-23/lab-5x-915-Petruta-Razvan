@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ReaderService {
-  private baseUrl = "https://sdi-library-management.strangled.net/api/";
+  private baseUrl = "https://library-management.ignorelist.com/api/";
   // private baseUrl = "http://localhost/api/";
 
   constructor(private httpClient: HttpClient) { }
