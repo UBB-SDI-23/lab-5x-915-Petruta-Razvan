@@ -33,7 +33,8 @@ const routes: Routes = [
   },
   {
     path: 'books-filter',
-    component: BookFilterComponent
+    component: BookFilterComponent,
+    data: { minPrice: 0, pageNo: 0, pageSize: 25 }
   },
   {
     path: 'books/:id',

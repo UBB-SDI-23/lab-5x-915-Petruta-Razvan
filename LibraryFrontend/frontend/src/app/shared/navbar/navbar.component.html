@@ -24,7 +24,7 @@
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <li><a class="dropdown-item" [routerLink]="['/books']" [queryParams]="{pageNo: 0, pageSize: 25}">See all</a></li>
-                <li><a class="dropdown-item" routerLink="/books-filter">Filter by price</a></li>
+                <li><a class="dropdown-item" [routerLink]="['/books-filter']" [queryParams]="{minPrice: 0, pageNo: 0, pageSize: 25}">Filter by price</a></li>
                 <li><a class="dropdown-item" routerLink="/books-add">Add new</a></li>
               </ul>
             </li>

@@ -20,4 +20,6 @@ public interface IBookService {
     List<BookDTO_onlyLibraryID> getBooksWithPriceGreater(Double price, Integer pageNo, Integer pageSize);
 
     long countAllBooks();
+
+    long countBooksWithMinimumPrice(Double price);
 }

@@ -18,7 +18,7 @@
         <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let book of books; let i = index">
             <div class="card m-3 text-center">
                 <div class="card-body">
-                    <h4># {{i + 1}}</h4>
+                    <h4># {{pageNumber * pageSize + i + 1}}</h4>
                     <div>
                         <p>Title: {{book.title}}</p>
                     </div>
@@ -40,5 +40,26 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <mat-paginator *ngIf="!showLoader" #paginator
+               class="demo-paginator"
+               (page)="onPageChanged($event)"
+               [length]="noPages * pageSize"
+               [pageSize]="pageSize"
+               [showFirstLastButtons]="true"
+               [pageSizeOptions]="[10, 25, 50]"
+               [pageIndex]="pageNumber"
+               aria-label="Select page">
+    </mat-paginator>
+
+    <div *ngIf="!showLoader" class="page-selector text-end">
+        <mat-form-field>
+            <mat-label>page:</mat-label>
+            <input matInput type="number"
+            [(ngModel)]="goToPageNumber" min="0" max="{{noPages}}"
+            (keyup.enter)="goToPage()"
+            (ngModelChange)="checkPageNumber()">
+        </mat-form-field>
     </div>
 </div>

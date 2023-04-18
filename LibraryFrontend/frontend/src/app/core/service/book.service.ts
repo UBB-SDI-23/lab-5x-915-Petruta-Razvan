@@ -24,12 +24,16 @@ export class BookService {
     return this.httpClient.get(this.baseUrl + "books/" + id) as Observable<BookDetails>;
   }
 
-  getBookWithMinPrice(price: string): Observable<Book[]> {
-    return this.httpClient.get(this.baseUrl + "books?minPrice=" + price) as Observable<Book[]>;
+  getBookWithMinPrice(price: string, pageNo: Number, pageSize: Number): Observable<Book[]> {
+    return this.httpClient.get(this.baseUrl + "books?minPrice=" + price + "&pageNo=" + pageNo.toString() + "&pageSize=" + pageSize.toString()) as Observable<Book[]>;
   }
 
   countBooks(): Observable<Number> {
     return this.httpClient.get(this.baseUrl + "books/count") as Observable<Number>;
+  }
+
+  countBooksWithMinPrice(price: string): Observable<Number> {
+    return this.httpClient.get(this.baseUrl + "books/countByPrice?minPrice=" + price) as Observable<Number>;
   }
 
   addBook(book: AddBookDTO, libraryID: string): Observable<Book> {

@@ -14,11 +14,13 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     @NonNull
     Page<Book> findAll(@NonNull Pageable pageable);
 
-    Page<Book> findByPriceGreaterThan(Double price, Pageable pageable);
+    Page<Book> findByPriceGreaterThanEqual(Double price, Pageable pageable);
     List<Book> findByLibraryID(Long id);
     @NonNull
     @EntityGraph(attributePaths = "library")
     Optional<Book> findById(@NonNull Long id);
 
     Long countByLibraryID(Long libraryID);
+
+    Long countByPriceGreaterThanEqual(Double price);
 }

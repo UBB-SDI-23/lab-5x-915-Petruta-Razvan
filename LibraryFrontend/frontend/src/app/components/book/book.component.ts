@@ -47,7 +47,7 @@ export class BookComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.pageNumber = Number(params['pageNo']) || 0;
-      this.pageSize = Number(params['pageSize']) || 50;
+      this.pageSize = Number(params['pageSize']) || 25;
     });
 
     this.bookService.getPageBooks(this.pageNumber, this.pageSize).subscribe({

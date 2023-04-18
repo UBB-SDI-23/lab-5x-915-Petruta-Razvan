@@ -80,9 +80,9 @@ public class BookService implements IBookService {
 
     @Override
     public List<BookDTO_onlyLibraryID> getBooksWithPriceGreater(Double price, Integer pageNo, Integer pageSize) {
-        Pageable pageable = PageRequest.of(pageNo, pageSize);
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("price"));
 
-        return this.bookRepository.findByPriceGreaterThan(price, pageable).getContent().stream().map(
+        return this.bookRepository.findByPriceGreaterThanEqual(price, pageable).getContent().stream().map(
                 (book) -> BookDTO_Converters.convertToBookDTO_onlyLibraryID(book, this.modelMapper)
         ).collect(Collectors.toList());
     }
@@ -90,5 +90,10 @@ public class BookService implements IBookService {
     @Override
     public long countAllBooks() {
         return this.bookRepository.count();
+    }
+
+    @Override
+    public long countBooksWithMinimumPrice(Double price) {
+        return this.bookRepository.countByPriceGreaterThanEqual(price);
     }
 }

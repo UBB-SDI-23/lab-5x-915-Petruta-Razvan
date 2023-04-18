@@ -5,6 +5,8 @@ import com.example.restapi.dtos.readerdtos.ReaderDTO_forOne;
 import com.example.restapi.model.Reader;
 import com.example.restapi.service.IReaderService;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,33 +24,44 @@ public class ReaderController {
     }
 
     @GetMapping("/readers")
-    List<ReaderDTO_forAll> allReaders(@RequestParam(defaultValue = "0") Integer pageNo,
-                                      @RequestParam(defaultValue = "25") Integer pageSize) {
-        return this.readerService.getAllReaders(pageNo, pageSize);
+    ResponseEntity<List<ReaderDTO_forAll>> allReaders(@RequestParam(defaultValue = "0") Integer pageNo,
+                              @RequestParam(defaultValue = "25") Integer pageSize) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.readerService.getAllReaders(pageNo, pageSize));
     }
 
     @GetMapping("/readers/count")
-    long countReaders() {
-        return this.readerService.countAllReaders();
+    ResponseEntity<Long> countReaders() {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.readerService.countAllReaders());
     }
 
     @GetMapping("/readers/{id}")
-    ReaderDTO_forOne oneReader(@PathVariable Long id) {
-        return this.readerService.getReaderById(id);
+    ResponseEntity<ReaderDTO_forOne> oneReader(@PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.readerService.getReaderById(id));
     }
 
     @PostMapping("/readers")
-    Reader newReader(@Valid @RequestBody Reader newReader) {
-        return this.readerService.addNewReader(newReader);
+    ResponseEntity<Reader> newReader(@Valid @RequestBody Reader newReader) {
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(this.readerService.addNewReader(newReader));
     }
 
     @PutMapping("/readers/{id}")
-    Reader replaceReader(@Valid @RequestBody Reader newReader, @PathVariable Long id) {
-        return this.readerService.replaceReader(newReader, id);
+    ResponseEntity<Reader> replaceReader(@Valid @RequestBody Reader newReader, @PathVariable Long id) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(this.readerService.replaceReader(newReader, id));
     }
 
     @DeleteMapping("/readers/{id}")
-    void deleteReader(@PathVariable Long id) {
+    ResponseEntity<HttpStatus> deleteReader(@PathVariable Long id) {
         this.readerService.deleteReader(id);
+        return ResponseEntity.accepted().body(HttpStatus.OK);
     }
 }
