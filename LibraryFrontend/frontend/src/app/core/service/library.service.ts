@@ -7,7 +7,7 @@ import { AddUpdateLibraryDTO, Library, LibraryAll, LibraryCount, LibraryDetails 
   providedIn: 'root'
 })
 export class LibraryService {
-  private baseUrl = "https://library-management.ignorelist.com/api/";
+  private baseUrl = "https://library-hub.crabdance.com/api/";
   // private baseUrl = "http://localhost:8080/api/";
 
   constructor(private httpClient: HttpClient) { }
