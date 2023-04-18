@@ -1,17 +1,15 @@
-package com.example.restapi.dto;
+package com.example.restapi.dtos.readerdtos;
 
-import com.example.restapi.model.Library;
+import com.example.restapi.dtos.readerdtos.ReaderDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BookDTO_wholeLibrary extends BookDTO {
-    private Library library;
+public class ReaderDTO_forAll extends ReaderDTO {
+    private Long totalLibraries;
 }

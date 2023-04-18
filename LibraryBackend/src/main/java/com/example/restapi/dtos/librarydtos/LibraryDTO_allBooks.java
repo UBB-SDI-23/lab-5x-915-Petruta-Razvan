@@ -1,5 +1,6 @@
-package com.example.restapi.dto;
+package com.example.restapi.dtos.librarydtos;
 
+import com.example.restapi.dtos.readerdtos.ReaderDTO_withMembership;
 import com.example.restapi.model.Book;
 import lombok.AllArgsConstructor;
 import lombok.Data;

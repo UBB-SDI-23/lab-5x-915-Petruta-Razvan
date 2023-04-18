@@ -1,37 +1,45 @@
 package com.example.restapi.service;
 
-import com.example.restapi.dto.BookDTO;
-import com.example.restapi.dto.BookDTO_onlyLibraryID;
+import com.example.restapi.dtos.bookdtos.BookDTO_Converters;
+import com.example.restapi.dtos.bookdtos.BookDTO_onlyLibraryID;
+import com.example.restapi.dtos.bookdtos.BookDTO_wholeLibrary;
 import com.example.restapi.exceptions.BookNotFoundException;
 import com.example.restapi.exceptions.LibraryNotFoundException;
 import com.example.restapi.model.Book;
 import com.example.restapi.model.Library;
 import com.example.restapi.repository.BookRepository;
 import com.example.restapi.repository.LibraryRepository;
+import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
-public class BookService {
+public class BookService implements IBookService {
     private final BookRepository bookRepository;
     private final LibraryRepository libraryRepository;
+    private final ModelMapper modelMapper;
 
-    public BookService(BookRepository bookRepository, LibraryRepository libraryRepository) {
+    public BookService(BookRepository bookRepository, LibraryRepository libraryRepository, ModelMapper modelMapper) {
         this.bookRepository = bookRepository;
         this.libraryRepository = libraryRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public List<Book> getAllBooks(Integer pageNo, Integer pageSize) {
+    @Override
+    public List<BookDTO_onlyLibraryID> getAllBooks(Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by("ID"));
 
-        return this.bookRepository.findAll(pageable).getContent();
+        return this.bookRepository.findAll(pageable).getContent().stream().map(
+                (book) -> BookDTO_Converters.convertToBookDTO_onlyLibraryID(book, this.modelMapper)
+        ).collect(Collectors.toList());
     }
 
+    @Override
     public Book addNewBook(Book newBook, Long id) {
         return this.libraryRepository.findById(id)
                 .map(library -> {
@@ -41,10 +49,13 @@ public class BookService {
                 }).orElseThrow(() -> new LibraryNotFoundException(id));
     }
 
-    public Book getBookById(Long id) {
-        return this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+    @Override
+    public BookDTO_wholeLibrary getBookById(Long id) {
+        return BookDTO_Converters.convertToBookDTO_wholeLibrary(this.bookRepository.findById(id).orElseThrow(() ->
+                new BookNotFoundException(id)), this.modelMapper);
     }
 
+    @Override
     public Book replaceBook(Book bookDTO, Long id) {
         Book book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
         book.setTitle(bookDTO.getTitle());
@@ -56,6 +67,7 @@ public class BookService {
         return this.bookRepository.save(book);
     }
 
+    @Override
     public void deleteBook(Long id) {
         Book book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
 
@@ -66,12 +78,16 @@ public class BookService {
         this.bookRepository.deleteById(id);
     }
 
-    public List<Book> getBooksWithPriceGreater(Double price, Integer pageNo, Integer pageSize) {
+    @Override
+    public List<BookDTO_onlyLibraryID> getBooksWithPriceGreater(Double price, Integer pageNo, Integer pageSize) {
         Pageable pageable = PageRequest.of(pageNo, pageSize);
 
-        return this.bookRepository.findByPriceGreaterThan(price, pageable).getContent();
+        return this.bookRepository.findByPriceGreaterThan(price, pageable).getContent().stream().map(
+                (book) -> BookDTO_Converters.convertToBookDTO_onlyLibraryID(book, this.modelMapper)
+        ).collect(Collectors.toList());
     }
 
+    @Override
     public long countAllBooks() {
         return this.bookRepository.count();
     }

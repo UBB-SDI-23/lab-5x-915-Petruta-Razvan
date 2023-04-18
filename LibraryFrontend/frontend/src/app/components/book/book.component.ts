@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Book } from 'src/app/core/model/book.model';
 import { BookService } from 'src/app/core/service/book.service';
@@ -11,18 +11,26 @@ import { BookService } from 'src/app/core/service/book.service';
 })
 
 export class BookComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
+
   books: Book[] = [];
+
   pageNumber: number = 0;
   pageSize: number = 25; 
   noPages: number = 0;
+  goToPageNumber: number = 1;
+
   showLoader: boolean = false;
 
-  goToPageNumber: number = 0;
-
-  constructor(private bookService: BookService, private route: ActivatedRoute, private router: Router, private elementRef: ElementRef) {}
+  constructor(private bookService: BookService, private route: ActivatedRoute, private router: Router,
+     private elementRef: ElementRef, private paginatorIntl: MatPaginatorIntl) {}
   
   ngOnInit(): void {
+    // go back to the top
     window.onscroll = () => this.scrollFunction();
+
+    // customize paginator
+    this.paginatorIntl.getRangeLabel = this.getRangeLabel.bind(this.paginatorIntl);
 
     this.bookService.countBooks().subscribe((result: Number) => {
       this.noPages = Math.floor(result.valueOf() / this.pageSize);
@@ -108,7 +116,7 @@ export class BookComponent implements OnInit {
 
   onPageChanged(event: PageEvent) {
     this.pageNumber = event.pageIndex;
-    this.goToPageNumber = this.pageNumber;
+    this.goToPageNumber = this.pageNumber + 1;
     this.pageSize = event.pageSize;
     
     this.bookService.countBooks().subscribe((result: Number) => {
@@ -123,9 +131,8 @@ export class BookComponent implements OnInit {
   }
 
   goToPage(): void {
-    this.pageNumber = Math.min(Math.max(0, this.goToPageNumber), this.noPages);
-    const pageIndex = this.pageNumber;
-    this.router.navigate(['/books'], { queryParams: { pageNo: pageIndex, pageSize: this.pageSize } })
+    this.pageNumber = Math.min(Math.max(1, this.goToPageNumber), this.noPages) - 1;
+    this.router.navigate(['/books'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
         .then(() => this.listBooks());
   }
 
@@ -133,5 +140,10 @@ export class BookComponent implements OnInit {
     if (this.goToPageNumber > this.noPages) {
       this.goToPageNumber = this.noPages;
     }
+  }
+
+  getRangeLabel(page: number, pageSize: number, length: number): string {
+    const total = Math.ceil(length / pageSize);
+    return `Page ${page + 1} of ${total}`;
   }
 }

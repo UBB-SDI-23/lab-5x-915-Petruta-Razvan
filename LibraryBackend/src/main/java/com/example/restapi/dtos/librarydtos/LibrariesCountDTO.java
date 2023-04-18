@@ -1,4 +1,4 @@
-package com.example.restapi.dto;
+package com.example.restapi.dtos.librarydtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

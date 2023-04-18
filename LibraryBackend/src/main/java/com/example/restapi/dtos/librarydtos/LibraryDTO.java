@@ -1,4 +1,4 @@
-package com.example.restapi.dto;
+package com.example.restapi.dtos.librarydtos;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Max;

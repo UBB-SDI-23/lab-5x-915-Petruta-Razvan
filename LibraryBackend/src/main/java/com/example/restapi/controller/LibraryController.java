@@ -1,37 +1,32 @@
 package com.example.restapi.controller;
 
-import com.example.restapi.dto.*;
-import com.example.restapi.model.Book;
+import com.example.restapi.dtos.bookdtos.BookDTO_onlyLibraryID;
+import com.example.restapi.dtos.librarydtos.LibrariesCountDTO;
+import com.example.restapi.dtos.librarydtos.LibraryDTO_allBooks;
+import com.example.restapi.dtos.librarydtos.LibraryDTO_noBooks;
+import com.example.restapi.dtos.readerdtos.MembershipDTO;
 import com.example.restapi.model.Library;
 import com.example.restapi.model.Membership;
 import com.example.restapi.model.Reader;
-import com.example.restapi.service.LibraryService;
-import com.example.restapi.service.MembershipService;
-import com.example.restapi.service.ReaderService;
+import com.example.restapi.service.ILibraryService;
+import com.example.restapi.service.IMembershipService;
 import jakarta.validation.Valid;
-import org.modelmapper.ModelMapper;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 @CrossOrigin
 @RestController
 @RequestMapping("/api")
 @Validated
 public class LibraryController {
-    private final LibraryService libraryService;
-    private final MembershipService membershipService;
-    private final ReaderService readerService;
-    private final ModelMapper modelMapper;
+    private final ILibraryService libraryService;
+    private final IMembershipService membershipService;
 
-    public LibraryController(LibraryService libraryService, MembershipService membershipService, ReaderService readerService, ModelMapper modelMapper) {
+    public LibraryController(ILibraryService libraryService, IMembershipService membershipService) {
         this.libraryService = libraryService;
         this.membershipService = membershipService;
-        this.readerService = readerService;
-        this.modelMapper = modelMapper;
     }
 
 
@@ -44,9 +39,7 @@ public class LibraryController {
 
     @GetMapping("/libraries/{id}/books")
     List<BookDTO_onlyLibraryID> allBookFromLibrary(@PathVariable Long id) {
-        return this.libraryService.getAllBooksFromLibrary(id).stream().map(
-                (book) -> DTOConverters.convertToBookDTO_forAll(book, this.modelMapper)
-        ).collect(Collectors.toList());
+        return this.libraryService.getAllBooksFromLibrary(id);
     }
 
     @GetMapping("/libraries/{id}/readers")
@@ -56,7 +49,7 @@ public class LibraryController {
 
     @GetMapping("/libraries/{id}")
     LibraryDTO_allBooks oneLibrary(@PathVariable Long id) {
-        return this.convertToLibraryDTO_forOne(this.libraryService.getLibraryById(id));
+        return this.libraryService.getLibraryById(id);
     }
 
     @GetMapping("/libraries/books-statistic")
@@ -102,25 +95,5 @@ public class LibraryController {
     @DeleteMapping("/libraries/{id}")
     void deleteLibrary(@PathVariable Long id) {
         this.libraryService.deleteLibrary(id);
-    }
-
-    private LibraryDTO_allBooks convertToLibraryDTO_forOne(Library library) {
-        LibraryDTO_allBooks libraryDTO = this.modelMapper.map(library, LibraryDTO_allBooks.class);
-        Set<ReaderDTO_withMembership> readers = library.getMemberships().stream()
-                .map(membership -> {
-                    Reader reader = this.readerService.getReaderById(membership.getID().getReaderID());
-                    ReaderDTO_withMembership readerDTO = new ReaderDTO_withMembership();
-                    readerDTO.setID(reader.getID());
-                    readerDTO.setName(reader.getName());
-                    readerDTO.setEmail(reader.getEmail());
-                    readerDTO.setGender(reader.getGender());
-                    readerDTO.setStudent(reader.isStudent());
-                    readerDTO.setBirthDate(reader.getBirthDate());
-                    readerDTO.setStartDate(membership.getStartDate());
-                    readerDTO.setEndDate(membership.getEndDate());
-                    return readerDTO;
-                }).collect(Collectors.toSet());
-        libraryDTO.setReaders(readers);
-        return libraryDTO;
     }
 }

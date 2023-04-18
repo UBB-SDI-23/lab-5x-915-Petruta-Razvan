@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReaderAll } from 'src/app/core/model/reader.model';
 import { ReaderService } from 'src/app/core/service/reader.service';
@@ -10,18 +10,26 @@ import { ReaderService } from 'src/app/core/service/reader.service';
   styleUrls: ['./reader.component.css']
 })
 export class ReaderComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
+
   readers: ReaderAll[] = [];
+
   pageNumber: number = 0;
   pageSize: number = 25;
   noPages: number = 0;
+  goToPageNumber: number = 1;
+
   showLoader: boolean = true;
 
-  goToPageNumber: number = 0;
-
-  constructor(private readerService: ReaderService, private route: ActivatedRoute, private router: Router, private elementRef: ElementRef) {}
+  constructor(private readerService: ReaderService, private route: ActivatedRoute, private router: Router,
+     private elementRef: ElementRef, private paginatorIntl: MatPaginatorIntl) {}
   
   ngOnInit(): void {
+    // go back to the top
     window.onscroll = () => this.scrollFunction();
+
+    // customize the paginator
+    this.paginatorIntl.getRangeLabel = this.getRangeLabel.bind(this.paginatorIntl);
 
     this.readerService.countReaders().subscribe((result: Number) => {
       this.noPages = Math.floor(result.valueOf() / this.pageSize);
@@ -99,7 +107,7 @@ export class ReaderComponent implements OnInit {
 
   onPageChanged(event: PageEvent) {
     this.pageNumber = event.pageIndex;
-    this.goToPageNumber = this.pageNumber;
+    this.goToPageNumber = this.pageNumber + 1;
     this.pageSize = event.pageSize;
     
     this.readerService.countReaders().subscribe((result: Number) => {
@@ -114,9 +122,8 @@ export class ReaderComponent implements OnInit {
   }
 
   goToPage(): void {
-    this.pageNumber = Math.min(Math.max(0, this.goToPageNumber), this.noPages);
-    const pageIndex = this.pageNumber;
-    this.router.navigate(['/readers'], { queryParams: { pageNo: pageIndex, pageSize: this.pageSize } })
+    this.pageNumber = Math.min(Math.max(1, this.goToPageNumber), this.noPages) - 1;
+    this.router.navigate(['/readers'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
         .then(() => this.listReaders());
   }
 
@@ -124,5 +131,10 @@ export class ReaderComponent implements OnInit {
     if (this.goToPageNumber > this.noPages) {
       this.goToPageNumber = this.noPages;
     }
+  }
+
+  getRangeLabel(page: number, pageSize: number, length: number): string {
+    const total = Math.ceil(length / pageSize);
+    return `Page ${page + 1} of ${total}`;
   }
 }

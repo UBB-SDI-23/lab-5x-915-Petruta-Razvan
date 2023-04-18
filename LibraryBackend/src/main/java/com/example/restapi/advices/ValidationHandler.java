@@ -1,7 +1,6 @@
 package com.example.restapi.advices;
 
-import com.example.restapi.dto.ValidationErrorDTO;
-import com.example.restapi.exceptions.BookNotFoundException;
+import com.example.restapi.dtos.ValidationErrorDTO;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;

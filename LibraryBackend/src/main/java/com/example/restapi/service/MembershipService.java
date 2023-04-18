@@ -1,6 +1,6 @@
 package com.example.restapi.service;
 
-import com.example.restapi.dto.MembershipDTO;
+import com.example.restapi.dtos.readerdtos.MembershipDTO;
 import com.example.restapi.exceptions.LibraryNotFoundException;
 import com.example.restapi.exceptions.ReaderNotFoundException;
 import com.example.restapi.model.Library;
@@ -16,7 +16,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @Service
-public class MembershipService {
+public class MembershipService implements IMembershipService {
     private final MembershipRepository membershipRepository;
     private final LibraryRepository libraryRepository;
     private final ReaderRepository readerRepository;
@@ -27,6 +27,7 @@ public class MembershipService {
         this.readerRepository = readerRepository;
     }
 
+    @Override
     public Membership createMembership(Long libraryID, Long readerID) {
         // check for library and reader existence
         Library library =  this.libraryRepository.findById(libraryID).orElseThrow(() -> new LibraryNotFoundException(libraryID));
@@ -58,6 +59,7 @@ public class MembershipService {
         return membership;
     }
 
+    @Override
     public List<MembershipDTO> addNewMemberships(List<MembershipDTO> memberships, Long id) {
         this.libraryRepository.findById(id).map(
                 library -> {

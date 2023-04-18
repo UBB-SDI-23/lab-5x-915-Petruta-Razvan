@@ -1,4 +1,4 @@
-package com.example.restapi.dto;
+package com.example.restapi.dtos.bookdtos;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;

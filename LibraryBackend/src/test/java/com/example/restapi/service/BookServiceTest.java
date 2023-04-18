@@ -1,27 +1,19 @@
 package com.example.restapi.service;
 
-import com.example.restapi.model.Book;
 import com.example.restapi.repository.BookRepository;
-import org.junit.Before;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-import org.springframework.data.domain.PageRequest;
-
-import java.util.Arrays;
-import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
 @RunWith(MockitoJUnitRunner.class)
 public class BookServiceTest {
     @Mock
     private BookRepository bookRepository;
     @InjectMocks
-    private BookService bookService;
+    private IBookService IBookService;
 
 //    @Before
 //    public void init() {

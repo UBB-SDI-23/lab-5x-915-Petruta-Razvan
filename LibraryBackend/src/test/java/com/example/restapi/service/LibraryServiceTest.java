@@ -1,6 +1,6 @@
 package com.example.restapi.service;
 
-import com.example.restapi.dto.LibrariesCountDTO;
+import com.example.restapi.dtos.librarydtos.LibrariesCountDTO;
 import com.example.restapi.repository.LibraryRepository;
 import org.junit.Before;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class LibraryServiceTest {
     @Mock
     private LibraryRepository libraryRepository;
     @InjectMocks
-    private LibraryService libraryService;
+    private ILibraryService ILibraryService;
 
     @Before
     public void init() {
@@ -39,7 +39,7 @@ public class LibraryServiceTest {
 
     @Test
     public void testGetLibrariesWithNumberOfBooksAsc() {
-        List<LibrariesCountDTO> result = this.libraryService.getLibrariesWithNumberOfBooksDesc();
+        List<LibrariesCountDTO> result = this.ILibraryService.getLibrariesWithNumberOfBooksDesc();
 
         assertEquals(3, result.size());
         assertEquals("name1", result.get(0).getName());
@@ -49,7 +49,7 @@ public class LibraryServiceTest {
 
     @Test
     public void testGetLibrariesGroupByCountStudentReadersDesc() {
-        List<LibrariesCountDTO> result = this.libraryService.getLibrariesWithNumberOfStudentReadersDesc();
+        List<LibrariesCountDTO> result = this.ILibraryService.getLibrariesWithNumberOfStudentReadersDesc();
 
         assertEquals(3, result.size());
         assertEquals("name1", result.get(0).getName());

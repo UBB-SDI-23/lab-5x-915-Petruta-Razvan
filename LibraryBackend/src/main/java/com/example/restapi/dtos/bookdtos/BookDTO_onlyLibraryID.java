@@ -1,5 +1,6 @@
-package com.example.restapi.dto;
+package com.example.restapi.dtos.bookdtos;
 
+import com.example.restapi.dtos.bookdtos.BookDTO;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

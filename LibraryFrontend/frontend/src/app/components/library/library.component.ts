@@ -1,5 +1,5 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
-import { PageEvent } from '@angular/material/paginator';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
 import { LibraryAll } from 'src/app/core/model/library.model';
 import { LibraryService } from 'src/app/core/service/library.service';
@@ -11,17 +11,26 @@ import { LibraryService } from 'src/app/core/service/library.service';
 })
 
 export class LibraryComponent implements OnInit {
+  @ViewChild(MatPaginator) paginator?: MatPaginator;
+
   libraries: LibraryAll[] = [];
+
   pageNumber: number = 0;
   pageSize: number = 25;
   noPages: number = 0;
+  goToPageNumber: number = 1;
+
   showLoader: boolean = true;
 
-  goToPageNumber: number = 0;
-  constructor(private libraryService: LibraryService, private route: ActivatedRoute, private router: Router, private elementRef: ElementRef) {}
+  constructor(private libraryService: LibraryService, private route: ActivatedRoute, 
+    private router: Router, private elementRef: ElementRef, private paginatorIntl: MatPaginatorIntl) {}
   
   ngOnInit(): void {
+    // go back to the top
     window.onscroll = () => this.scrollFunction();
+
+    // customize paginator
+    this.paginatorIntl.getRangeLabel = this.getRangeLabel.bind(this.paginatorIntl);
 
     this.libraryService.countLibraries().subscribe((result: Number) => {
       this.noPages = Math.floor(result.valueOf() / this.pageSize);
@@ -107,7 +116,7 @@ export class LibraryComponent implements OnInit {
 
   onPageChanged(event: PageEvent) {
     this.pageNumber = event.pageIndex;
-    this.goToPageNumber = this.pageNumber;
+    this.goToPageNumber = this.pageNumber + 1;
     this.pageSize = event.pageSize;
     
     this.libraryService.countLibraries().subscribe((result: Number) => {
@@ -122,15 +131,19 @@ export class LibraryComponent implements OnInit {
   }
 
   goToPage(): void {
-    this.pageNumber = Math.min(Math.max(0, this.goToPageNumber), this.noPages);
-    const pageIndex = this.pageNumber;
-    this.router.navigate(['/libraries'], { queryParams: { pageNo: pageIndex, pageSize: this.pageSize } })
+    this.pageNumber = Math.min(Math.max(1, this.goToPageNumber), this.noPages) - 1;
+    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
         .then(() => this.listLibraries());
   }
 
   checkPageNumber(): void {
-    if (this.goToPageNumber > this.noPages) {
+    if (this.goToPageNumber >= this.noPages) {
       this.goToPageNumber = this.noPages;
     }
+  }
+
+  getRangeLabel(page: number, pageSize: number, length: number): string {
+    const total = Math.ceil(length / pageSize);
+    return `Page ${page + 1} of ${total}`;
   }
 }

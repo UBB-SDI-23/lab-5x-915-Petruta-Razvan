@@ -1,6 +1,6 @@
 package com.example.restapi.repository;
 
-import com.example.restapi.dto.LibrariesCountDTO;
+import com.example.restapi.dtos.librarydtos.LibrariesCountDTO;
 
 import java.util.List;
 
