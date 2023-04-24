@@ -12,7 +12,8 @@ import lombok.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "books", indexes = {
-        @Index(name = "fk_library_id_books_index", columnList = "library_id")
+        @Index(name = "fk_library_id_books_index", columnList = "library_id"),
+        @Index(name = "price_books_index", columnList = "price")
 })
 public class Book {
     @Id

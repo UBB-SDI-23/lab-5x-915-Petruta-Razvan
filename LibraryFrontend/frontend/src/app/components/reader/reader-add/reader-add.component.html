@@ -24,7 +24,7 @@
         <div class="form-group mt-3">
             <label>BirthDate</label>
             <input id="startDate" name="birthDate" class="form-control" type="date" [(ngModel)]="birthDate" required
-                autocomplete="off">
+                autocomplete="off" max="{{yesterdayDate}}">
             <div *ngIf="errorMessages.birthDate !== null" class="alert alert-danger" role="alert">
                 {{errorMessages.birthDate}}
             </div>
