@@ -20,6 +20,8 @@ export class LibraryComponent implements OnInit {
   noPages: number = 0;
   goToPageNumber: number = 1;
 
+  currentPage = 1;
+
   showLoader: boolean = true;
 
   constructor(private libraryService: LibraryService, private route: ActivatedRoute, 
@@ -133,6 +135,12 @@ export class LibraryComponent implements OnInit {
   goToPage(): void {
     this.pageNumber = Math.min(Math.max(1, this.goToPageNumber), this.noPages) - 1;
     this.router.navigate(['/libraries'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
+        .then(() => this.listLibraries());
+  }
+
+  goToPageSpecified(num: number): void {
+    this.currentPage = num;
+    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.currentPage - 1, pageSize: this.pageSize } })
         .then(() => this.listLibraries());
   }
 

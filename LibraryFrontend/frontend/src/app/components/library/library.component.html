@@ -76,6 +76,58 @@
         </mat-form-field>
     </div>
 
+    <nav aria-label="Page navigation example" class="custom">
+        <ul class="pagination m-3 justify-content-end custom">
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(1)">1</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(2)">2</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(3)">3</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(4)">4</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(5)">5</a></li>
+            
+            <ul class="pagination" *ngIf="currentPage <= 10">
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(6)">6</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(7)">7</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(8)">8</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(9)">9</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(10)">10</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(11)">11</a></li>
+            </ul>
+
+            <div class="pagination" *ngIf="currentPage > 10 && currentPage <= noPages - 10">
+                <li class="page-item page-custom"><a class="page-link">...</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 5)">{{currentPage - 5}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 4)">{{currentPage - 4}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 3)">{{currentPage - 3}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 3)">{{currentPage - 2}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 1)">{{currentPage - 1}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage)">{{currentPage}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 1)">{{currentPage + 1}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 2)">{{currentPage + 2}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 3)">{{currentPage + 3}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 4)">{{currentPage + 4}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 5)">{{currentPage + 5}}</a></li>
+                <li class="page-item page-custom"><a class="page-link">...</a></li>
+            </div>
+
+            <li *ngIf="currentPage <= 10 || currentPage > noPages - 10" class="page-item page-custom"><a class="page-link">...</a></li>
+
+            <ul class="pagination" *ngIf="currentPage > noPages - 10">
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 10)">{{noPages - 10}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 9)">{{noPages - 9}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 8)">{{noPages - 8}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 7)">{{noPages - 7}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 6)">{{noPages - 6}}</a></li>
+                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 5)">{{noPages - 5}}</a></li>
+            </ul>
+
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 4)">{{noPages - 4}}</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 3)">{{noPages - 3}}</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 2)">{{noPages - 2}}</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 1)">{{noPages - 1}}</a></li>
+            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages)">{{noPages}}</a></li>
+        </ul>
+    </nav>
+
     <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top" (click)="backToTop()">
         <i class="fas fa-arrow-up"></i>
     </button>
