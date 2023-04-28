@@ -1,7 +1,9 @@
-package com.example.restapi.model;
+package com.example.restapi.model.membership;
 
+import com.example.restapi.model.Library;
+import com.example.restapi.model.Reader;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

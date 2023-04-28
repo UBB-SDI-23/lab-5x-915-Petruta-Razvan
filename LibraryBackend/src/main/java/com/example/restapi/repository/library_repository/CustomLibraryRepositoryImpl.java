@@ -1,13 +1,14 @@
-package com.example.restapi.repository;
+package com.example.restapi.repository.library_repository;
 
 import com.example.restapi.dtos.librarydtos.LibrariesCountDTO;
 import com.example.restapi.model.Book;
 import com.example.restapi.model.Library;
-import com.example.restapi.model.Membership;
+import com.example.restapi.model.membership.Membership;
 import com.example.restapi.model.Reader;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import jakarta.persistence.criteria.*;
+import com.example.restapi.repository.library_repository.CustomLibraryRepository;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
 
 import java.util.List;
 

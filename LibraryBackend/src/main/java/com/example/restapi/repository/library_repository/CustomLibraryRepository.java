@@ -1,4 +1,4 @@
-package com.example.restapi.repository;
+package com.example.restapi.repository.library_repository;
 
 import com.example.restapi.dtos.librarydtos.LibrariesCountDTO;
 

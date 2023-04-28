@@ -1,1 +1,1 @@
-CREATE INDEX price_books_index ON books (price);
+-- CREATE INDEX price_books_index ON books (price);

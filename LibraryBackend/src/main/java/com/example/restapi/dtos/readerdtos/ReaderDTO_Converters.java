@@ -4,7 +4,7 @@ import com.example.restapi.dtos.librarydtos.LibraryDTO_withMembership;
 import com.example.restapi.exceptions.LibraryNotFoundException;
 import com.example.restapi.model.Library;
 import com.example.restapi.model.Reader;
-import com.example.restapi.repository.LibraryRepository;
+import com.example.restapi.repository.library_repository.LibraryRepository;
 import org.modelmapper.ModelMapper;
 
 import java.util.Set;

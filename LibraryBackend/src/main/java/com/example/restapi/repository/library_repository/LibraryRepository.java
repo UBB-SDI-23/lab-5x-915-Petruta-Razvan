@@ -1,6 +1,7 @@
-package com.example.restapi.repository;
+package com.example.restapi.repository.library_repository;
 
 import com.example.restapi.model.Library;
+import com.example.restapi.repository.library_repository.CustomLibraryRepository;
 import lombok.NonNull;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

@@ -1,1 +1,1 @@
-CREATE INDEX name_index ON libraries (name);
+-- CREATE INDEX name_index ON libraries (name);
