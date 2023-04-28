@@ -1,7 +1,7 @@
 package com.example.restapi.service;
 
 import com.example.restapi.dtos.readerdtos.MembershipDTO;
-import com.example.restapi.model.Membership;
+import com.example.restapi.model.membership.Membership;
 
 import java.util.List;
 

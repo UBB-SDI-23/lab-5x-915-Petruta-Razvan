@@ -4,7 +4,7 @@ import com.example.restapi.dtos.bookdtos.BookDTO_onlyLibraryID;
 import com.example.restapi.dtos.bookdtos.BookDTO_wholeLibrary;
 import com.example.restapi.model.Book;
 import com.example.restapi.service.IBookService;
-import jakarta.validation.Valid;
+import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

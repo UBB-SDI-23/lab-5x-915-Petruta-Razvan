@@ -1,7 +1,7 @@
 package com.example.restapi.service;
 
 import com.example.restapi.dtos.librarydtos.LibrariesCountDTO;
-import com.example.restapi.repository.LibraryRepository;
+import com.example.restapi.repository.library_repository.LibraryRepository;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

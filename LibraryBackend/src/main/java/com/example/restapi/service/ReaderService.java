@@ -5,7 +5,7 @@ import com.example.restapi.dtos.readerdtos.ReaderDTO_forOne;
 import com.example.restapi.dtos.readerdtos.ReaderDTO_Converters;
 import com.example.restapi.exceptions.ReaderNotFoundException;
 import com.example.restapi.model.Reader;
-import com.example.restapi.repository.LibraryRepository;
+import com.example.restapi.repository.library_repository.LibraryRepository;
 import com.example.restapi.repository.MembershipRepository;
 import com.example.restapi.repository.ReaderRepository;
 import org.modelmapper.ModelMapper;
