@@ -1,5 +1,6 @@
 package com.example.restapi.security.jwt;
 
+import com.example.restapi.exceptions.UserDoesNotHavePermissionException;
 import io.jsonwebtoken.*;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -44,17 +45,20 @@ public class JwtUtils {
             return true;
         } catch (SignatureException e) {
             logger.error("Invalid JWT signature: {}", e.getMessage());
+            throw new UserDoesNotHavePermissionException("Invalid token");
         } catch (MalformedJwtException e) {
             logger.error("Invalid JWT token: {}", e.getMessage());
+            throw new UserDoesNotHavePermissionException("Invalid token");
         } catch (ExpiredJwtException e) {
             logger.error("JWT token is expired: {}", e.getMessage());
+            throw new UserDoesNotHavePermissionException("Expired token");
         } catch (UnsupportedJwtException e) {
             logger.error("JWT token is unsupported: {}", e.getMessage());
+            throw new UserDoesNotHavePermissionException("Unsupported token");
         } catch (IllegalArgumentException e) {
             logger.error("JWT claims string is empty: {}", e.getMessage());
+            throw new UserDoesNotHavePermissionException("Empty token");
         }
-
-        return false;
     }
 
     public ResponseCookie generateTokenFromUsernameSignin(String username) {

@@ -19,9 +19,13 @@ def insert_data_books():
             with conn.cursor() as cursor:
                 cursor.execute("SELECT ID from libraries")
                 library_ids = [el[0] for el in cursor.fetchall()]
-                insert_query = "INSERT INTO books (title, author, publisher, price, published_year, description, library_id) VALUES "
+
+                cursor.execute("SELECT ID from users")
+                user_ids = [el[0] for el in cursor.fetchall()]
+
+                insert_query = "INSERT INTO books (title, author, publisher, price, published_year, description, library_id, user_id) VALUES "
                 values = []
-                for i in range(1000000):
+                for i in range(1000):
                     title = fake.sentence(nb_words=random.randint(2, 5), variable_nb_words=True,
                                           ext_word_list=None).strip(".")
                     author = fake.name()
@@ -33,8 +37,9 @@ def insert_data_books():
                     price = round(random.uniform(10, 100), 2)
                     published_year = random.randint(1850, 2022)
                     library_id = random.choice(library_ids)
-                    values.append(f"('{title}', '{author}', '{publisher}', {price}, {published_year}, '{description}', {library_id})")
-                    if len(values) == 1000:
+                    user_id = random.choice(user_ids)
+                    values.append(f"('{title}', '{author}', '{publisher}', {price}, {published_year}, '{description}', {library_id}, {user_id})")
+                    if len(values) == 100:
                         f.write(insert_query + ", ".join(values) + ";\n")
                         values = []
     except Exception as error:

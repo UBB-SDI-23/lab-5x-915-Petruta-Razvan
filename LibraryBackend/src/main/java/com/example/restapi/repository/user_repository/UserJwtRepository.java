@@ -1,4 +1,4 @@
-package com.example.restapi.repository;
+package com.example.restapi.repository.user_repository;
 
 import com.example.restapi.model.user.UserJwt;
 import org.springframework.data.jpa.repository.JpaRepository;

@@ -20,6 +20,7 @@ public class ReaderDTO_Converters {
         newReader.setGender(reader.getGender());
         newReader.setBirthDate(reader.getBirthDate());
         newReader.setTotalLibraries(countReaders);
+        newReader.setUsername(reader.getUser().getUsername());
         return newReader;
     }
 
@@ -40,6 +41,7 @@ public class ReaderDTO_Converters {
                     return libraryDTO;
                 })).collect(Collectors.toSet());
         readerDTO.setLibraries(libraries);
+        readerDTO.setUsername(reader.getUser().getUsername());
         return readerDTO;
     }
 }

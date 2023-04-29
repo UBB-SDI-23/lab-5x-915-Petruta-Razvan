@@ -20,7 +20,7 @@ public class LibraryServiceTest {
     @Mock
     private LibraryRepository libraryRepository;
     @InjectMocks
-    private ILibraryService ILibraryService;
+    private com.example.restapi.service.library_service.ILibraryService ILibraryService;
 
     @Before
     public void init() {

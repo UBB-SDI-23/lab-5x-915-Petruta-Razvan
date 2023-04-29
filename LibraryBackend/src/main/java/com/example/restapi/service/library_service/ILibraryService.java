@@ -1,4 +1,4 @@
-package com.example.restapi.service;
+package com.example.restapi.service.library_service;
 
 import com.example.restapi.dtos.bookdtos.BookDTO_onlyLibraryID;
 import com.example.restapi.dtos.librarydtos.LibrariesCountDTO;
@@ -16,11 +16,11 @@ public interface ILibraryService {
 
     List<BookDTO_onlyLibraryID> getAllBooksFromLibrary(Long id);
 
-    Library addNewLibrary(Library newLibrary);
+    Library addNewLibrary(Library newLibrary, Long userID);
 
     LibraryDTO_allBooks getLibraryById(Long id);
 
-    Library replaceLibrary(Library newLibrary, Long id);
+    Library replaceLibrary(Library newLibrary, Long libraryID, Long userID);
 
     void deleteLibrary(Long id);
 

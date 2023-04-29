@@ -1,9 +1,11 @@
 package com.example.restapi.dtos.librarydtos;
 
 import com.example.restapi.dtos.readerdtos.ReaderDTO_withMembership;
+import com.example.restapi.dtos.userdtos.UserDTO;
 import com.example.restapi.exceptions.ReaderNotFoundException;
 import com.example.restapi.model.Library;
 import com.example.restapi.model.Reader;
+import com.example.restapi.model.user.User;
 import com.example.restapi.repository.ReaderRepository;
 import org.modelmapper.ModelMapper;
 
@@ -21,6 +23,8 @@ public class LibraryDTO_Converters {
         newLibrary.setYearOfConstruction(library.getYearOfConstruction());
         newLibrary.setTotalReaders(countReaders);
         newLibrary.setTotalBooks(countBooks);
+        newLibrary.setUsername(library.getUser().getUsername());
+
         return newLibrary;
     }
 
@@ -41,6 +45,7 @@ public class LibraryDTO_Converters {
                     return readerDTO;
                 }).collect(Collectors.toSet());
         libraryDTO.setReaders(readers);
+        libraryDTO.setUsername(library.getUser().getUsername());
         return libraryDTO;
     }
 }

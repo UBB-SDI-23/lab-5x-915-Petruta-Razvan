@@ -1,7 +1,7 @@
 package com.example.restapi.security.services;
 
 import com.example.restapi.model.user.User;
-import com.example.restapi.repository.UserRepository;
+import com.example.restapi.repository.user_repository.UserRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

@@ -17,9 +17,12 @@ def insert_data_readers():
         with open("./queries/insert_readers.sql", "w", encoding="utf-8") as f:
             fake = Faker()
             with conn.cursor() as cursor:
-                insert_query = "INSERT INTO readers (name, email, birth_date, gender, is_student) VALUES "
+                cursor.execute("SELECT ID from users")
+                user_ids = [el[0] for el in cursor.fetchall()]
+
+                insert_query = "INSERT INTO readers (name, email, birth_date, gender, is_student, user_id) VALUES "
                 values = []
-                for i in range(1000000):
+                for i in range(1000):
                     name = fake.name()
                     name_modified = "".join(c for c in name if c not in SPECIAL_CHARS).lower()
                     email = name_modified + random.choice(EMAIL_DOMAINS)
@@ -29,8 +32,9 @@ def insert_data_readers():
                     date = f"{year}-{'{:02d}'.format(month)}-{'{:02d}'.format(day)}"
                     gender = random.choice(GENDERS)
                     is_student = random.choice([True, False])
-                    values.append(f"('{name}', '{email}', '{date}', '{gender}', {is_student})")
-                    if len(values) == 1000:
+                    user_id = random.choice(user_ids)
+                    values.append(f"('{name}', '{email}', '{date}', '{gender}', {is_student}, {user_id})")
+                    if len(values) == 100:
                         f.write(insert_query + ", ".join(values) + ";\n")
                         values = []
     except Exception as error:

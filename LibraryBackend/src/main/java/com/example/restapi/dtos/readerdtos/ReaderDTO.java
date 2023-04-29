@@ -11,9 +11,14 @@ import java.time.LocalDate;
 @AllArgsConstructor
 public abstract class ReaderDTO {
     private Long ID;
+
     private String name;
+
     private String email;
+
     private LocalDate birthDate;
+
     private String gender;
+
     private boolean isStudent;
 }
