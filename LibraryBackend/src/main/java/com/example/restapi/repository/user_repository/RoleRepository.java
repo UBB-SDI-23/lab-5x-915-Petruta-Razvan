@@ -1,4 +1,4 @@
-package com.example.restapi.repository;
+package com.example.restapi.repository.user_repository;
 
 import com.example.restapi.model.user.ERole;
 import com.example.restapi.model.user.Role;

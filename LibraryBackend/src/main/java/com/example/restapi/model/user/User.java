@@ -2,19 +2,20 @@ package com.example.restapi.model.user;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+
+import com.example.restapi.model.Book;
+import com.example.restapi.model.Library;
+import com.example.restapi.model.Reader;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import lombok.*;
 
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity // JPA annotation to make this object ready for storage in a JPA-based data store
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Entity
 @Table(name = "users",
         uniqueConstraints = {
                 @UniqueConstraint(columnNames = "username"),
@@ -22,7 +23,7 @@ import java.util.Set;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long ID;
 
     @NotEmpty
     private String username;
@@ -37,9 +38,45 @@ public class User {
     private Set<Role> roles = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JsonIgnore
     private UserProfile userProfile;
-    public User(String username, String password) {
-        this.username = username;
-        this.password = password;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    private Set<Library> libraries;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    private Set<Book> books;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    private Set<Reader> readers;
+
+    public void addBook(Book book) {
+        this.books.add(book);
+    }
+
+    public void removeBook(Book book) {
+        this.books.remove(book);
+    }
+
+    public void addLibrary(Library library) {
+        this.libraries.add(library);
+    }
+
+    public void removeLibrary(Library library) {
+        this.libraries.remove(library);
+    }
+
+    public void addReader(Reader reader) {
+        this.readers.add(reader);
+    }
+
+    public void removeReader(Reader reader) {
+        this.readers.remove(reader);
     }
 }

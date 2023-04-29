@@ -1,4 +1,4 @@
-package com.example.restapi.service;
+package com.example.restapi.service.book_service;
 
 import com.example.restapi.dtos.bookdtos.BookDTO_onlyLibraryID;
 import com.example.restapi.dtos.bookdtos.BookDTO_wholeLibrary;
@@ -9,11 +9,11 @@ import java.util.List;
 public interface IBookService {
     List<BookDTO_onlyLibraryID> getAllBooks(Integer pageNo, Integer pageSize);
 
-    Book addNewBook(Book newBook, Long id);
+    Book addNewBook(Book newBook, Long libraryID, Long userID);
 
     BookDTO_wholeLibrary getBookById(Long id);
 
-    Book replaceBook(Book bookDTO, Long id);
+    Book replaceBook(Book bookDTO, Long bookID, Long userID);
 
     void deleteBook(Long id);
 

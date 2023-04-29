@@ -1,6 +1,7 @@
 package com.example.restapi.model;
 
 import com.example.restapi.model.membership.Membership;
+import com.example.restapi.model.user.User;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -23,22 +24,28 @@ public class Library {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column
     private Long ID;
+
     @Column
     @NotEmpty
     private String name;
+
     @Column
     @NotEmpty
     private String address;
+
     @Column
     @Email
     private String email;
+
     @Column
     @NotEmpty
     private String website;
+
     @Column
     @Min(1800)
     @Max(2023)
     private Integer yearOfConstruction;
+
     @OneToMany(mappedBy = "library", cascade = CascadeType.ALL)
     @JsonIgnore
     @EqualsAndHashCode.Exclude
@@ -48,6 +55,12 @@ public class Library {
     @JsonIgnore
     @EqualsAndHashCode.Exclude
     private Set<Membership> memberships;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    @JsonIgnore
+    @EqualsAndHashCode.Exclude
+    private User user;
 
     public void addBook(Book book) {
         this.books.add(book);

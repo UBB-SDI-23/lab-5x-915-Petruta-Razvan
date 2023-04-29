@@ -3,10 +3,17 @@ package com.example.restapi.controller;
 import com.example.restapi.dtos.bookdtos.BookDTO_onlyLibraryID;
 import com.example.restapi.dtos.bookdtos.BookDTO_wholeLibrary;
 import com.example.restapi.model.Book;
-import com.example.restapi.service.IBookService;
+import com.example.restapi.model.user.User;
+import com.example.restapi.security.jwt.JwtUtils;
+import com.example.restapi.service.book_service.IBookService;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import com.example.restapi.service.user_service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,9 +25,13 @@ import java.util.List;
 @Validated
 public class BookController {
     private final IBookService bookService;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
 
-    public BookController(IBookService bookService) {
+    public BookController(IBookService bookService, UserService userService, JwtUtils jwtUtils) {
         this.bookService = bookService;
+        this.userService = userService;
+        this.jwtUtils = jwtUtils;
     }
 
     @GetMapping("/books")
@@ -58,21 +69,32 @@ public class BookController {
                 .body(this.bookService.countBooksWithMinimumPrice(minPrice));
     }
 
-    @PostMapping("/libraries/{id}/books")
-    ResponseEntity<Book> newBook(@Valid @RequestBody Book newBook, @PathVariable Long id) {
+    @PostMapping("/libraries/{libraryID}/books")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    ResponseEntity<Book> newBook(@Valid @RequestBody Book newBook, @PathVariable Long libraryID, HttpServletRequest request) {
+        String token = this.jwtUtils.getJwtFromCookies(request);
+        String username = this.jwtUtils.getUserNameFromJwtToken(token);
+        User user = this.userService.getUserByUsername(username);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(this.bookService.addNewBook(newBook, id));
+                .body(this.bookService.addNewBook(newBook, libraryID, user.getID()));
     }
 
-    @PutMapping("/books/{id}")
-    ResponseEntity<Book> replaceBook(@Valid @RequestBody Book book, @PathVariable Long id) {
+    @PutMapping("/books/{bookID}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    ResponseEntity<Book> replaceBook(@Valid @RequestBody Book book, @PathVariable Long bookID, HttpServletRequest request) {
+        String token = this.jwtUtils.getJwtFromCookies(request);
+        String username = this.jwtUtils.getUserNameFromJwtToken(token);
+        User user = this.userService.getUserByUsername(username);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(this.bookService.replaceBook(book, id));
+                .body(this.bookService.replaceBook(book, bookID, user.getID()));
     }
 
     @DeleteMapping("/books/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<HttpStatus> deleteBook(@PathVariable Long id) {
         this.bookService.deleteBook(id);
         return ResponseEntity.accepted().body(HttpStatus.OK);

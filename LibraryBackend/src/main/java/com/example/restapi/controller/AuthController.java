@@ -3,10 +3,10 @@ package com.example.restapi.controller;
 
 import com.example.restapi.dtos.RegisterDTO;
 import com.example.restapi.model.user.*;
-import com.example.restapi.repository.RoleRepository;
-import com.example.restapi.repository.UserJwtRepository;
-import com.example.restapi.repository.UserProfileRepository;
-import com.example.restapi.repository.UserRepository;
+import com.example.restapi.repository.user_repository.RoleRepository;
+import com.example.restapi.repository.user_repository.UserJwtRepository;
+import com.example.restapi.repository.user_repository.UserProfileRepository;
+import com.example.restapi.repository.user_repository.UserRepository;
 import com.example.restapi.security.jwt.JwtUtils;
 import com.example.restapi.security.payload.request.LoginRequest;
 import com.example.restapi.security.payload.request.SignupRequest;

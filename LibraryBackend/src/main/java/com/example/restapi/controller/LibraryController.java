@@ -8,11 +8,18 @@ import com.example.restapi.dtos.readerdtos.MembershipDTO;
 import com.example.restapi.model.Library;
 import com.example.restapi.model.membership.Membership;
 import com.example.restapi.model.Reader;
-import com.example.restapi.service.ILibraryService;
-import com.example.restapi.service.IMembershipService;
+import com.example.restapi.model.user.User;
+import com.example.restapi.security.jwt.JwtUtils;
+import com.example.restapi.service.library_service.ILibraryService;
+import com.example.restapi.service.membership_service.IMembershipService;
+
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+
+import com.example.restapi.service.user_service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,10 +32,14 @@ import java.util.List;
 public class LibraryController {
     private final ILibraryService libraryService;
     private final IMembershipService membershipService;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
 
-    public LibraryController(ILibraryService libraryService, IMembershipService membershipService) {
+    public LibraryController(ILibraryService libraryService, IMembershipService membershipService, UserService userService, JwtUtils jwtUtils) {
         this.libraryService = libraryService;
         this.membershipService = membershipService;
+        this.userService = userService;
+        this.jwtUtils = jwtUtils;
     }
 
 
@@ -91,34 +102,51 @@ public class LibraryController {
     }
 
     @PostMapping("/libraries")
-    ResponseEntity<Library> newLibrary(@Valid @RequestBody Library newLibrary) {
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    ResponseEntity<Library> newLibrary(@Valid @RequestBody Library newLibrary, HttpServletRequest request) {
+        String token = this.jwtUtils.getJwtFromCookies(request);
+        String username = this.jwtUtils.getUserNameFromJwtToken(token);
+        User user = this.userService.getUserByUsername(username);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(this.libraryService.addNewLibrary(newLibrary));
+                .body(this.libraryService.addNewLibrary(newLibrary, user.getID()));
     }
 
     @PostMapping("/libraries/{libraryID}/readers/{readerID}")
-    ResponseEntity<Membership> newReaderMembership(@PathVariable Long libraryID, @PathVariable Long readerID) {
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    ResponseEntity<Membership> newReaderMembership(@PathVariable Long libraryID, @PathVariable Long readerID, HttpServletRequest request) {
+        String token = this.jwtUtils.getJwtFromCookies(request);
+        String username = this.jwtUtils.getUserNameFromJwtToken(token);
+        User user = this.userService.getUserByUsername(username);
+
         return ResponseEntity
                 .status(HttpStatus.CREATED)
-                .body(this.membershipService.createMembership(libraryID, readerID));
+                .body(this.membershipService.createMembership(libraryID, readerID, user.getID()));
     }
 
     @PostMapping("/libraries/{id}/readersList")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     ResponseEntity<List<MembershipDTO>> newMembershipsList(@RequestBody List<MembershipDTO> memberships, @PathVariable Long id) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(this.membershipService.addNewMemberships(memberships, id));
     }
 
-    @PutMapping("/libraries/{id}")
-    ResponseEntity<Library> replaceLibrary(@Valid @RequestBody Library newLibrary, @PathVariable Long id) {
+    @PutMapping("/libraries/{libraryID}")
+    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
+    ResponseEntity<Library> replaceLibrary(@Valid @RequestBody Library newLibrary, @PathVariable Long libraryID, HttpServletRequest request) {
+        String token = this.jwtUtils.getJwtFromCookies(request);
+        String username = this.jwtUtils.getUserNameFromJwtToken(token);
+        User user = this.userService.getUserByUsername(username);
+
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .body(this.libraryService.replaceLibrary(newLibrary, id));
+                .body(this.libraryService.replaceLibrary(newLibrary, libraryID, user.getID()));
     }
 
     @DeleteMapping("/libraries/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
     ResponseEntity<HttpStatus> deleteLibrary(@PathVariable Long id) {
         this.libraryService.deleteLibrary(id);
         return ResponseEntity.accepted().body(HttpStatus.OK);

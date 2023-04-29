@@ -13,7 +13,7 @@ public class BookServiceTest {
     @Mock
     private BookRepository bookRepository;
     @InjectMocks
-    private IBookService IBookService;
+    private com.example.restapi.service.book_service.IBookService IBookService;
 
 //    @Before
 //    public void init() {
