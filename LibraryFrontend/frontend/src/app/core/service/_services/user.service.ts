@@ -7,7 +7,8 @@ import { SQLResponse, UserInfo, UserProfile, UserRolesUpdate, UserWithRolesDTO }
   providedIn: 'root',
 })
 export class UserService {
-  private baseUrl = "http://localhost:8080/api/";
+  // private baseUrl = "http://localhost:8080/api/";
+  private baseUrl = "https://library-hub.crabdance.com/api/";
 
   constructor(private httpClient: HttpClient) {}
 
