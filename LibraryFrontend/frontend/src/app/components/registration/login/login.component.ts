@@ -39,7 +39,7 @@ export class LoginComponent implements OnInit {
         this.isLoggedIn = true;
         this.roles = this.storageService.getUser().roles;
         
-        this.reloadPage();
+        // this.reloadPage();
       },
       error: err => {
         this.errorMessage = err.error.message;
@@ -52,6 +52,6 @@ export class LoginComponent implements OnInit {
   }
 
   reloadPage(): void {
-    window.location.reload();
+    // window.location.reload();
   }
 }
