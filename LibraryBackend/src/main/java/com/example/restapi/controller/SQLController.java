@@ -178,7 +178,7 @@ public class SQLController {
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new SQLRunResponseDTO("Error: something went wrong"));
+                    .body(new SQLRunResponseDTO("Error: something went wrong" + e));
         }
     }
 
