@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Book, BookDetails, UpdateBookDTO } from 'src/app/core/model/book.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { BookService } from 'src/app/core/service/book.service';
 
 @Component({
@@ -18,9 +20,30 @@ export class BookUpdateComponent implements OnInit {
   description?: string;
   showLoader: boolean = false;
 
-  constructor(private bookService: BookService, private activatedRoute: ActivatedRoute, private router: Router) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private bookService: BookService, 
+    private activatedRoute: ActivatedRoute, 
+    private router: Router,
+    private toastrService: ToastrService,
+    private storageService: StorageService) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    } else {
+      this.toastrService.error("Log in required", "", { progressBar: true });
+      this.router.navigateByUrl("/login");
+    }
+
     this.showLoader = true;
 
     this.activatedRoute.params.subscribe(params => {
@@ -33,9 +56,15 @@ export class BookUpdateComponent implements OnInit {
           this.price = book.price;
           this.publishedYear = book.publishedYear;
           this.description = book.description;
+          if (this.username !== book.username && !this.isModerator() && !this.isAdmin()) {
+            this.toastrService.error("You are not allowed to update this book", "", { progressBar: true });
+            this.router.navigateByUrl("/");
+          }
         },
         error: (error) => {
-          console.log(error);
+          this.showLoader = false;
+          this.router.navigateByUrl("/");
+          this.toastrService.error(error.error, "", { progressBar: true });
         },
         complete: () => {
           this.showLoader = false;
@@ -61,9 +90,20 @@ export class BookUpdateComponent implements OnInit {
           this.router.navigateByUrl("/books/" + book.id);
         },
         error: (error) => {
-          console.log(error);
+          this.toastrService.error(error.error, "", { progressBar: true });
+        },
+        complete: () => {
+          this.toastrService.success("Book successfully updated", "", { progressBar: true });
         }
       });
     }
+  }
+
+  isModerator(): boolean {
+    return this.roles.includes("ROLE_MODERATOR");
+  }
+
+  isAdmin(): boolean {
+    return this.roles.includes("ROLE_ADMIN");
   }
 }

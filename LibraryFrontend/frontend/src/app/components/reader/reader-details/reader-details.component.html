@@ -21,6 +21,9 @@
         <div>
             <p><span class="fw-bold">Is student:</span> {{reader.student ? "Yes" : "No"}}</p>
         </div>
+        <div>
+            <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', reader.username]">{{reader.username}}</a></p>
+        </div>
 
         <p class="fw-bold">Library memberships:</p>
         <div class="row">
@@ -59,15 +62,20 @@
             </div>
         </div>
 
-        <div>
+        <div *ngIf="isUserCorrect() || isModerator() || isAdmin()">
             <p>Want a new membership? <a [routerLink]="['/reader-membership/', reader.id]">here</a></p>
         </div>
 
         <div>
-            <button type="button" [routerLink]="['/readers-update/', reader.id]"
-                            class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
-            <button type="button" [routerLink]="['/readers-delete/', reader.id]"
-            class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
+            <button *ngIf="isUserCorrect() || isModerator() || isAdmin()" type="button" [routerLink]="['/readers-update/', reader.id]"
+                class="btn btn-outline-primary m-2 btn-custom">
+                <i class="fa-solid fa-arrows-rotate"></i>
+
+            </button>
+            <button *ngIf="isAdmin()" type="button" [routerLink]="['/readers-delete/', reader.id]"
+                class="btn btn-outline-danger m-2 btn-custom">
+                <i class="fa-solid fa-trash"></i>
+            </button>
         </div>
     </div>
 </div>

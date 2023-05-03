@@ -22,7 +22,7 @@ def insert_data_readers():
 
                 insert_query = "INSERT INTO readers (name, email, birth_date, gender, is_student, user_id) VALUES "
                 values = []
-                for i in range(1000):
+                for i in range(100000):
                     name = fake.name()
                     name_modified = "".join(c for c in name if c not in SPECIAL_CHARS).lower()
                     email = name_modified + random.choice(EMAIL_DOMAINS)
@@ -34,7 +34,7 @@ def insert_data_readers():
                     is_student = random.choice([True, False])
                     user_id = random.choice(user_ids)
                     values.append(f"('{name}', '{email}', '{date}', '{gender}', {is_student}, {user_id})")
-                    if len(values) == 100:
+                    if len(values) == 1000:
                         f.write(insert_query + ", ".join(values) + ";\n")
                         values = []
     except Exception as error:

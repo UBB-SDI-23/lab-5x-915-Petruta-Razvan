@@ -86,6 +86,7 @@ public class ReaderService implements IReaderService {
         reader.setStudent(newReader.isStudent());
         reader.setBirthDate(newReader.getBirthDate());
         reader.setEmail(newReader.getEmail());
+        reader.setUser(user);
 
         return this.readerRepository.save(reader);
     }

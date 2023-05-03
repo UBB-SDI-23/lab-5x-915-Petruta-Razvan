@@ -19,4 +19,6 @@ public interface LibraryRepository extends JpaRepository<Library, Long>, CustomL
             "OR name LIKE ('%' || ?1 || '%') ORDER BY ts_rank(to_tsvector('english', name), " +
             "to_tsquery('english', replace(?1, ' ', ':* & ') || ':*')) DESC LIMIT 20", nativeQuery = true)
     List<Library> findTop20BySearchTerm(String searchTerm);
+
+    Long countByUserID(Long userID);
 }

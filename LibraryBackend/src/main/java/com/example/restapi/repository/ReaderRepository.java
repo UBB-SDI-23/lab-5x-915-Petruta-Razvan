@@ -12,4 +12,6 @@ public interface ReaderRepository extends JpaRepository<Reader, Long> {
     @NonNull
     Page<Reader> findAll(@NonNull Pageable pageable);
     List<Reader> findReadersByMembershipsLibraryID(Long libraryID);
+
+    Long countByUserID(Long userID);
 }

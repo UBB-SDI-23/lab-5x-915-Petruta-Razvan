@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
-import { LibraryAll } from 'src/app/core/model/library.model';
+import { ToastrService } from 'ngx-toastr';
+import { Library, LibraryAll } from 'src/app/core/model/library.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { LibraryService } from 'src/app/core/service/library.service';
 
 @Component({
@@ -20,14 +22,31 @@ export class LibraryComponent implements OnInit {
   noPages: number = 0;
   goToPageNumber: number = 1;
 
-  currentPage = 1;
-
   showLoader: boolean = true;
 
-  constructor(private libraryService: LibraryService, private route: ActivatedRoute, 
-    private router: Router, private elementRef: ElementRef, private paginatorIntl: MatPaginatorIntl) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private libraryService: LibraryService, 
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private elementRef: ElementRef, 
+    private paginatorIntl: MatPaginatorIntl,
+    private storageService: StorageService,
+    private toastrService: ToastrService) {}
   
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    }
+
     // go back to the top
     window.onscroll = () => this.scrollFunction();
 
@@ -57,7 +76,10 @@ export class LibraryComponent implements OnInit {
         this.libraries = result;
       },
       error: (error) => {
-        console.log(error);
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error(error.error, "", { progressBar: true });
+        console.log(error.errror);
       },
       complete: () => {
         this.showLoader = false;
@@ -138,12 +160,6 @@ export class LibraryComponent implements OnInit {
         .then(() => this.listLibraries());
   }
 
-  goToPageSpecified(num: number): void {
-    this.currentPage = num;
-    this.router.navigate(['/libraries'], { queryParams: { pageNo: this.currentPage - 1, pageSize: this.pageSize } })
-        .then(() => this.listLibraries());
-  }
-
   checkPageNumber(): void {
     if (this.goToPageNumber >= this.noPages) {
       this.goToPageNumber = this.noPages;
@@ -153,5 +169,21 @@ export class LibraryComponent implements OnInit {
   getRangeLabel(page: number, pageSize: number, length: number): string {
     const total = Math.ceil(length / pageSize);
     return `Page ${page + 1} of ${total}`;
+  }
+
+  isUser(): boolean {
+    return this.roles.includes("ROLE_USER");
+  }
+
+  isUserCorrect(library: Library): boolean {
+    return this.username === library.username;
+  }
+
+  isModerator(): boolean {
+    return this.roles.includes("ROLE_MODERATOR");
+  }
+
+  isAdmin(): boolean {
+    return this.roles.includes("ROLE_ADMIN");
   }
 }

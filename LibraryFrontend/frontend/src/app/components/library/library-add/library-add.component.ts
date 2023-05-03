@@ -1,6 +1,9 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AddUpdateLibraryDTO, Library } from 'src/app/core/model/library.model';
+import { AuthService } from 'src/app/core/service/_services/auth.service';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { LibraryService } from 'src/app/core/service/library.service';
 
 @Component({
@@ -8,7 +11,7 @@ import { LibraryService } from 'src/app/core/service/library.service';
   templateUrl: './library-add.component.html',
   styleUrls: ['./library-add.component.css']
 })
-export class LibraryAddComponent {
+export class LibraryAddComponent implements OnInit {
   name?: string;
   address?: string;
   email?: string;
@@ -23,7 +26,29 @@ export class LibraryAddComponent {
     'yearOfConstruction': null
   };
 
-  constructor(private libraryService: LibraryService, private router: Router) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private libraryService: LibraryService, 
+    private router: Router, 
+    private toastrService: ToastrService,
+    private storageService: StorageService) {}
+
+  ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    } else {
+      this.toastrService.error("Log in required", "", { progressBar: true });
+      this.router.navigateByUrl("/login");
+    }
+  }
 
   onSubmit(form: any) {
     this.showLoader = true;
@@ -77,9 +102,15 @@ export class LibraryAddComponent {
               this.errorMessages.yearOfConstruction = null;
             }
           }
+
+          if (error.status === 401 || error.status === 402 || error.status === 403) {
+            this.toastrService.error(error.error.message, "", { progressBar: true });
+          }
+          
         },
         complete: () => {
           this.showLoader = false;
+          this.toastrService.success("Library added successfully", "", { progressBar: true });
         }
       })
     }

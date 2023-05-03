@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subject, debounceTime } from 'rxjs';
 import { AddBookDTO, Book } from 'src/app/core/model/book.model';
 import { Library } from 'src/app/core/model/library.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { BookService } from 'src/app/core/service/book.service';
 import { LibraryService } from 'src/app/core/service/library.service';
 
@@ -37,9 +39,30 @@ export class BookAddComponent implements OnInit {
   searchTerm = new Subject<string>();
   options?: Library[];
 
-  constructor(private bookService: BookService, private libraryService: LibraryService, private router: Router) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private bookService: BookService, 
+    private libraryService: LibraryService, 
+    private router: Router,
+    private storageService: StorageService,
+    private toastrService: ToastrService) {}
 
   ngOnInit() {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    } else {
+      this.toastrService.error("Log in required", "", { progressBar: true });
+      this.router.navigateByUrl("/login");
+    }
+
     this.searchTerm.pipe(
       debounceTime(1000) // debounce by 1 second
     ).subscribe(term => {
@@ -125,6 +148,7 @@ export class BookAddComponent implements OnInit {
         },
         complete: () => {
           this.showLoader = false;
+          this.toastrService.success("Book added successfully", "", { progressBar: true });
         }
       })
     }

@@ -4,7 +4,7 @@ import com.example.restapi.dtos.userdtos.UserDTO;
 import com.example.restapi.dtos.userdtos.UserProfileDTO;
 
 public interface IUserProfileService {
-    UserDTO getUserProfile(Long id);
+    UserDTO getUserProfile(String username);
 
-    UserProfileDTO updateUserProfile(UserProfileDTO newUserProfile, Long id);
+    UserProfileDTO updateUserProfile(UserProfileDTO newUserProfile, String username);
 }

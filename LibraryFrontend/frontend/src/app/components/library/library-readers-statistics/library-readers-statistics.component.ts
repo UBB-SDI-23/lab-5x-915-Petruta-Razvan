@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { LibraryCount } from 'src/app/core/model/library.model';
 import { LibraryService } from 'src/app/core/service/library.service';
 
@@ -11,7 +13,10 @@ export class LibraryReadersStatisticsComponent implements OnInit {
   libraries: LibraryCount[] = [];
   showLoader: boolean = true;
 
-  constructor(private libraryService: LibraryService) {}
+  constructor(
+    private libraryService: LibraryService,
+    private toastrService: ToastrService,
+    private router: Router) {}
   
   ngOnInit(): void {
     this.showLoader = true;
@@ -21,7 +26,9 @@ export class LibraryReadersStatisticsComponent implements OnInit {
         this.libraries = result;
       },
       error: (error) => {
-        console.log(error);
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error(error.error, "", { progressBar: true });
       },
       complete: () => {
         this.showLoader = false;

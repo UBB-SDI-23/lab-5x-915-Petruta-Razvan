@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Subject, debounceTime } from 'rxjs';
 import { Book } from 'src/app/core/model/book.model';
 import { BookService } from 'src/app/core/service/book.service';
@@ -25,8 +26,12 @@ export class BookFilterComponent implements OnInit {
   showLoader: boolean = false;
   showPaginator: boolean = false;
 
-  constructor(private bookService: BookService, private route: ActivatedRoute, private router: Router, 
-    private paginatorIntl: MatPaginatorIntl) {}
+  constructor(
+    private bookService: BookService, 
+    private route: ActivatedRoute, 
+    private router: Router, 
+    private paginatorIntl: MatPaginatorIntl,
+    private toastrService: ToastrService) {}
   
   ngOnInit(): void {
     // customize paginator
@@ -62,7 +67,9 @@ export class BookFilterComponent implements OnInit {
         this.books = result;
       },
       error: (error) => {
-        console.log(error);
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error(error.error, "", { progressBar: true });
       },
       complete: () => {
         this.router.navigate(['/books-filter'], { queryParams: { minPrice: this.selectedPrice, pageNo: this.pageNumber, pageSize: this.pageSize } });

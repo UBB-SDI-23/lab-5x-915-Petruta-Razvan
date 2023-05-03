@@ -2,6 +2,7 @@ package com.example.restapi.model.user;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 
 import com.example.restapi.model.Book;
 import com.example.restapi.model.Library;
@@ -26,9 +27,11 @@ public class User {
     private Long ID;
 
     @NotEmpty
+    @Size(min = 3, max = 20)
     private String username;
 
     @NotEmpty
+    @Size(min = 5)
     private String password;
 
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)

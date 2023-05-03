@@ -89,6 +89,7 @@ public class BookService implements IBookService {
         book.setPrice(bookDTO.getPrice());
         book.setPublishedYear(bookDTO.getPublishedYear());
         book.setDescription(bookDTO.getDescription());
+        book.setUser(user);
 
         return this.bookRepository.save(book);
     }

@@ -4,7 +4,11 @@
     </div>
 </div>
 
-<div *ngIf="!showLoader" class="container container-fluid mt-5 mb-5 container-custom">
+<div class="text-center m-5" *ngIf="libraries.length === 0 && !showLoader">
+    <h1>No data available</h1>
+</div>
+
+<div *ngIf="!showLoader && libraries.length > 0" class="container container-fluid mt-5 mb-5 container-custom">
     <div class="btn-group dropend m-3 mb-5">
         <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-custom btn-sort"
             data-bs-toggle="dropdown" aria-expanded="false">
@@ -43,12 +47,21 @@
                         <p><span class="fw-bold">Number of available books:</span> {{library.totalBooks}}</p>
                     </div>
                     <div>
+                        <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', library.username]">{{library.username}}</a></p>
+                    </div>
+                    <div>
                         <button type="button" [routerLink]="['/libraries/', library.id]"
-                            class="btn btn-outline-warning m-2 btn-custom"><i class="fa-sharp fa-solid fa-info"></i></button>
-                        <button type="button" [routerLink]="['/libraries-update/', library.id]"
-                            class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
-                        <button type="button" [routerLink]="['/libraries-delete/', library.id]"
-                            class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
+                            class="btn btn-outline-warning m-2 btn-custom">
+                            <i class="fa-sharp fa-solid fa-info"></i>
+                        </button>
+                        <button *ngIf="isUserCorrect(library) || isModerator() || isAdmin()" type="button" [routerLink]="['/libraries-update/', library.id]"
+                            class="btn btn-outline-primary m-2 btn-custom">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                        <button *ngIf="isAdmin()" type="button" [routerLink]="['/libraries-delete/', library.id]"
+                            class="btn btn-outline-danger m-2 btn-custom">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -75,58 +88,6 @@
             (ngModelChange)="checkPageNumber()">
         </mat-form-field>
     </div>
-
-    <nav aria-label="Page navigation example" class="custom">
-        <ul class="pagination m-3 justify-content-end custom">
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(1)">1</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(2)">2</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(3)">3</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(4)">4</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(5)">5</a></li>
-            
-            <ul class="pagination" *ngIf="currentPage <= 10">
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(6)">6</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(7)">7</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(8)">8</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(9)">9</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(10)">10</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(11)">11</a></li>
-            </ul>
-
-            <div class="pagination" *ngIf="currentPage > 10 && currentPage <= noPages - 10">
-                <li class="page-item page-custom"><a class="page-link">...</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 5)">{{currentPage - 5}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 4)">{{currentPage - 4}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 3)">{{currentPage - 3}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 3)">{{currentPage - 2}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage - 1)">{{currentPage - 1}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage)">{{currentPage}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 1)">{{currentPage + 1}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 2)">{{currentPage + 2}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 3)">{{currentPage + 3}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 4)">{{currentPage + 4}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(currentPage + 5)">{{currentPage + 5}}</a></li>
-                <li class="page-item page-custom"><a class="page-link">...</a></li>
-            </div>
-
-            <li *ngIf="currentPage <= 10 || currentPage > noPages - 10" class="page-item page-custom"><a class="page-link">...</a></li>
-
-            <ul class="pagination" *ngIf="currentPage > noPages - 10">
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 10)">{{noPages - 10}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 9)">{{noPages - 9}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 8)">{{noPages - 8}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 7)">{{noPages - 7}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 6)">{{noPages - 6}}</a></li>
-                <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 5)">{{noPages - 5}}</a></li>
-            </ul>
-
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 4)">{{noPages - 4}}</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 3)">{{noPages - 3}}</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 2)">{{noPages - 2}}</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages - 1)">{{noPages - 1}}</a></li>
-            <li class="page-item page-custom"><a class="page-link" (click)="goToPageSpecified(noPages)">{{noPages}}</a></li>
-        </ul>
-    </nav>
 
     <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top" (click)="backToTop()">
         <i class="fas fa-arrow-up"></i>

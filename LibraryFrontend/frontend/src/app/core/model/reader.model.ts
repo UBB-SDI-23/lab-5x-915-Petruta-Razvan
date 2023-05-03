@@ -6,7 +6,8 @@ export interface Reader {
     email: string,
     birthDate: Date,
     gender: string,
-    student: boolean
+    student: boolean,
+    username: string
 }
 
 export interface ReaderAll {
@@ -16,7 +17,8 @@ export interface ReaderAll {
     birthDate: Date,
     gender: string,
     student: boolean,
-    totalLibraries: number
+    totalLibraries: number,
+    username: string
 }
 
 export interface ReaderDetails {
@@ -26,7 +28,8 @@ export interface ReaderDetails {
     birthDate: Date,
     gender: string,
     student: boolean,
-    libraries: LibraryMembership[]
+    libraries: LibraryMembership[],
+    username: string
 }
 
 export interface ReaderMembership {

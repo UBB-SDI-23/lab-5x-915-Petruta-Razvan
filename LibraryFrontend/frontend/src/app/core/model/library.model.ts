@@ -7,7 +7,8 @@ export interface Library {
     address: string,
     email: string,
     website: string,
-    yearOfConstruction: number
+    yearOfConstruction: number,
+    username: string
 }
 
 export interface LibraryAll {
@@ -18,7 +19,8 @@ export interface LibraryAll {
     website: string,
     yearOfConstruction: number,
     totalReaders: number,
-    totalBooks: number
+    totalBooks: number,
+    username: string
 }
 
 export interface LibraryDetails {
@@ -29,7 +31,8 @@ export interface LibraryDetails {
     website: string,
     yearOfConstruction: number,
     books: BookNoLibrary[],
-    readers: ReaderMembership[]
+    readers: ReaderMembership[],
+    username: string
 }
 
 export interface LibraryMembership {
@@ -40,7 +43,8 @@ export interface LibraryMembership {
     website: string,
     yearOfConstruction: number,
     startDate: Date,
-    endDate: Date
+    endDate: Date,
+    username: string
 }
 
 export interface LibraryCount {

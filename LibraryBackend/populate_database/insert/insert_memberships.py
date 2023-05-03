@@ -22,7 +22,7 @@ def insert_data_memberships():
                 pairs = set()
                 insert_query = "INSERT INTO memberships (library_id, reader_id, start_date, end_date) VALUES "
                 values = []
-                for i in range(1000):
+                for i in range(500000):
                     library_id = random.choice(library_ids)
                     reader_id = random.choice(reader_ids)
                     while (library_id, reader_id) in pairs:
@@ -38,7 +38,7 @@ def insert_data_memberships():
                     day = random.randint(1, 28)
                     end_date = f"{year}-{'{:02d}'.format(month)}-{'{:02d}'.format(day)}"
                     values.append(f"({library_id}, {reader_id}, '{start_date}', '{end_date}')")
-                    if len(values) == 100:
+                    if len(values) == 1000:
                         f.write(insert_query + ", ".join(values) + ";\n")
                         values = []
     except Exception as error:

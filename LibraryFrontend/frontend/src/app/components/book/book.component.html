@@ -4,7 +4,11 @@
     </div>
 </div>
 
-<div *ngIf="!showLoader" class="container container-fluid mt-5 mb-5 container-custom">
+<div class="text-center m-5" *ngIf="books.length === 0 && !showLoader">
+    <h1>No data available</h1>
+</div>
+
+<div *ngIf="!showLoader && books.length > 0" class="container container-fluid mt-5 mb-5 container-custom">
     <div class="btn-group dropend m-3 mb-5">
         <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-custom btn-sort" data-bs-toggle="dropdown" aria-expanded="false">
             Sort by:
@@ -42,12 +46,21 @@
                         <p><span class="fw-bold">Library ID:</span> {{book.libraryID}}</p>
                     </div>
                     <div>
+                        <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', book.username]">{{book.username}}</a></p>
+                    </div>
+                    <div>
                         <button type="button" [routerLink]="['/books/', book.id]" 
-                            class="btn btn-outline-warning m-2 btn-custom"><i class="fa-sharp fa-solid fa-info"></i></button>
-                        <button type="button" [routerLink]="['/books-update/', book.id]" 
-                            class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
-                        <button type="button" [routerLink]="['/books-delete/', book.id]"
-                            class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
+                            class="btn btn-outline-warning m-2 btn-custom">
+                            <i class="fa-sharp fa-solid fa-info"></i>
+                        </button>
+                        <button *ngIf="isUserCorrect(book) || isModerator() || isAdmin()" type="button" [routerLink]="['/books-update/', book.id]" 
+                            class="btn btn-outline-primary m-2 btn-custom">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                        <button *ngIf="isAdmin()" type="button" [routerLink]="['/books-delete/', book.id]"
+                            class="btn btn-outline-danger m-2 btn-custom">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>

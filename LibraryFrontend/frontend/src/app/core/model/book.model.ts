@@ -8,7 +8,8 @@ export interface Book {
     price: number,
     publishedYear: number,
     libraryID: number,
-    description: string
+    description: string,
+    username: string
 }
 
 export interface BookNoLibrary {
@@ -18,7 +19,8 @@ export interface BookNoLibrary {
     publisher: string,
     price: number,
     publishedYear: number,
-    description: string
+    description: string,
+    username: string
 }
 
 export interface BookDetails {
@@ -29,7 +31,8 @@ export interface BookDetails {
     price: number,
     publishedYear: number,
     description: string,
-    library: Library
+    library: Library,
+    username: string
 }
 
 export interface UpdateBookDTO {
