@@ -24,6 +24,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.CookieGenerator;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -140,11 +141,12 @@ public class AuthController {
 
         String jwtCookie = jwtUtils.generateTokenFromUsernameSignin(userDetails.getUsername()).toString();
 
-        Cookie cookie = new Cookie("jwtToken", jwtCookie);
-        cookie.setPath("/");
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true);
-        response.addCookie(cookie); // Add the cookie to the response header
+        CookieGenerator cookieGenerator = new CookieGenerator();
+        cookieGenerator.setCookieName("jwtToken");
+        cookieGenerator.setCookiePath("/");
+        cookieGenerator.setCookieHttpOnly(true);
+        cookieGenerator.setCookieSecure(true);
+        cookieGenerator.addCookie(response, jwtCookie);
 
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
