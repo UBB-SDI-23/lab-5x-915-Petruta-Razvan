@@ -25,7 +25,7 @@ def insert_data_books():
 
                 insert_query = "INSERT INTO books (title, author, publisher, price, published_year, description, library_id, user_id) VALUES "
                 values = []
-                for i in range(1000):
+                for i in range(100000):
                     title = fake.sentence(nb_words=random.randint(2, 5), variable_nb_words=True,
                                           ext_word_list=None).strip(".")
                     author = fake.name()
@@ -39,7 +39,7 @@ def insert_data_books():
                     library_id = random.choice(library_ids)
                     user_id = random.choice(user_ids)
                     values.append(f"('{title}', '{author}', '{publisher}', {price}, {published_year}, '{description}', {library_id}, {user_id})")
-                    if len(values) == 100:
+                    if len(values) == 1000:
                         f.write(insert_query + ", ".join(values) + ";\n")
                         values = []
     except Exception as error:

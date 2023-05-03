@@ -21,6 +21,9 @@
         <div>
             <p><span class="fw-bold">Construction Year:</span> {{library.yearOfConstruction}}</p>
         </div>
+        <div>
+            <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', library.username]">{{library.username}}</a></p>
+        </div>
 
         <p class="fw-bold">Books:</p>
         <div class="row">
@@ -85,8 +88,12 @@
         </div>
 
         <div>
-            <button type="button" [routerLink]="['/libraries-update/', library.id]" class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
-            <button type="button" [routerLink]="['/libraries-delete/', library.id]" class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
+            <button *ngIf="isCorrectUser() || isModerator() || isAdmin()" type="button" [routerLink]="['/libraries-update/', library.id]" class="btn btn-outline-primary m-2 btn-custom">
+                <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+            <button *ngIf="isAdmin()" type="button" [routerLink]="['/libraries-delete/', library.id]" class="btn btn-outline-danger m-2 btn-custom">
+                <i class="fa-solid fa-trash"></i>
+            </button>
         </div>
     </div>
 </div>

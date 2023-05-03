@@ -17,4 +17,4 @@ if __name__ == "__main__":
     # insert_data_libraries()
     # insert_data_books()
     # insert_data_readers()
-    # insert_data_memberships()
+    insert_data_memberships()

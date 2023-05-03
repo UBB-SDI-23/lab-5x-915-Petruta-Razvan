@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { Book } from 'src/app/core/model/book.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { BookService } from 'src/app/core/service/book.service';
 
 @Component({
@@ -22,10 +24,29 @@ export class BookComponent implements OnInit {
 
   showLoader: boolean = false;
 
-  constructor(private bookService: BookService, private route: ActivatedRoute, private router: Router,
-     private elementRef: ElementRef, private paginatorIntl: MatPaginatorIntl) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private bookService: BookService, 
+    private route: ActivatedRoute, 
+    private router: Router,
+    private elementRef: ElementRef, 
+    private paginatorIntl: MatPaginatorIntl,
+    private storageService: StorageService,
+    private toastrService: ToastrService) {}
   
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    }
+
     // go back to the top
     window.onscroll = () => this.scrollFunction();
 
@@ -55,7 +76,9 @@ export class BookComponent implements OnInit {
         this.books = result;
       },
       error: (error) => {
-        console.log(error);
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error("You are not an admin", "", { progressBar: true });
       },
       complete: () => {
         this.showLoader = false;
@@ -145,5 +168,21 @@ export class BookComponent implements OnInit {
   getRangeLabel(page: number, pageSize: number, length: number): string {
     const total = Math.ceil(length / pageSize);
     return `Page ${page + 1} of ${total}`;
+  }
+
+  isUser(): boolean {
+    return this.roles.includes("ROLE_USER");
+  }
+
+  isUserCorrect(book: Book): boolean {
+    return this.username === book.username;
+  }
+
+  isModerator(): boolean {
+    return this.roles.includes("ROLE_MODERATOR");
+  }
+
+  isAdmin(): boolean {
+    return this.roles.includes("ROLE_ADMIN");
   }
 }

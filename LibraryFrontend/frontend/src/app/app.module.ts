@@ -33,6 +33,17 @@ import { ReaderAddComponent } from './components/reader/reader-add/reader-add.co
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { BookAddComponent } from './components/book/book-add/book-add.component';
 import { ReaderNewMembershipComponent } from './components/reader/reader-new-membership/reader-new-membership.component';
+import { LoginComponent } from './components/registration/login/login.component';
+import { ToastrModule } from 'ngx-toastr';
+
+import { httpInterceptorProviders } from './core/service/_helpers/http.interceptor';
+import { UserProfileComponent } from './components/user/user-profile/user-profile.component';
+import { RegisterComponent } from './components/registration/register/register.component';
+import { RegisterConfirmationComponent } from './components/registration/register-confirmation/register-confirmation.component';
+import { CurrentUserProfileComponent } from './components/user/current-user-profile/current-user-profile.component';
+import { UpdateUserProfileComponent } from './components/user/update-user-profile/update-user-profile.component';
+import { AdminRolesDashboardComponent } from './components/user/admin-roles-dashboard/admin-roles-dashboard.component';
+import { AdminDataManagementDashboardComponent } from './components/user/admin-data-management-dashboard/admin-data-management-dashboard.component';
 
 @NgModule({
   declarations: [
@@ -58,7 +69,15 @@ import { ReaderNewMembershipComponent } from './components/reader/reader-new-mem
     ReaderDeleteComponent,
     ReaderAddComponent,
     BookAddComponent,
-    ReaderNewMembershipComponent
+    ReaderNewMembershipComponent,
+    LoginComponent,
+    UserProfileComponent,
+    RegisterComponent,
+    RegisterConfirmationComponent,
+    CurrentUserProfileComponent,
+    UpdateUserProfileComponent,
+    AdminRolesDashboardComponent,
+    AdminDataManagementDashboardComponent
     // put all components, automat cand le creez
   ],
   imports: [
@@ -66,6 +85,9 @@ import { ReaderNewMembershipComponent } from './components/reader/reader-new-mem
     AppRoutingModule,
     HttpClientModule,
     FormsModule,
+    ToastrModule.forRoot({
+      positionClass: 'toast-bottom-center'
+    }),
     BrowserAnimationsModule,
     MatInputModule,
     MatAutocompleteModule,
@@ -75,7 +97,8 @@ import { ReaderNewMembershipComponent } from './components/reader/reader-new-mem
   providers: [
     // all the services
     LibraryService,
-    BookService
+    BookService,
+    httpInterceptorProviders
   ],
   bootstrap: [AppComponent]
 })

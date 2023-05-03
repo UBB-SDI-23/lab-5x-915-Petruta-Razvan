@@ -18,4 +18,7 @@ public class UserDTO {
     private String username;
     private Set<Role> roles;
     private UserProfileDTO userProfile;
+    private Long totalLibraries;
+    private Long totalBooks;
+    private Long totalReaders;
 }

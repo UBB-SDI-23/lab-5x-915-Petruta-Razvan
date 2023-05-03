@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AddUpdateReaderDTO, Reader } from 'src/app/core/model/reader.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { ReaderService } from 'src/app/core/service/reader.service';
 
 @Component({
@@ -24,9 +26,29 @@ export class ReaderAddComponent implements OnInit {
     'student': null
   };
 
-  constructor(private readerService: ReaderService, private router: Router) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private readerService: ReaderService, 
+    private toastrService: ToastrService,
+    private router: Router,
+    private storageService: StorageService) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    } else {
+      this.toastrService.error("Log in required", "", { progressBar: true });
+      this.router.navigateByUrl("/login");
+    }
+
     const today = new Date();
     const yesterday = new Date(today.getTime() - (24 * 60 * 60 * 1000));
     this.yesterdayDate = yesterday.toISOString().slice(0, 10);
@@ -91,6 +113,7 @@ export class ReaderAddComponent implements OnInit {
         },
         complete: () => {
           this.showLoader = false;
+          this.toastrService.success("Reader added successfully", "", { progressBar: true });
         }
       });
     }

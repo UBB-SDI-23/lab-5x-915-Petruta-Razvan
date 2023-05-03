@@ -4,9 +4,14 @@
     </div>
 </div>
 
-<div *ngIf="!showLoader" class="container container-fluid mt-5 mb-5 container-custom">
+<div class="text-center m-5" *ngIf="readers.length === 0 && !showLoader">
+    <h1>No data available</h1>
+</div>
+
+<div *ngIf="!showLoader && readers.length > 0" class="container container-fluid mt-5 mb-5 container-custom">
     <div class="btn-group dropend m-3 mb-5">
-        <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-custom btn-sort" data-bs-toggle="dropdown" aria-expanded="false">
+        <button type="button" class="btn btn-outline-secondary dropdown-toggle btn-custom btn-sort"
+            data-bs-toggle="dropdown" aria-expanded="false">
             Sort by:
         </button>
         <ul class="dropdown-menu">
@@ -38,40 +43,42 @@
                         <p><span class="fw-bold">Number of memberships:</span> {{reader.totalLibraries}}</p>
                     </div>
                     <div>
+                        <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', reader.username]">{{reader.username}}</a></p>
+                    </div>
+                    <div>
                         <button type="button" [routerLink]="['/readers/', reader.id]"
-                            class="btn btn-outline-warning m-2 btn-custom"><i class="fa-sharp fa-solid fa-info"></i></button>
-                        <button type="button" [routerLink]="['/readers-update/', reader.id]"
-                            class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
-                        <button type="button" [routerLink]="['/readers-delete/', reader.id]"
-                        class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
+                            class="btn btn-outline-warning m-2 btn-custom">
+                            <i class="fa-sharp fa-solid fa-info"></i>
+                        </button>
+                        <button *ngIf="isUserCorrect(reader) || isModerator() || isAdmin()" type="button" [routerLink]="['/readers-update/', reader.id]"
+                            class="btn btn-outline-primary m-2 btn-custom">
+                            <i class="fa-solid fa-arrows-rotate"></i>
+                        </button>
+                        <button *ngIf="isAdmin()" type="button" [routerLink]="['/readers-delete/', reader.id]"
+                            class="btn btn-outline-danger m-2 btn-custom">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <mat-paginator #paginator
-               class="demo-paginator"
-               (page)="onPageChanged($event)"
-               [length]="noPages * pageSize"
-               [pageSize]="pageSize"
-               [showFirstLastButtons]="true"
-               [pageSizeOptions]="[10, 25, 50]"
-               [pageIndex]="pageNumber"
-               aria-label="Select page">
+
+    <mat-paginator #paginator class="demo-paginator" (page)="onPageChanged($event)" [length]="noPages * pageSize"
+        [pageSize]="pageSize" [showFirstLastButtons]="true" [pageSizeOptions]="[10, 25, 50]" [pageIndex]="pageNumber"
+        aria-label="Select page">
     </mat-paginator>
 
     <div class="page-selector text-end">
         <mat-form-field>
             <mat-label>page:</mat-label>
-            <input matInput type="number"
-            [(ngModel)]="goToPageNumber" min="0" max="{{noPages}}"
-            (keyup.enter)="goToPage()"
-            (ngModelChange)="checkPageNumber()">
+            <input matInput type="number" [(ngModel)]="goToPageNumber" min="0" max="{{noPages}}"
+                (keyup.enter)="goToPage()" (ngModelChange)="checkPageNumber()">
         </mat-form-field>
     </div>
 
-    <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top" (click)="backToTop()">
+    <button type="button" class="btn btn-danger btn-green btn-floating btn-lg" id="btn-back-to-top"
+        (click)="backToTop()">
         <i class="fas fa-arrow-up"></i>
     </button>
 </div>

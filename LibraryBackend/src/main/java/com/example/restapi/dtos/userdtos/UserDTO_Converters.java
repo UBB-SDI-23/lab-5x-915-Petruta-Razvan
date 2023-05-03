@@ -9,12 +9,15 @@ public class UserDTO_Converters {
         return modelMapper.map(userProfile, UserProfileDTO.class);
     }
 
-    public static UserDTO convertToUserDTO(User user, ModelMapper modelMapper) {
+    public static UserDTO convertToUserDTO(User user, ModelMapper modelMapper, Long totalLibraries, Long totalBooks, Long totalReaders) {
         UserDTO userDTO = new UserDTO();
         userDTO.setID(user.getID());
         userDTO.setUsername(user.getUsername());
         userDTO.setRoles(user.getRoles());
         userDTO.setUserProfile(UserDTO_Converters.convertToUserProfileDTO(user.getUserProfile(), modelMapper));
+        userDTO.setTotalLibraries(totalLibraries);
+        userDTO.setTotalBooks(totalBooks);
+        userDTO.setTotalReaders(totalReaders);
         return userDTO;
     }
 }

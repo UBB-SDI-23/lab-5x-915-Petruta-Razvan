@@ -24,6 +24,9 @@
         <div>
             <p><span class="fw-bold">Published Year:</span> {{book.publishedYear}}</p>
         </div>
+        <div>
+            <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', book.username]">{{book.username}}</a></p>
+        </div>
 
         <p class="fw-bold">From the library:</p>
         <div class="card m-3 text-center">
@@ -47,10 +50,14 @@
         </div>
 
         <div>
-            <button type="button" [routerLink]="['/books-update/', book.id]" 
-                class="btn btn-outline-primary m-2 btn-custom"><i class="fa-solid fa-arrows-rotate"></i></button>
-            <button type="button" [routerLink]="['/books-delete/', book.id]"
-                            class="btn btn-outline-danger m-2 btn-custom"><i class="fa-solid fa-trash"></i></button>
+            <button *ngIf="isUserCorrect() || isModerator() || isAdmin()" type="button" [routerLink]="['/books-update/', book.id]"
+                class="btn btn-outline-primary m-2 btn-custom">
+                <i class="fa-solid fa-arrows-rotate"></i>
+            </button>
+            <button *ngIf="isAdmin()" type="button" [routerLink]="['/books-delete/', book.id]"
+                class="btn btn-outline-danger m-2 btn-custom">
+                <i class="fa-solid fa-trash"></i>
+            </button>
         </div>
     </div>
 </div>

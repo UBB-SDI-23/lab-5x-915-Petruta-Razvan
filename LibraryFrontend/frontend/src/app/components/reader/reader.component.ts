@@ -1,7 +1,9 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ReaderAll } from 'src/app/core/model/reader.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { ReaderService } from 'src/app/core/service/reader.service';
 
 @Component({
@@ -21,10 +23,29 @@ export class ReaderComponent implements OnInit {
 
   showLoader: boolean = true;
 
-  constructor(private readerService: ReaderService, private route: ActivatedRoute, private router: Router,
-     private elementRef: ElementRef, private paginatorIntl: MatPaginatorIntl) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private readerService: ReaderService, 
+    private route: ActivatedRoute, 
+    private router: Router,
+    private elementRef: ElementRef, 
+    private paginatorIntl: MatPaginatorIntl,
+    private storageService: StorageService,
+    private toastrService: ToastrService) {}
   
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    }
+
     // go back to the top
     window.onscroll = () => this.scrollFunction();
 
@@ -54,7 +75,9 @@ export class ReaderComponent implements OnInit {
         this.readers = result;
       },
       error: (error) => {
-        console.log(error);
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error(error.error, "", { progressBar: true });
       },
       complete: () => {
         this.showLoader = false;
@@ -136,5 +159,21 @@ export class ReaderComponent implements OnInit {
   getRangeLabel(page: number, pageSize: number, length: number): string {
     const total = Math.ceil(length / pageSize);
     return `Page ${page + 1} of ${total}`;
+  }
+
+  isUser(): boolean {
+    return this.roles.includes("ROLE_USER");
+  }
+
+  isUserCorrect(reader: ReaderAll): boolean {
+    return this.username === reader.username;
+  }
+
+  isModerator(): boolean {
+    return this.roles.includes("ROLE_MODERATOR");
+  }
+
+  isAdmin(): boolean {
+    return this.roles.includes("ROLE_ADMIN");
   }
 }

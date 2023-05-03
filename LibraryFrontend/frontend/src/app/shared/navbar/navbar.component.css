@@ -4,9 +4,17 @@
 }
 
 li a:hover {
-    color: #36c66b;
+    color: #679289;
 }
 
 .dropdown-item:active {
     background: transparent;
+}
+
+.nav-link {
+    cursor: pointer;
+}
+
+.logout-icon:hover {
+    color: #e3242b !important;
 }

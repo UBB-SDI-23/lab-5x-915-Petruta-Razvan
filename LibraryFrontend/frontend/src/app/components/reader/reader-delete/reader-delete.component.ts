@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { ReaderDetails } from 'src/app/core/model/reader.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { ReaderService } from 'src/app/core/service/reader.service';
 
 @Component({
@@ -14,9 +16,35 @@ export class ReaderDeleteComponent implements OnInit {
   consent: boolean = false;
   showLoader: boolean = false;
 
-  constructor(private readerService: ReaderService, private activatedRoute: ActivatedRoute, private router: Router) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private readerService: ReaderService, 
+    private activatedRoute: ActivatedRoute, 
+    private router: Router,
+    private toastrService: ToastrService,
+    private storageService: StorageService) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      if (!this.isAdmin()) {
+        this.toastrService.error("You are not an admin", "", { progressBar: true });
+        this.router.navigateByUrl("/");
+      }
+
+      this.username = user.username;
+    } else {
+      this.toastrService.error("Log in required", "", { progressBar: true });
+      this.router.navigateByUrl("/login");
+    }
+
     this.showLoader = true;
 
     this.activatedRoute.params.subscribe(params => {
@@ -26,7 +54,9 @@ export class ReaderDeleteComponent implements OnInit {
           this.reader = result;
         },
         error: (error) => {
-          console.log(error);
+          this.showLoader = false;
+          this.router.navigateByUrl("/");
+          this.toastrService.error(error.error, "", { progressBar: true });
         },
         complete: () => {
           this.showLoader = false;
@@ -43,15 +73,22 @@ export class ReaderDeleteComponent implements OnInit {
         this.router.navigate(['/readers'], { queryParams: { pageNo: 0, pageSize: 25 } });
       },
       error: (error) => {
-        console.log(error);
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error(error.error, "", { progressBar: true });
       },
       complete: () => {
         this.showLoader = false;
+        this.toastrService.success("Reader deleted successfully", "", { progressBar: true });
       }
     });
   }
 
   onCancel(): void {
     this.router.navigate(['/readers'], { queryParams: { pageNo: 0, pageSize: 25 } });
+  }
+
+  isAdmin(): boolean {
+    return this.roles.includes("ROLE_ADMIN");
   }
 }

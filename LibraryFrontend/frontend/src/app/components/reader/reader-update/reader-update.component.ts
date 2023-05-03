@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 import { AddUpdateReaderDTO, Reader, ReaderDetails } from 'src/app/core/model/reader.model';
+import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { ReaderService } from 'src/app/core/service/reader.service';
 
 @Component({
@@ -24,9 +26,30 @@ export class ReaderUpdateComponent implements OnInit {
     'student': null
   };
 
-  constructor(private readerService: ReaderService, private activatedRoute: ActivatedRoute, private router: Router) {}
+  roles: string[] = [];
+  isLoggedIn = false;
+  username?: string;
+
+  constructor(
+    private readerService: ReaderService, 
+    private activatedRoute: ActivatedRoute, 
+    private router: Router,
+    private storageService: StorageService,
+    private toastrService: ToastrService) {}
 
   ngOnInit(): void {
+    this.isLoggedIn = this.storageService.isLoggedIn();
+
+    if (this.isLoggedIn) {
+      const user = this.storageService.getUser();
+      this.roles = user.roles;
+
+      this.username = user.username;
+    } else {
+      this.toastrService.error("Log in required", "", { progressBar: true });
+      this.router.navigateByUrl("/login");
+    }
+
     this.showLoader = true;
 
     this.activatedRoute.params.subscribe(params => {
@@ -38,9 +61,15 @@ export class ReaderUpdateComponent implements OnInit {
           this.birthDate = reader.birthDate;
           this.gender = reader.gender;
           this.student = reader.student;
+          if (this.username !== reader.username && !this.isModerator() && !this.isAdmin()) {
+            this.toastrService.error("You are not allowed to update this reader", "", { progressBar: true });
+            this.router.navigateByUrl("/");
+          }
         },
         error: (error) => {
-          console.log(error);
+          this.showLoader = false;
+          this.router.navigateByUrl("/");
+          this.toastrService.error(error.error, "", { progressBar: true });
         },
         complete: () => {
           this.showLoader = false;
@@ -105,8 +134,17 @@ export class ReaderUpdateComponent implements OnInit {
         },
         complete: () => {
           this.showLoader = false;
+          this.toastrService.success("Reader updated successfully", "", { progressBar: true });
         }
       });
     }
+  }
+
+  isModerator(): boolean {
+    return this.roles.includes("ROLE_MODERATOR");
+  }
+
+  isAdmin(): boolean {
+    return this.roles.includes("ROLE_ADMIN");
   }
 }

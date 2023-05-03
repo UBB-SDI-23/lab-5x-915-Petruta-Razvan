@@ -106,6 +106,7 @@ public class LibraryService implements ILibraryService {
         library.setAddress(newLibrary.getAddress());
         library.setWebsite(newLibrary.getWebsite());
         library.setYearOfConstruction(newLibrary.getYearOfConstruction());
+        library.setUser(user);
 
         return this.libraryRepository.save(library);
     }
