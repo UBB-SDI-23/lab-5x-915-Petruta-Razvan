@@ -1,6 +1,5 @@
 package com.example.restapi.security.payload.response;
 
-import javax.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,4 +15,5 @@ public class UserInfoResponse {
     private Long id;
     private String username;
     private List<String> roles;
+    private String jwtToken;
 }

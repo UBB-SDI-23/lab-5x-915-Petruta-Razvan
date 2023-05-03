@@ -25,8 +25,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
-@CrossOrigin(origins = "https://sdi-library-management.netlify.app", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+//@CrossOrigin(origins = "https://sdi-library-management.netlify.app", allowCredentials = "true")
 @RestController
 @RequestMapping("/api")
 @Validated
@@ -103,9 +103,8 @@ public class LibraryController {
     }
 
     @PostMapping("/libraries")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    ResponseEntity<Library> newLibrary(@Valid @RequestBody Library newLibrary, HttpServletRequest request) {
-        String token = this.jwtUtils.getJwtFromCookies(request);
+    ResponseEntity<Library> newLibrary(@Valid @RequestBody Library newLibrary, HttpServletRequest request, @RequestHeader("Authorization") String token) {
+//        String token = this.jwtUtils.getJwtFromCookies(request);
         String username = this.jwtUtils.getUserNameFromJwtToken(token);
         User user = this.userService.getUserByUsername(username);
 

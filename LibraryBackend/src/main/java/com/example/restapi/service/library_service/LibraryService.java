@@ -73,6 +73,15 @@ public class LibraryService implements ILibraryService {
     public Library addNewLibrary(Library newLibrary, Long userID) {
         User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
 
+        boolean modOrAdmin = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_ADMIN || role.getName() == ERole.ROLE_MODERATOR || role.getName() == ERole.ROLE_USER
+        );
+
+        if (!modOrAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "add a new library", user.getUsername()));
+        }
+
         newLibrary.setUser(user);
         user.addLibrary(newLibrary);
 
