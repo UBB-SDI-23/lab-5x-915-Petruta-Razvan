@@ -8,7 +8,8 @@ import { Router } from '@angular/router';
 const AUTH_API = "https://library-hub.crabdance.com/api/auth/";
 
 const httpOptions = {
-  headers: new HttpHeaders({ 'Content-Type': 'application/json' })
+  headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+  withCredentials: true
 };
 
 @Injectable({

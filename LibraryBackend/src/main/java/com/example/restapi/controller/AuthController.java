@@ -25,6 +25,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -127,7 +129,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -138,13 +140,19 @@ public class AuthController {
 
         String jwtCookie = jwtUtils.generateTokenFromUsernameSignin(userDetails.getUsername()).toString();
 
+        Cookie cookie = new Cookie("jwtToken", jwtCookie);
+        cookie.setPath("/");
+        cookie.setHttpOnly(true);
+        cookie.setSecure(true);
+        response.addCookie(cookie); // Add the cookie to the response header
+
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, jwtCookie)
+//                .header(HttpHeaders.SET_COOKIE, jwtCookie)
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         roles));
