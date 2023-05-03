@@ -19,8 +19,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
-//@CrossOrigin(origins = "https://sdi-library-management.netlify.app", allowCredentials = "true")
+//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
+@CrossOrigin(origins = "https://sdi-library-management.netlify.app", allowCredentials = "true")
 @RestController
 @RequestMapping("/api")
 @Validated
