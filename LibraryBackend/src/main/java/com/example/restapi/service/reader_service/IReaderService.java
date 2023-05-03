@@ -15,7 +15,7 @@ public interface IReaderService {
 
     Reader replaceReader(Reader newReader, Long readerID, Long userID);
 
-    void deleteReader(Long id);
+    void deleteReader(Long id, Long userID);
 
     long countAllReaders();
 }

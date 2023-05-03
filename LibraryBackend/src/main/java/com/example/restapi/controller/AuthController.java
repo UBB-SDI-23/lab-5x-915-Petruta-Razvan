@@ -147,19 +147,15 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-//                .header(HttpHeaders.SET_COOKIE, jwtCookie)
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         roles, jwtCookie));
     }
 
     @PostMapping("/signout")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
     public ResponseEntity<?> logoutUser() {
-        String cookie = jwtUtils.getCleanJwtCookie().toString();
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header(HttpHeaders.SET_COOKIE, cookie)
                 .body(new MessageResponse("You've been signed out!"));
     }
 }

@@ -73,11 +73,13 @@ public class LibraryService implements ILibraryService {
     public Library addNewLibrary(Library newLibrary, Long userID) {
         User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
 
-        boolean modOrAdmin = user.getRoles().stream().anyMatch((role) ->
-                role.getName() == ERole.ROLE_ADMIN || role.getName() == ERole.ROLE_MODERATOR || role.getName() == ERole.ROLE_USER
+        boolean userOrModOrAdmin = user.getRoles().stream().anyMatch((role) ->
+                        role.getName() == ERole.ROLE_ADMIN
+                        || role.getName() == ERole.ROLE_MODERATOR
+                        || role.getName() == ERole.ROLE_USER
         );
 
-        if (!modOrAdmin) {
+        if (!userOrModOrAdmin) {
             throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
                     "add a new library", user.getUsername()));
         }
@@ -98,6 +100,15 @@ public class LibraryService implements ILibraryService {
     public Library replaceLibrary(Library newLibrary, Long libraryID, Long userID) {
         Library library = this.libraryRepository.findById(libraryID).orElseThrow(() -> new LibraryNotFoundException(libraryID));
         User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
+
+        boolean isUser = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_USER
+        );
+
+        if (!isUser) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "add a new library", user.getUsername()));
+        }
 
         if (!Objects.equals(user.getID(), library.getUser().getID())) {
             boolean modOrAdmin = user.getRoles().stream().anyMatch((role) ->
@@ -121,7 +132,18 @@ public class LibraryService implements ILibraryService {
     }
 
     @Override
-    public void deleteLibrary(Long id) {
+    public void deleteLibrary(Long id, Long userID) {
+        User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
+
+        boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_ADMIN
+        );
+
+        if (!isAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "delete library %s", user.getUsername(), id));
+        }
+
         this.libraryRepository.deleteById(id);
     }
 

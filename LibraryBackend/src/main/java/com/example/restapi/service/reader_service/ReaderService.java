@@ -53,6 +53,17 @@ public class ReaderService implements IReaderService {
     public Reader addNewReader(Reader newReader, Long userID) {
         User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
 
+        boolean userOrModOrAdmin = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_ADMIN
+                        || role.getName() == ERole.ROLE_MODERATOR
+                        || role.getName() == ERole.ROLE_USER
+        );
+
+        if (!userOrModOrAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "add a new reader", user.getUsername()));
+        }
+
         newReader.setUser(user);
         user.addReader(newReader);
 
@@ -69,6 +80,15 @@ public class ReaderService implements IReaderService {
     public Reader replaceReader(Reader newReader, Long readerID, Long userID) {
         Reader reader = this.readerRepository.findById(readerID).orElseThrow(() -> new ReaderNotFoundException(readerID));
         User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
+
+        boolean isUser = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_USER
+        );
+
+        if (!isUser) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "update the reader %s", user.getUsername(), reader.getName()));
+        }
 
         if (!Objects.equals(user.getID(), reader.getUser().getID())) {
             boolean modOrAdmin = user.getRoles().stream().anyMatch((role) ->
@@ -92,7 +112,18 @@ public class ReaderService implements IReaderService {
     }
 
     @Override
-    public void deleteReader(Long id) {
+    public void deleteReader(Long id, Long userID) {
+        User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
+
+        boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_ADMIN
+        );
+
+        if (!isAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "delete reader %s", user.getUsername(), id));
+        }
+
         this.readerRepository.deleteById(id);
     }
 

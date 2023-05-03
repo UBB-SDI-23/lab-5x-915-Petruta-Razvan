@@ -3,8 +3,10 @@ package com.example.restapi.service.user_service;
 import com.example.restapi.dtos.userdtos.UserDTO;
 import com.example.restapi.dtos.userdtos.UserDTO_Converters;
 import com.example.restapi.dtos.userdtos.UserProfileDTO;
+import com.example.restapi.exceptions.UserDoesNotHavePermissionException;
 import com.example.restapi.exceptions.UserNotFoundException;
 import com.example.restapi.exceptions.UserProfileNotFoundException;
+import com.example.restapi.model.user.ERole;
 import com.example.restapi.model.user.User;
 import com.example.restapi.model.user.UserProfile;
 import com.example.restapi.repository.BookRepository;
@@ -14,6 +16,8 @@ import com.example.restapi.repository.user_repository.UserProfileRepository;
 import com.example.restapi.repository.user_repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
+
+import java.util.Objects;
 
 @Service
 public class UserProfileService implements IUserProfileService {
@@ -44,9 +48,32 @@ public class UserProfileService implements IUserProfileService {
     }
 
     @Override
-    public UserProfileDTO updateUserProfile(UserProfileDTO newUserProfile, String username) {
+    public UserProfileDTO updateUserProfile(UserProfileDTO newUserProfile, String username, String _username) {
+        User userReq = userRepository.findByUsername(_username)
+                .orElseThrow(() -> new UserNotFoundException(_username));
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new UserNotFoundException(username));
+
+        boolean isUser = userReq.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_USER
+        );
+
+        if (!isUser) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "update this profile", userReq.getUsername()));
+        }
+
+        if (!Objects.equals(userReq.getID(), user.getID())) {
+            boolean modOrAdmin = userReq.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN || role.getName() == ERole.ROLE_MODERATOR
+            );
+
+            if (!modOrAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "update this profile", user.getUsername()));
+            }
+        }
+
         UserProfile userProfileUpdated = userProfileRepository.findById(user.getUserProfile().getId())
                 .map(userProfile -> {
                     userProfile.setBio(newUserProfile.getBio());

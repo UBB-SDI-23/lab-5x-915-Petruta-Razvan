@@ -58,9 +58,8 @@ public class ReaderController {
     }
 
     @PostMapping("/readers")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    ResponseEntity<Reader> newReader(@Valid @RequestBody Reader newReader, HttpServletRequest request) {
-        String token = this.jwtUtils.getJwtFromCookies(request);
+    ResponseEntity<Reader> newReader(@Valid @RequestBody Reader newReader,
+                                     @RequestHeader("Authorization") String token) {
         String username = this.jwtUtils.getUserNameFromJwtToken(token);
         User user = this.userService.getUserByUsername(username);
 
@@ -70,9 +69,9 @@ public class ReaderController {
     }
 
     @PutMapping("/readers/{readerID}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    ResponseEntity<Reader> replaceReader(@Valid @RequestBody Reader newReader, @PathVariable Long readerID, HttpServletRequest request) {
-        String token = this.jwtUtils.getJwtFromCookies(request);
+    ResponseEntity<Reader> replaceReader(@Valid @RequestBody Reader newReader,
+                                         @PathVariable Long readerID,
+                                         @RequestHeader("Authorization") String token) {
         String username = this.jwtUtils.getUserNameFromJwtToken(token);
         User user = this.userService.getUserByUsername(username);
 
@@ -82,9 +81,11 @@ public class ReaderController {
     }
 
     @DeleteMapping("/readers/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<HttpStatus> deleteReader(@PathVariable Long id) {
-        this.readerService.deleteReader(id);
+    ResponseEntity<HttpStatus> deleteReader(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        String username = this.jwtUtils.getUserNameFromJwtToken(token);
+        User user = this.userService.getUserByUsername(username);
+
+        this.readerService.deleteReader(id, user.getID());
         return ResponseEntity.accepted().body(HttpStatus.OK);
     }
 }

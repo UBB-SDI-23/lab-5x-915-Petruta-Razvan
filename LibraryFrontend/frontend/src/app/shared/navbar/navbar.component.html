@@ -17,7 +17,7 @@
                 all</a></li>
             <li><a class="dropdown-item" routerLink="/libraries-books-statistics">Books statistics</a></li>
             <li><a class="dropdown-item" routerLink="/libraries-readers-statistics">Readers statistics</a></li>
-            <li *ngIf="isUser() || isModerator() || isAdmin()"><a class="dropdown-item" routerLink="/libraries-add">Add new</a></li>
+            <li *ngIf="isLoggedIn && (isUser() || isModerator() || isAdmin())"><a class="dropdown-item" routerLink="/libraries-add">Add new</a></li>
           </ul>
         </li>
 
@@ -31,7 +31,7 @@
             </li>
             <li><a class="dropdown-item" [routerLink]="['/books-filter']"
                 [queryParams]="{minPrice: 0, pageNo: 0, pageSize: 25}">Filter by price</a></li>
-            <li *ngIf="isUser() || isModerator() || isAdmin()"><a class="dropdown-item" routerLink="/books-add">Add new</a></li>
+            <li *ngIf="isLoggedIn && (isUser() || isModerator() || isAdmin())"><a class="dropdown-item" routerLink="/books-add">Add new</a></li>
           </ul>
         </li>
 
@@ -43,7 +43,7 @@
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
             <li><a class="dropdown-item" [routerLink]="['/readers']" [queryParams]="{pageNo: 0, pageSize: 25}">See
                 all</a></li>
-            <li *ngIf="isUser() || isModerator() || isAdmin()"><a class="dropdown-item" routerLink="/readers-add">Add new</a></li>
+            <li *ngIf="isLoggedIn && (isUser() || isModerator() || isAdmin())"><a class="dropdown-item" routerLink="/readers-add">Add new</a></li>
           </ul>
         </li>
 

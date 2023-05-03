@@ -1,15 +1,15 @@
 package com.example.restapi.controller;
 
 import com.example.restapi.dtos.SQLRunResponseDTO;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.restapi.exceptions.UserDoesNotHavePermissionException;
+import com.example.restapi.model.user.ERole;
+import com.example.restapi.model.user.User;
+import com.example.restapi.security.jwt.JwtUtils;
+import com.example.restapi.service.user_service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -21,13 +21,31 @@ import java.nio.file.Paths;
 @RestController
 @RequestMapping("/api")
 public class SQLController {
-    @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private final JdbcTemplate jdbcTemplate;
+    private final UserService userService;
+    private final JwtUtils jwtUtils;
+
+    public SQLController(JdbcTemplate jdbcTemplate, UserService userService, JwtUtils jwtUtils) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.userService = userService;
+        this.jwtUtils = jwtUtils;
+    }
 
     @PostMapping("/run-delete-books-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> deleteAllBooks() {
+    ResponseEntity<?> deleteAllBooks(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "delete all books", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_books.sql"));
             String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_books.sql"));
@@ -43,9 +61,20 @@ public class SQLController {
     }
 
     @PostMapping("/run-delete-libraries-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> deleteAllLibraries() {
+    ResponseEntity<?> deleteAllLibraries(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "delete all libraries", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_libraries.sql"));
             String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_libraries.sql"));
@@ -61,9 +90,20 @@ public class SQLController {
     }
 
     @PostMapping("/run-delete-memberships-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> deleteAllMemberships() {
+    ResponseEntity<?> deleteAllMemberships(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "delete all memberships", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_memberships.sql"));
             String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_memberships.sql"));
@@ -79,9 +119,20 @@ public class SQLController {
     }
 
     @PostMapping("/run-delete-readers-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> deleteAllReaders() {
+    ResponseEntity<?> deleteAllReaders(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "delete all readers", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_readers.sql"));
             String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_readers.sql"));
@@ -97,9 +148,20 @@ public class SQLController {
     }
 
     @PostMapping("/run-insert-libraries-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> insertAllLibraries() {
+    ResponseEntity<?> insertAllLibraries(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "insert all libraries", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_libraries.sql";
             String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_libraries.sql";
@@ -121,9 +183,20 @@ public class SQLController {
     }
 
     @PostMapping("/run-insert-books-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> insertAllBooks() {
+    ResponseEntity<?> insertAllBooks(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "insert all books", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_books.sql";
             String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_books.sql";
@@ -145,9 +218,20 @@ public class SQLController {
     }
 
     @PostMapping("/run-insert-readers-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> insertAllReaders() {
+    ResponseEntity<?> insertAllReaders(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "insert all readers", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_readers.sql";
             String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_readers.sql";
@@ -169,9 +253,20 @@ public class SQLController {
     }
 
     @PostMapping("/run-insert-memberships-script")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<?> insertAllMemberships() {
+    ResponseEntity<?> insertAllMemberships(@RequestHeader("Authorization") String token) {
         try {
+            String username = this.jwtUtils.getUserNameFromJwtToken(token);
+            User user = this.userService.getUserByUsername(username);
+
+            boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                    role.getName() == ERole.ROLE_ADMIN
+            );
+
+            if (!isAdmin) {
+                throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                        "insert all memberships", user.getUsername()));
+            }
+
             String currentDir = System.getProperty("user.dir");
 //            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_memberships.sql";
             String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_memberships.sql";

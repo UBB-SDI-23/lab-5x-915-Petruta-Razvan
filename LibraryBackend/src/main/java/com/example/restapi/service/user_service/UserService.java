@@ -2,6 +2,7 @@ package com.example.restapi.service.user_service;
 
 import com.example.restapi.dtos.userdtos.UserRolesDTO;
 import com.example.restapi.dtos.userdtos.UserWithRolesDTO;
+import com.example.restapi.exceptions.UserDoesNotHavePermissionException;
 import com.example.restapi.exceptions.UserNotFoundException;
 import com.example.restapi.model.user.ERole;
 import com.example.restapi.model.user.Role;
@@ -30,8 +31,18 @@ public class UserService {
         return this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
     }
 
-    public UserWithRolesDTO updateUserRoles(String username, UserRolesDTO roles) {
+    public UserWithRolesDTO updateUserRoles(String username, UserRolesDTO roles, String _username) {
         User user = this.userRepository.findByUsername(username).orElseThrow(() -> new UserNotFoundException(username));
+        User userReq = this.userRepository.findByUsername(_username).orElseThrow(() -> new UserNotFoundException(_username));
+
+        boolean isAdmin = userReq.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_USER
+        );
+
+        if (!isAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "change roles", userReq.getUsername()));
+        }
 
         Set<Role> newRoles = new HashSet<>();
 
@@ -59,7 +70,18 @@ public class UserService {
         return new UserWithRolesDTO(user.getUsername(), user.getRoles());
     }
 
-    public List<UserWithRolesDTO> getTop20UsersByUsername(String searchTerm) {
+    public List<UserWithRolesDTO> getTop20UsersByUsername(String searchTerm, Long userID) {
+        User _user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
+
+        boolean isAdmin = _user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_ADMIN
+        );
+
+        if (!isAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "update other users' roles", _user.getUsername()));
+        }
+
         return this.userRepository.findTop20BySearchTerm(searchTerm).stream().map(user -> {
             UserWithRolesDTO userDTO = new UserWithRolesDTO();
             userDTO.setUsername(user.getUsername());

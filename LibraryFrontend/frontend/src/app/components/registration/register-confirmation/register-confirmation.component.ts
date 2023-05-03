@@ -14,6 +14,8 @@ export class RegisterConfirmationComponent implements OnInit {
   isLoggedIn = false;
   username?: string;
   jwtToken?: string;
+  seconds: number = 10 * 60;
+  minutes: number = 10;
 
   constructor(
     private storageService: StorageService, 
@@ -32,6 +34,17 @@ export class RegisterConfirmationComponent implements OnInit {
     this.activatedRoute.params.subscribe(params => {
       this.jwtToken = params['code'];
     });
+
+    const countdown = setInterval(() => {
+      if (this.seconds === 0) {
+        clearInterval(countdown);
+        this.toastrService.error("Registration confirmation expired", "", { progressBar: true });
+        this.router.navigateByUrl("/");
+      } else {
+        this.seconds--;
+        this.minutes = Math.floor(this.seconds / 60);
+      }
+    }, 1000);
   }
 
   confirmActivation(): void {

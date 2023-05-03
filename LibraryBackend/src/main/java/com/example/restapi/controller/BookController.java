@@ -13,7 +13,6 @@ import javax.validation.Valid;
 import com.example.restapi.service.user_service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -71,9 +70,9 @@ public class BookController {
     }
 
     @PostMapping("/libraries/{libraryID}/books")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    ResponseEntity<Book> newBook(@Valid @RequestBody Book newBook, @PathVariable Long libraryID, HttpServletRequest request) {
-        String token = this.jwtUtils.getJwtFromCookies(request);
+    ResponseEntity<Book> newBook(@Valid @RequestBody Book newBook,
+                                 @PathVariable Long libraryID,
+                                 @RequestHeader("Authorization") String token) {
         String username = this.jwtUtils.getUserNameFromJwtToken(token);
         User user = this.userService.getUserByUsername(username);
 
@@ -83,9 +82,9 @@ public class BookController {
     }
 
     @PutMapping("/books/{bookID}")
-    @PreAuthorize("hasRole('USER') or hasRole('MODERATOR') or hasRole('ADMIN')")
-    ResponseEntity<Book> replaceBook(@Valid @RequestBody Book book, @PathVariable Long bookID, HttpServletRequest request) {
-        String token = this.jwtUtils.getJwtFromCookies(request);
+    ResponseEntity<Book> replaceBook(@Valid @RequestBody Book book,
+                                     @PathVariable Long bookID,
+                                     @RequestHeader("Authorization") String token) {
         String username = this.jwtUtils.getUserNameFromJwtToken(token);
         User user = this.userService.getUserByUsername(username);
 
@@ -95,9 +94,11 @@ public class BookController {
     }
 
     @DeleteMapping("/books/{id}")
-    @PreAuthorize("hasRole('ADMIN')")
-    ResponseEntity<HttpStatus> deleteBook(@PathVariable Long id) {
-        this.bookService.deleteBook(id);
+    ResponseEntity<HttpStatus> deleteBook(@PathVariable Long id, @RequestHeader("Authorization") String token) {
+        String username = this.jwtUtils.getUserNameFromJwtToken(token);
+        User user = this.userService.getUserByUsername(username);
+
+        this.bookService.deleteBook(id, user.getID());
         return ResponseEntity.accepted().body(HttpStatus.OK);
     }
 }

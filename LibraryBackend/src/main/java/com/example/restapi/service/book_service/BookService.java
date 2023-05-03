@@ -52,6 +52,17 @@ public class BookService implements IBookService {
         Library library = this.libraryRepository.findById(libraryID).orElseThrow(() -> new LibraryNotFoundException(libraryID));
         User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
 
+        boolean userOrModOrAdmin = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_ADMIN
+                        || role.getName() == ERole.ROLE_MODERATOR
+                        || role.getName() == ERole.ROLE_USER
+        );
+
+        if (!userOrModOrAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "add a new book", user.getUsername()));
+        }
+
         newBook.setLibrary(library);
         library.addBook(newBook);
 
@@ -71,6 +82,15 @@ public class BookService implements IBookService {
     public Book replaceBook(Book bookDTO, Long bookID, Long userID) {
         Book book = this.bookRepository.findById(bookID).orElseThrow(() -> new BookNotFoundException(bookID));
         User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
+
+        boolean isUser = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_USER
+        );
+
+        if (!isUser) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "add a new book", user.getUsername()));
+        }
 
         if (!Objects.equals(user.getID(), book.getUser().getID())) {
             boolean modOrAdmin = user.getRoles().stream().anyMatch((role) ->
@@ -95,8 +115,18 @@ public class BookService implements IBookService {
     }
 
     @Override
-    public void deleteBook(Long id) {
+    public void deleteBook(Long id, Long userID) {
         Book book = this.bookRepository.findById(id).orElseThrow(() -> new BookNotFoundException(id));
+        User user = this.userRepository.findById(userID).orElseThrow(() -> new UserNotFoundException(userID));
+
+        boolean isAdmin = user.getRoles().stream().anyMatch((role) ->
+                role.getName() == ERole.ROLE_ADMIN
+        );
+
+        if (!isAdmin) {
+            throw new UserDoesNotHavePermissionException(String.format("%s does not have permission to " +
+                    "delete book %s", user.getUsername(), id));
+        }
 
         Library library = this.libraryRepository.findById(book.getLibrary().getID()).orElseThrow(() -> new LibraryNotFoundException(book.getLibrary().getID()));
 

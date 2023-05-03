@@ -22,7 +22,7 @@ public interface ILibraryService {
 
     Library replaceLibrary(Library newLibrary, Long libraryID, Long userID);
 
-    void deleteLibrary(Long id);
+    void deleteLibrary(Long id, Long userID);
 
     List<Reader> getReadersFromLibrary(Long libraryID);
 

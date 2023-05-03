@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { AuthService } from 'src/app/core/service/_services/auth.service';
 import { StorageService } from 'src/app/core/service/_services/storage.service';
+import { NavbarService } from 'src/app/core/service/navbar.service';
 
 @Component({
   selector: 'app-navbar',
@@ -12,9 +13,26 @@ export class NavbarComponent {
   isLoggedIn = false;
   username?: string;
 
-  constructor(private storageService: StorageService, private authService: AuthService) { }
+  constructor(
+    private storageService: StorageService, 
+    private authService: AuthService,
+    private navbarService: NavbarService) { }
 
   ngOnInit(): void {
+    this.initialiseNavbar();
+
+    this.navbarService.getLoginObservable().subscribe(() => {
+      this.isLoggedIn = true;
+      this.initialiseNavbar();
+    });
+
+    this.navbarService.getLogoutObservable().subscribe(() => {
+      this.isLoggedIn = false;
+      this.initialiseNavbar();
+    });
+  }
+
+  initialiseNavbar(): void {
     this.isLoggedIn = this.storageService.isLoggedIn();
 
     if (this.isLoggedIn) {
@@ -22,19 +40,21 @@ export class NavbarComponent {
       this.roles = user.roles;
 
       this.username = user.username;
+    } else {
+      this.username = undefined;
     }
   }
 
   logout(): void {
     this.authService.logout().subscribe({
       next: res => {
-        console.log(res);
         this.storageService.clean();
-
-        window.location.reload();
       },
       error: err => {
         console.log(err);
+      },
+      complete: () => {
+        this.navbarService.logout();
       }
     });
   }

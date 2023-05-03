@@ -15,7 +15,7 @@ public interface IBookService {
 
     Book replaceBook(Book bookDTO, Long bookID, Long userID);
 
-    void deleteBook(Long id);
+    void deleteBook(Long id, Long userID);
 
     List<BookDTO_onlyLibraryID> getBooksWithPriceGreater(Double price, Integer pageNo, Integer pageSize);
 
