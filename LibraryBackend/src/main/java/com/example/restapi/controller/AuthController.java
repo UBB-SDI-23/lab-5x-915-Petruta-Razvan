@@ -130,7 +130,7 @@ public class AuthController {
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest, HttpServletResponse response) {
+    public ResponseEntity<?> authenticateUser(@Valid @RequestBody LoginRequest loginRequest) {
 
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
@@ -141,20 +141,13 @@ public class AuthController {
 
         String jwtCookie = jwtUtils.generateTokenFromUsernameSignin(userDetails.getUsername()).toString();
 
-        CookieGenerator cookieGenerator = new CookieGenerator();
-        cookieGenerator.setCookieName("jwtToken");
-        cookieGenerator.setCookiePath("/");
-        cookieGenerator.setCookieHttpOnly(true);
-        cookieGenerator.setCookieSecure(true);
-        cookieGenerator.addCookie(response, jwtCookie);
-
         List<String> roles = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .collect(Collectors.toList());
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-//                .header(HttpHeaders.SET_COOKIE, jwtCookie)
+                .header(HttpHeaders.SET_COOKIE, jwtCookie)
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         roles));

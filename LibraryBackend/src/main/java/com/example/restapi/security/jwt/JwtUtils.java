@@ -72,6 +72,7 @@ public class JwtUtils {
         return ResponseCookie.from(this.jwtCookie, token)
                 .path("/api")
                 .httpOnly(true)
+                .secure(true)
                 .build();
     }
 
