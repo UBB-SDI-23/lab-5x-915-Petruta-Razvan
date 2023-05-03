@@ -147,7 +147,7 @@ public class AuthController {
 
         return ResponseEntity
                 .status(HttpStatus.OK)
-                .header(HttpHeaders.AUTHORIZATION, jwtCookie)
+                .header(HttpHeaders.SET_COOKIE, jwtCookie)
                 .body(new UserInfoResponse(userDetails.getId(),
                         userDetails.getUsername(),
                         roles));
