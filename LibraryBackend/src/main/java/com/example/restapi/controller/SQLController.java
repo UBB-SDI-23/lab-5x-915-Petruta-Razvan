@@ -28,7 +28,8 @@ public class SQLController {
     ResponseEntity<?> deleteAllBooks() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_books.sql"));
+//            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_books.sql"));
+            String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_books.sql"));
             jdbcTemplate.update(sql);
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -45,7 +46,8 @@ public class SQLController {
     ResponseEntity<?> deleteAllLibraries() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_libraries.sql"));
+//            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_libraries.sql"));
+            String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_libraries.sql"));
             jdbcTemplate.update(sql);
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -62,7 +64,8 @@ public class SQLController {
     ResponseEntity<?> deleteAllMemberships() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_memberships.sql"));
+//            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_memberships.sql"));
+            String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_memberships.sql"));
             jdbcTemplate.update(sql);
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -79,7 +82,8 @@ public class SQLController {
     ResponseEntity<?> deleteAllReaders() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_readers.sql"));
+//            String sql = Files.readString(Paths.get(currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\delete_readers.sql"));
+            String sql = Files.readString(Paths.get(currentDir + "/src/main/java/com/example/restapi/sql_scripts/delete_readers.sql"));
             jdbcTemplate.update(sql);
             return ResponseEntity
                     .status(HttpStatus.OK)
@@ -96,7 +100,8 @@ public class SQLController {
     ResponseEntity<?> insertAllLibraries() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_libraries.sql";
+//            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_libraries.sql";
+            String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_libraries.sql";
             BufferedReader reader = new BufferedReader(new FileReader(fullPath));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -119,7 +124,8 @@ public class SQLController {
     ResponseEntity<?> insertAllBooks() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_books.sql";
+//            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_books.sql";
+            String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_books.sql";
             BufferedReader reader = new BufferedReader(new FileReader(fullPath));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -142,7 +148,8 @@ public class SQLController {
     ResponseEntity<?> insertAllReaders() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_readers.sql";
+//            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_readers.sql";
+            String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_readers.sql";
             BufferedReader reader = new BufferedReader(new FileReader(fullPath));
             String line;
             while ((line = reader.readLine()) != null) {
@@ -165,7 +172,8 @@ public class SQLController {
     ResponseEntity<?> insertAllMemberships() {
         try {
             String currentDir = System.getProperty("user.dir");
-            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_memberships.sql";
+//            String fullPath = currentDir + "\\src\\main\\java\\com\\example\\restapi\\sql_scripts\\insert_memberships.sql";
+            String fullPath = currentDir + "/src/main/java/com/example/restapi/sql_scripts/insert_memberships.sql";
             BufferedReader reader = new BufferedReader(new FileReader(fullPath));
             String line;
             while ((line = reader.readLine()) != null) {
