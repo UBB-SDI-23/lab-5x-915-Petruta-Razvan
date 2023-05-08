@@ -23,6 +23,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.CookieGenerator;
 
@@ -35,10 +36,10 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
-@CrossOrigin(origins = "https://sdi-library-management.netlify.app", allowCredentials = "true")
+@CrossOrigin(origins = { "http://localhost:4200", "https://sdi-library-management.netlify.app" }, allowCredentials = "true")
 @RestController
 @RequestMapping("/api/auth")
+@Validated
 public class AuthController {
     AuthenticationManager authenticationManager;
 

@@ -12,11 +12,14 @@ import { StorageService } from 'src/app/core/service/_services/storage.service';
 export class RegisterComponent {
   form: any = {
     username: null,
-    password: null
+    password: null,
+    confirmPassword: null
   };
   isLoggedIn = false;
   registeredFailed = false;
   errorMessage = '';
+  usernameErrorMessage = undefined;
+  passwordErrorMessage = undefined;
   registerInfo?: RegisterResponseDTO;
 
   constructor(private authService: AuthService, private storageService: StorageService, private router: Router) { }
@@ -35,15 +38,21 @@ export class RegisterComponent {
       next: data => {
         this.registeredFailed = false;
         this.registerInfo = data;
-
         this.router.navigate(["/register-confirmation", data.jwtToken]);
       },
       error: err => {
-        this.errorMessage = err.error.message;
         this.registeredFailed = true;
+        this.errorMessage = err.error.message ? err.error.message : undefined;
+        if (err.error.hasOwnProperty('errors')) {
+          this.usernameErrorMessage = err.error.errors.hasOwnProperty('username') ? err.error.errors.username : undefined;
+          this.passwordErrorMessage = err.error.errors.hasOwnProperty('password') ? err.error.errors.password : undefined;
+        } else {
+          this.usernameErrorMessage = undefined;
+          this.passwordErrorMessage = undefined;
+        }
       },
       complete: () => {
-
+        this.registeredFailed = false;
       }
     });
   }

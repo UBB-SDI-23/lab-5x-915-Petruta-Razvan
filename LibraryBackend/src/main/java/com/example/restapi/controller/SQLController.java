@@ -16,8 +16,7 @@ import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-//@CrossOrigin(origins = "http://localhost:4200", allowCredentials = "true")
-@CrossOrigin(origins = "https://sdi-library-management.netlify.app", allowCredentials = "true")
+@CrossOrigin(origins = { "http://localhost:4200", "https://sdi-library-management.netlify.app" }, allowCredentials = "true")
 @RestController
 @RequestMapping("/api")
 public class SQLController {
@@ -178,7 +177,7 @@ public class SQLController {
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.OK)
-                    .body(new SQLRunResponseDTO("Error: something went wrong" + e));
+                    .body(new SQLRunResponseDTO("Error: something went wrong"));
         }
     }
 
