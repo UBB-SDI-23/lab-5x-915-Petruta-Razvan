@@ -34,6 +34,12 @@
                             </div>
                         </mat-option>
                     </mat-autocomplete>
+
+                    <label>Elements per page:</label>
+                    <input type="number" name="elementsPerPage" class="form-control" placeholder="..." 
+                    [(ngModel)]="selectedElementsPerPage" required>
+
+                    <button class="btn btn-primary" (click)="updateElementsPerPage()">Set</button>
                 </div>
             </div>
 

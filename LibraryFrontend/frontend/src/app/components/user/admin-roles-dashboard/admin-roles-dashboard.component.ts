@@ -34,6 +34,8 @@ export class AdminRolesDashboardComponent implements OnInit {
   checkUser?: boolean;
   checkModerator?: boolean;
 
+  selectedElementsPerPage?: number;
+
   roles: string[] = [];
   isLoggedIn = false;
   username?: string;
@@ -205,5 +207,20 @@ export class AdminRolesDashboardComponent implements OnInit {
     });
 
     return found;
+  }
+
+  updateElementsPerPage(): void {
+    if (!this.selectedElementsPerPage) {
+      return;
+    }
+
+    this.userService.updateElementsPerPage(this.selectedElementsPerPage).subscribe({
+      next: (response) => {
+        this.showLoader = false;
+      },
+      complete: () => {
+        this.toastrService.success("Number of elements per page successfully updated updated successfully", "", { progressBar: true });
+      }
+    });
   }
 }

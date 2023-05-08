@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ReaderAll } from 'src/app/core/model/reader.model';
 import { StorageService } from 'src/app/core/service/_services/storage.service';
+import { UserService } from 'src/app/core/service/_services/user.service';
 import { ReaderService } from 'src/app/core/service/reader.service';
 
 @Component({
@@ -34,7 +35,8 @@ export class ReaderComponent implements OnInit {
     private elementRef: ElementRef, 
     private paginatorIntl: MatPaginatorIntl,
     private storageService: StorageService,
-    private toastrService: ToastrService) {}
+    private toastrService: ToastrService,
+    private userService: UserService) {}
   
   ngOnInit(): void {
     this.isLoggedIn = this.storageService.isLoggedIn();
@@ -45,6 +47,13 @@ export class ReaderComponent implements OnInit {
 
       this.username = user.username;
     }
+
+    this.userService.getElementsPerPage().subscribe({
+      next: (response) => {
+        this.pageSize = response;
+        console.log(this.pageSize);
+      }
+    });
 
     // go back to the top
     window.onscroll = () => this.scrollFunction();

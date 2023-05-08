@@ -12,6 +12,14 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) {}
 
+  getElementsPerPage(): Observable<any> {
+    return this.httpClient.get(this.baseUrl + "user-settings");
+  }
+
+  updateElementsPerPage(elementsPerPage: number): Observable<any> {
+    return this.httpClient.post(this.baseUrl + "user-settings", { 'elementsPerPage': elementsPerPage });
+  }
+
   getUserProfile(username: string): Observable<UserProfile> {
     return this.httpClient.get(this.baseUrl + "user-profile/" + username) as Observable<UserProfile>;
   }
