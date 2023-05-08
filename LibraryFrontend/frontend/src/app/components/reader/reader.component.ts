@@ -51,7 +51,6 @@ export class ReaderComponent implements OnInit {
     this.userService.getElementsPerPage().subscribe({
       next: (response) => {
         this.pageSize = response;
-        console.log(this.pageSize);
       }
     });
 
@@ -76,22 +75,30 @@ export class ReaderComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.pageNumber = Number(params['pageNo']) || 0;
-      this.pageSize = Number(params['pageSize']) || 25;
+      
+      this.userService.getElementsPerPage().subscribe({
+        next: (response) => {
+          this.pageSize = response;
+        },
+        complete: () => {
+          this.readerService.getPageReaders(this.pageNumber, this.pageSize).subscribe({
+            next: (result: ReaderAll[]) => {
+              this.readers = result;
+            },
+            error: (error) => {
+              this.showLoader = false;
+              this.router.navigateByUrl("/");
+              this.toastrService.error(error.error, "", { progressBar: true });
+            },
+            complete: () => {
+              this.showLoader = false;
+            }
+          });
+        }
+      });
     });
 
-    this.readerService.getPageReaders(this.pageNumber, this.pageSize).subscribe({
-      next: (result: ReaderAll[]) => {
-        this.readers = result;
-      },
-      error: (error) => {
-        this.showLoader = false;
-        this.router.navigateByUrl("/");
-        this.toastrService.error(error.error, "", { progressBar: true });
-      },
-      complete: () => {
-        this.showLoader = false;
-      }
-    });
+    
   }
 
   onSort(field: string): void {

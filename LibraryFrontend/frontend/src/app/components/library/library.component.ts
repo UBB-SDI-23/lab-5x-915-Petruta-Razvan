@@ -76,23 +76,31 @@ export class LibraryComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.pageNumber = Number(params['pageNo']) || 0;
-      this.pageSize = Number(params['pageSize']) || 25;
+      
+      this.userService.getElementsPerPage().subscribe({
+        next: (response) => {
+          this.pageSize = response;
+        },
+        complete: () => {
+          this.libraryService.getPageLibraries(this.pageNumber, this.pageSize).subscribe({
+            next: (result: LibraryAll[]) => {
+              this.libraries = result;
+            },
+            error: (error) => {
+              this.showLoader = false;
+              this.router.navigateByUrl("/");
+              this.toastrService.error(error.error, "", { progressBar: true });
+              console.log(error.errror);
+            },
+            complete: () => {
+              this.showLoader = false;
+            }
+          });
+        }
+      });
     });
     
-    this.libraryService.getPageLibraries(this.pageNumber, this.pageSize).subscribe({
-      next: (result: LibraryAll[]) => {
-        this.libraries = result;
-      },
-      error: (error) => {
-        this.showLoader = false;
-        this.router.navigateByUrl("/");
-        this.toastrService.error(error.error, "", { progressBar: true });
-        console.log(error.errror);
-      },
-      complete: () => {
-        this.showLoader = false;
-      }
-    });
+    
   }
 
   onSort(field: string): void {

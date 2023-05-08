@@ -76,22 +76,30 @@ export class BookComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.pageNumber = Number(params['pageNo']) || 0;
-      this.pageSize = Number(params['pageSize']) || 25;
+      
+      this.userService.getElementsPerPage().subscribe({
+        next: (response) => {
+          this.pageSize = response;
+        },
+        complete: () => {
+          this.bookService.getPageBooks(this.pageNumber, this.pageSize).subscribe({
+            next: (result: Book[]) => {
+              this.books = result;
+            },
+            error: (error) => {
+              this.showLoader = false;
+              this.router.navigateByUrl("/");
+              this.toastrService.error("You are not an admin", "", { progressBar: true });
+            },
+            complete: () => {
+              this.showLoader = false;
+            }
+          });
+        }
+      });
     });
 
-    this.bookService.getPageBooks(this.pageNumber, this.pageSize).subscribe({
-      next: (result: Book[]) => {
-        this.books = result;
-      },
-      error: (error) => {
-        this.showLoader = false;
-        this.router.navigateByUrl("/");
-        this.toastrService.error("You are not an admin", "", { progressBar: true });
-      },
-      complete: () => {
-        this.showLoader = false;
-      }
-    });
+    
   }
 
   onSort(field: string): void {
