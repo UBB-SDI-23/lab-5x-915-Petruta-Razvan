@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { RegisterResponseDTO } from '../../model/user.model';
 import { Router } from '@angular/router';
 
-// const AUTH_API = 'http://localhost:8080/api/auth/';
-const AUTH_API = "https://library-hub.crabdance.com/api/auth/";
+const AUTH_API = 'http://localhost:8080/api/auth/';
+// const AUTH_API = "https://library-hub.crabdance.com/api/auth/";
 
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),

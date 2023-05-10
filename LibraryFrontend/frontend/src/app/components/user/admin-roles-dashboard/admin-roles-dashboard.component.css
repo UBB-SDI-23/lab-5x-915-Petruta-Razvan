@@ -9,3 +9,11 @@
 .container-custom {
     max-width: 80%;
 }
+
+.page-size {
+    margin-top: 5rem;
+}
+
+.btn-update-page-size {
+    margin-top: 1rem;
+}

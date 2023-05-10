@@ -10,10 +10,10 @@
 
             <div class="col-lg-6 col-md-12 mt-5">
                 <div class="form-group mt-3">
-                    <label>User</label>
-                    <input type="text" name="options" class="form-control" placeholder="select user by username" 
-                    matInput [matAutocomplete]="car" [(ngModel)]="selectedOption" #userSearchInput required
-                    (input)="search(userSearchInput.value)" matAutocompletePosition="below">
+                    <label>Change user's roles</label>
+                    <input type="text" name="options" class="form-control" placeholder="select user by username"
+                        matInput [matAutocomplete]="car" [(ngModel)]="selectedOption" #userSearchInput required
+                        (input)="search(userSearchInput.value)" matAutocompletePosition="below">
                     <mat-autocomplete #car="matAutocomplete" (optionSelected)="onSelection($event)">
                         <div *ngIf="!showSearchLoader">
                             <mat-option *ngFor="let option of options" [value]="option">
@@ -35,11 +35,13 @@
                         </mat-option>
                     </mat-autocomplete>
 
-                    <label>Elements per page:</label>
-                    <input type="number" name="elementsPerPage" class="form-control" placeholder="..." 
-                    [(ngModel)]="selectedElementsPerPage" required>
+                    <div class="page-size">
+                        <label>Change the number of elements per page:</label>
+                        <input type="number" name="elementsPerPage" class="form-control"
+                            [(ngModel)]="selectedElementsPerPage" required>
 
-                    <button class="btn btn-primary" (click)="updateElementsPerPage()">Set</button>
+                        <button class="btn btn-primary btn-update-page-size" (click)="updateElementsPerPage()">Update</button>
+                    </div>
                 </div>
             </div>
 
@@ -53,13 +55,13 @@
                     </div>
                     <div class="col-auto form-check mt-3 mb-3">
                         <label class="form-check-label" for="exampleCheck1">Moderator</label>
-                        <input type="checkbox" name="ROLE_MODERATOR" class="form-check-input check-custom" id="exampleCheck2"
-                            [(ngModel)]="checkModerator">
+                        <input type="checkbox" name="ROLE_MODERATOR" class="form-check-input check-custom"
+                            id="exampleCheck2" [(ngModel)]="checkModerator">
                     </div>
                     <div class="col-auto form-check mt-3 mb-3">
                         <label class="form-check-label" for="exampleCheck1">Admin</label>
-                        <input type="checkbox" name="ROLE_ADMIN" class="form-check-input check-custom" id="exampleCheck3"
-                            [(ngModel)]="checkAdmin">
+                        <input type="checkbox" name="ROLE_ADMIN" class="form-check-input check-custom"
+                            id="exampleCheck3" [(ngModel)]="checkAdmin">
                     </div>
                     <button type="button" class="btn btn-primary" (click)="updateRoles()">Update roles</button>
                 </div>

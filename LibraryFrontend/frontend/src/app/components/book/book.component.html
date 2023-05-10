@@ -31,19 +31,19 @@
                         <p><span class="fw-bold">Author:</span> {{book.author}}</p>
                     </div>
                     <div>
-                        <p><span class="fw-bold">Publisher:</span> {{book.publisher}}</p>
+                        <p *ngIf="!isMobileSize"><span class="fw-bold">Publisher:</span> {{book.publisher}}</p>
                     </div>
                     <div>
-                        <p><span class="fw-bold">Description:</span> {{book.description.substring(0, 100)}}...</p>
+                        <p *ngIf="!isMobileSize"><span class="fw-bold">Description:</span> {{book.description.substring(0, 100)}}...</p>
                     </div>
                     <div>
                         <p><span class="fw-bold">Price:</span> {{book.price}} €</p>
                     </div>
                     <div>
-                        <p><span class="fw-bold">Published Year:</span> {{book.publishedYear}}</p>
+                        <p *ngIf="!isMobileSize"><span class="fw-bold">Published Year:</span> {{book.publishedYear}}</p>
                     </div>
                     <div>
-                        <p><span class="fw-bold">Library ID:</span> {{book.libraryID}}</p>
+                        <p *ngIf="!isMobileSize"><span class="fw-bold">Library ID:</span> {{book.libraryID}}</p>
                     </div>
                     <div>
                         <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', book.username]">{{book.username}}</a></p>
@@ -73,12 +73,12 @@
                [length]="noPages * pageSize"
                [pageSize]="pageSize"
                [showFirstLastButtons]="true"
-               [pageSizeOptions]="[10, 25, 50]"
+               [pageSizeOptions]="pageSizeOptions"
                [pageIndex]="pageNumber"
                aria-label="Select page">
     </mat-paginator>
 
-    <div class="page-selector text-end">
+    <div *ngIf="!isMobileSize" class="page-selector text-end">
         <mat-form-field>
             <mat-label>page:</mat-label>
             <input matInput type="number"

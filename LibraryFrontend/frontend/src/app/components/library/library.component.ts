@@ -6,6 +6,8 @@ import { Library, LibraryAll } from 'src/app/core/model/library.model';
 import { StorageService } from 'src/app/core/service/_services/storage.service';
 import { UserService } from 'src/app/core/service/_services/user.service';
 import { LibraryService } from 'src/app/core/service/library.service';
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
+
 
 @Component({
   selector: 'app-library',
@@ -20,6 +22,7 @@ export class LibraryComponent implements OnInit {
 
   pageNumber: number = 0;
   pageSize: number = 25;
+  pageSizeOptions: number[] = [10, 25, 50];
   noPages: number = 0;
   goToPageNumber: number = 1;
 
@@ -29,6 +32,8 @@ export class LibraryComponent implements OnInit {
   isLoggedIn = false;
   username?: string;
 
+  isMobileSize: boolean = true;
+
   constructor(
     private libraryService: LibraryService, 
     private route: ActivatedRoute, 
@@ -37,7 +42,8 @@ export class LibraryComponent implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private storageService: StorageService,
     private toastrService: ToastrService,
-    private userService: UserService) {}
+    private userService: UserService,
+    private breakpointObserver: BreakpointObserver) {}
   
   ngOnInit(): void {
     this.isLoggedIn = this.storageService.isLoggedIn();
@@ -49,26 +55,40 @@ export class LibraryComponent implements OnInit {
       this.username = user.username;
     }
 
+    this.breakpointObserver.observe(['(min-width: 768px)']).subscribe((state: BreakpointState) => {
+      if (state.matches) {
+        this.isMobileSize = false;
+      } else { 
+        this.isMobileSize = true;
+        this.pageSize = 5;
+        this.router.navigate(['/libraries'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
+        .then(() => this.listLibraries());
+      }
+    });
+
     this.userService.getElementsPerPage().subscribe({
       next: (response) => {
         this.pageSize = response;
+        if (!this.pageSizeOptions.includes(this.pageSize)) {
+          this.pageSizeOptions.push(this.pageSize);
+          this.pageSizeOptions.sort((a, b) => a - b);
+        }
+      },
+      complete: () => {
+        this.libraryService.countLibraries().subscribe((result: Number) => {
+          this.noPages = Math.floor(result.valueOf() / this.pageSize);
+          if (result.valueOf() % this.pageSize > 0) {
+            this.noPages++;
+          }
+        });
+
+        this.listLibraries();
       }
     });
 
-    // go back to the top
     window.onscroll = () => this.scrollFunction();
 
-    // customize paginator
     this.paginatorIntl.getRangeLabel = this.getRangeLabel.bind(this.paginatorIntl);
-
-    this.libraryService.countLibraries().subscribe((result: Number) => {
-      this.noPages = Math.floor(result.valueOf() / this.pageSize);
-      if (result.valueOf() % this.pageSize > 0) {
-        this.noPages++;
-      }
-    });
-
-    this.listLibraries();
   }
 
   listLibraries(): void {
@@ -76,31 +96,23 @@ export class LibraryComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.pageNumber = Number(params['pageNo']) || 0;
-      
-      this.userService.getElementsPerPage().subscribe({
-        next: (response) => {
-          this.pageSize = response;
-        },
-        complete: () => {
-          this.libraryService.getPageLibraries(this.pageNumber, this.pageSize).subscribe({
-            next: (result: LibraryAll[]) => {
-              this.libraries = result;
-            },
-            error: (error) => {
-              this.showLoader = false;
-              this.router.navigateByUrl("/");
-              this.toastrService.error(error.error, "", { progressBar: true });
-              console.log(error.errror);
-            },
-            complete: () => {
-              this.showLoader = false;
-            }
-          });
-        }
-      });
+      this.pageSize = Number(params['pageSize']) || 25;
     });
     
-    
+    this.libraryService.getPageLibraries(this.pageNumber, this.pageSize).subscribe({
+      next: (result: LibraryAll[]) => {
+        this.libraries = result;
+      },
+      error: (error) => {
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error(error.error, "", { progressBar: true });
+        console.log(error.errror);
+      },
+      complete: () => {
+        this.showLoader = false;
+      }
+    });
   }
 
   onSort(field: string): void {

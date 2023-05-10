@@ -32,6 +32,8 @@ export class CurrentUserProfileComponent {
   totalBooks?: number;
   totalReaders?: number;
 
+  showLoader: boolean = true;
+
   constructor(
     private storageService: StorageService, 
     private userService: UserService, 
@@ -40,6 +42,8 @@ export class CurrentUserProfileComponent {
     private toastrService: ToastrService) {}
 
   ngOnInit(): void {
+    this.showLoader = true;
+
     this.isLoggedIn = this.storageService.isLoggedIn();
 
     if (this.isLoggedIn) {
@@ -66,9 +70,10 @@ export class CurrentUserProfileComponent {
           this.totalReaders = result.totalReaders;
         },
         error: (error) => {
-          console.log(error);
+          this.showLoader = false;
         },
         complete: () => {
+          this.showLoader = false;
         }
       });
     });

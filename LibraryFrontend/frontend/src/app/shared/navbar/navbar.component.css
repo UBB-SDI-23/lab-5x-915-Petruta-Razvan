@@ -3,6 +3,10 @@
     margin-right: 10%;
 }
 
+li a {
+    cursor: pointer;
+}
+
 li a:hover {
     color: #679289;
 }

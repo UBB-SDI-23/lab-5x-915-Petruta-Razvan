@@ -13,7 +13,7 @@
             Libraries
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" [routerLink]="['/libraries']" [queryParams]="{pageNo: 0, pageSize: 25}">See
+            <li><a class="dropdown-item" (click)="seeAllLibraries()">See
                 all</a></li>
             <li><a class="dropdown-item" routerLink="/libraries-books-statistics">Books statistics</a></li>
             <li><a class="dropdown-item" routerLink="/libraries-readers-statistics">Readers statistics</a></li>
@@ -27,7 +27,7 @@
             Books
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" [routerLink]="['/books']" [queryParams]="{pageNo: 0, pageSize: 25}">See all</a>
+            <li><a class="dropdown-item" (click)="seeAllBooks()">See all</a>
             </li>
             <li><a class="dropdown-item" [routerLink]="['/books-filter']"
                 [queryParams]="{minPrice: 0, pageNo: 0, pageSize: 25}">Filter by price</a></li>
@@ -41,7 +41,7 @@
             Readers
           </a>
           <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <li><a class="dropdown-item" [routerLink]="['/readers']" [queryParams]="{pageNo: 0, pageSize: 25}">See
+            <li><a class="dropdown-item" (click)="seeAllReaders()">See
                 all</a></li>
             <li *ngIf="isLoggedIn && (isUser() || isModerator() || isAdmin())"><a class="dropdown-item" routerLink="/readers-add">Add new</a></li>
           </ul>

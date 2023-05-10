@@ -1,3 +1,4 @@
+import { BreakpointObserver, BreakpointState } from '@angular/cdk/layout';
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatPaginatorIntl, PageEvent } from '@angular/material/paginator';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -20,6 +21,7 @@ export class BookComponent implements OnInit {
 
   pageNumber: number = 0;
   pageSize: number = 25; 
+  pageSizeOptions: number[] = [10, 25, 50];
   noPages: number = 0;
   goToPageNumber: number = 1;
 
@@ -29,6 +31,8 @@ export class BookComponent implements OnInit {
   isLoggedIn = false;
   username?: string;
 
+  isMobileSize: boolean = true;
+
   constructor(
     private bookService: BookService, 
     private route: ActivatedRoute, 
@@ -37,7 +41,8 @@ export class BookComponent implements OnInit {
     private paginatorIntl: MatPaginatorIntl,
     private storageService: StorageService,
     private toastrService: ToastrService,
-    private userService: UserService) {}
+    private userService: UserService,
+    private breakpointObserver: BreakpointObserver) {}
   
   ngOnInit(): void {
     this.isLoggedIn = this.storageService.isLoggedIn();
@@ -49,9 +54,34 @@ export class BookComponent implements OnInit {
       this.username = user.username;
     }
 
+    this.breakpointObserver.observe(['(min-width: 768px)']).subscribe((state: BreakpointState) => {
+      if (state.matches) {
+        this.isMobileSize = false;
+      } else { 
+        this.isMobileSize = true;
+        this.pageSize = 5;
+        this.router.navigate(['/books'], { queryParams: { pageNo: this.pageNumber, pageSize: this.pageSize } })
+        .then(() => this.listBooks());
+      }
+    });
+
     this.userService.getElementsPerPage().subscribe({
       next: (response) => {
         this.pageSize = response;
+        if (!this.pageSizeOptions.includes(this.pageSize)) {
+          this.pageSizeOptions.push(this.pageSize);
+          this.pageSizeOptions.sort((a, b) => a - b);
+        }
+      },
+      complete: () => {
+        this.bookService.countBooks().subscribe((result: Number) => {
+          this.noPages = Math.floor(result.valueOf() / this.pageSize);
+          if (result.valueOf() % this.pageSize > 0) {
+            this.noPages++;
+          }
+        });
+    
+        this.listBooks();
       }
     });
 
@@ -60,15 +90,6 @@ export class BookComponent implements OnInit {
 
     // customize paginator
     this.paginatorIntl.getRangeLabel = this.getRangeLabel.bind(this.paginatorIntl);
-
-    this.bookService.countBooks().subscribe((result: Number) => {
-      this.noPages = Math.floor(result.valueOf() / this.pageSize);
-      if (result.valueOf() % this.pageSize > 0) {
-        this.noPages++;
-      }
-    });
-
-    this.listBooks();
   }
 
   listBooks(): void {
@@ -76,30 +97,22 @@ export class BookComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.pageNumber = Number(params['pageNo']) || 0;
-      
-      this.userService.getElementsPerPage().subscribe({
-        next: (response) => {
-          this.pageSize = response;
-        },
-        complete: () => {
-          this.bookService.getPageBooks(this.pageNumber, this.pageSize).subscribe({
-            next: (result: Book[]) => {
-              this.books = result;
-            },
-            error: (error) => {
-              this.showLoader = false;
-              this.router.navigateByUrl("/");
-              this.toastrService.error("You are not an admin", "", { progressBar: true });
-            },
-            complete: () => {
-              this.showLoader = false;
-            }
-          });
-        }
-      });
+      this.pageSize = Number(params['pageSize']) || 25;
     });
 
-    
+    this.bookService.getPageBooks(this.pageNumber, this.pageSize).subscribe({
+      next: (result: Book[]) => {
+        this.books = result;
+      },
+      error: (error) => {
+        this.showLoader = false;
+        this.router.navigateByUrl("/");
+        this.toastrService.error("You are not an admin", "", { progressBar: true });
+      },
+      complete: () => {
+        this.showLoader = false;
+      }
+    });
   }
 
   onSort(field: string): void {

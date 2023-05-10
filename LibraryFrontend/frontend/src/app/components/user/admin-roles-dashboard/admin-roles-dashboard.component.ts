@@ -63,6 +63,12 @@ export class AdminRolesDashboardComponent implements OnInit {
       this.router.navigateByUrl("/login");
     }
 
+    this.userService.getElementsPerPage().subscribe({
+      next: (response) => {
+        this.selectedElementsPerPage = response;
+      }
+    });
+
     this.searchTerm.pipe(
       debounceTime(1000) // debounce by 1 second
     ).subscribe(term => {

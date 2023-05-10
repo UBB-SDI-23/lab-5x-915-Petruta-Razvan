@@ -29,7 +29,7 @@
                         <p><span class="fw-bold">Name:</span> {{library.name}}</p>
                     </div>
                     <div>
-                        <p><span class="fw-bold">Address:</span> {{library.address}}</p>
+                        <p *ngIf="!isMobileSize"><span class="fw-bold">Address:</span> {{library.address}}</p>
                     </div>
                     <div>
                         <p><span class="fw-bold">Email:</span> {{library.email}}</p>
@@ -38,7 +38,7 @@
                         <p><span class="fw-bold">Website:</span> {{library.website}}</p>
                     </div>
                     <div>
-                        <p><span class="fw-bold">Construction Year:</span> {{library.yearOfConstruction}}</p>
+                        <p *ngIf="!isMobileSize"><span class="fw-bold">Construction Year:</span> {{library.yearOfConstruction}}</p>
                     </div>
                     <div>
                         <p><span class="fw-bold">Number of readers:</span> {{library.totalReaders}}</p>
@@ -74,12 +74,12 @@
                [length]="noPages * pageSize"
                [pageSize]="pageSize"
                [showFirstLastButtons]="true"
-               [pageSizeOptions]="[10, 25, 50]"
+               [pageSizeOptions]="pageSizeOptions"
                [pageIndex]="pageNumber"
                aria-label="Select page">
     </mat-paginator>
 
-    <div class="page-selector text-end">
+    <div *ngIf="!isMobileSize" class="page-selector text-end">
         <mat-form-field>
             <mat-label>page:</mat-label>
             <input matInput type="number"

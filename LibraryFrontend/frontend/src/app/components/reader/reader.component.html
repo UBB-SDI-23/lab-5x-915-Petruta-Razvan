@@ -43,14 +43,16 @@
                         <p><span class="fw-bold">Number of memberships:</span> {{reader.totalLibraries}}</p>
                     </div>
                     <div>
-                        <p><span class="fw-bold">User: </span><a [routerLink]="['/users/', reader.username]">{{reader.username}}</a></p>
+                        <p><span class="fw-bold">User: </span><a
+                                [routerLink]="['/users/', reader.username]">{{reader.username}}</a></p>
                     </div>
                     <div>
                         <button type="button" [routerLink]="['/readers/', reader.id]"
                             class="btn btn-outline-warning m-2 btn-custom">
                             <i class="fa-sharp fa-solid fa-info"></i>
                         </button>
-                        <button *ngIf="isUserCorrect(reader) || isModerator() || isAdmin()" type="button" [routerLink]="['/readers-update/', reader.id]"
+                        <button *ngIf="isUserCorrect(reader) || isModerator() || isAdmin()" type="button"
+                            [routerLink]="['/readers-update/', reader.id]"
                             class="btn btn-outline-primary m-2 btn-custom">
                             <i class="fa-solid fa-arrows-rotate"></i>
                         </button>
@@ -64,16 +66,28 @@
         </div>
     </div>
 
-    <mat-paginator #paginator class="demo-paginator" (page)="onPageChanged($event)" [length]="noPages * pageSize"
-        [pageSize]="pageSize" [showFirstLastButtons]="true" [pageSizeOptions]="[10, 25, 50]" [pageIndex]="pageNumber"
+    <mat-paginator 
+        #paginator 
+        class="demo-paginator" 
+        (page)="onPageChanged($event)" 
+        [length]="noPages * pageSize"
+        [pageSize]="pageSize" 
+        [showFirstLastButtons]="true" 
+        [pageSizeOptions]="pageSizeOptions" 
+        [pageIndex]="pageNumber"
         aria-label="Select page">
     </mat-paginator>
 
-    <div class="page-selector text-end">
+    <div *ngIf="!isMobileSize" class="page-selector text-end">
         <mat-form-field>
             <mat-label>page:</mat-label>
-            <input matInput type="number" [(ngModel)]="goToPageNumber" min="0" max="{{noPages}}"
-                (keyup.enter)="goToPage()" (ngModelChange)="checkPageNumber()">
+            <input 
+                matInput type="number" 
+                [(ngModel)]="goToPageNumber" 
+                min="0" 
+                max="{{noPages}}"
+                (keyup.enter)="goToPage()" 
+                (ngModelChange)="checkPageNumber()">
         </mat-form-field>
     </div>
 

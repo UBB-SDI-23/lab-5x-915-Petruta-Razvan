@@ -31,9 +31,13 @@ export class UserProfileComponent implements OnInit {
   totalBooks?: number;
   totalReaders?: number;
 
+  showLoader: boolean = true;
+
   constructor(private storageService: StorageService, private userService: UserService, private activatedRoute: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.showLoader = true;
+
     this.isLoggedIn = this.storageService.isLoggedIn();
 
     if (this.isLoggedIn) {
@@ -53,9 +57,10 @@ export class UserProfileComponent implements OnInit {
           this.totalReaders = result.totalReaders;
         },
         error: (error) => {
-          console.log(error);
+          this.showLoader = false;
         },
         complete: () => {
+          this.showLoader = false;
         }
       });
     });
